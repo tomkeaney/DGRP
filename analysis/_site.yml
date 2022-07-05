@@ -1,7 +1,7 @@
-name: "DGRP"
+name: DGRP
 output_dir: ../docs
 navbar:
-  title: "DGRP"
+  title: DGRP
   left:
   - text: Progress
     href: index.html
