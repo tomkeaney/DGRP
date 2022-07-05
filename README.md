@@ -1,5 +1,5 @@
 # DGRP
 
-A [workflowr][] project.
+Our progress can be veiwed [here](https://tomkeaney.github.io/DGRP/)
 
-[workflowr]: https://github.com/workflowr/workflowr
+A [workflowr](https://github.com/workflowr/workflowr) project.
