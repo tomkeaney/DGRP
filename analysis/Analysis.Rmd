@@ -1,0 +1,688 @@
+---
+title: "Line heritability and genetic trait correlations"
+author: "Becca Belmonte, Mary Kate Corbally, Thomas Keaney"
+output: html_document
+site: workflowr::wflow_site
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load in necessary packages
+
+```{r load packages}
+
+library(Matrix)
+library(tidyverse)
+library(googlesheets4) # for reading google sheets
+library(pheatmap) # for heatmaps
+library(RColorBrewer) # for custom colours
+library(rcartocolor) # cool colours
+library(wesanderson) # cool colours
+library(kableExtra) # for scrolling tables
+library(pander) # more tables
+library(patchwork) # for cool plots
+library(brms) # for bayesian models
+library(tidybayes) # for more bayesian things
+library(shiny) # for interactive app
+library(DT) # for interactive tables
+library(broom) # convert results of functions into tables
+library(ggExtra) # for marginal plots
+library(ggtips) # for shiny app
+library(psych) # for getting p values and CIs for correlations
+
+```
+
+$~$
+
+# Load in the data
+
+For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and the microbiome traits measured in Everett _et al_ (2020). We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively. They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. 
+
+```{r}
+# this is the full dataset, including the Jin and Everett data
+
+all.dgrp.phenos_scaled.csv <- read_csv("data/derived/all.dgrp.phenos_scaled.csv")
+
+# this is the filtered data which we choose to use
+
+selected.dgrp.phenos_scaled <- read_csv("data/derived/selected.dgrp.phenos_scaled.csv")
+```
+
+$~$
+
+# Estimating $r_g$
+
+$~$
+
+We create a massive trait correlation matrix using the `cor()` function. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method.  
+
+We also use the `corr.test` function from the `psych` package to get confidence intervals and p-values adjusted for multiple testing for each correlation.
+
+Note that we perform ~260,000 bivariate correlations here, so the code takes a while to run.
+
+The code chunk below produces the csv files `rg.csv`.
+
+We only show each correlation once i.e. this is not a mirrored correlation matrix.
+
+```{r}
+
+# Create a correlation matrix for all traits 
+
+
+if(!file.exists("data/derived/rg.csv")){
+  
+  spearman_results <- corr.test(selected.dgrp.phenos_scaled %>% select(-line), adjust = "holm", method = "spearman", ci = TRUE)
+  
+  # Wrangling the data into a useable tibble
+  
+  # First make a function to find the desired combinations of traits
+  
+  expand.grid.unique <- function(x, y, include.equals=FALSE)
+  {
+    x <- unique(x)
+    y <- unique(y)
+    g <- function(i)
+    {
+      z <- setdiff(y, x[seq_len(i-include.equals)])
+      
+      if(length(z)) cbind(x[i], z, deparse.level=0)
+    }
+    do.call(rbind, lapply(seq_along(x), g))
+  }
+  
+  # Use the function to find the desired combinations that match up with the spearman_results$ci2 output
+  
+  traits <- expand.grid.unique(spearman_results$r %>% rownames(),
+                               spearman_results$r %>% colnames()) %>% 
+    as_tibble() %>% 
+    rename(trait_1 = V1,
+           trait_2 = V2)
+  
+  # pull the relevant stats from the psych object
+  
+  ci <- spearman_results$ci2 %>%
+    as_tibble()
+  
+  # adjusted CIs aren't provided in the ci2 object, so we specifically call them
+  
+  ci_adjust <- spearman_results$ci.adj %>% 
+    as_tibble()
+  
+  # combine everything into the final output
+  
+  rg <- tibble(traits, ci, ci_adjust)
+
+  write_csv(rg, file = "data/derived/rg.csv")
+} else rg <- read_csv("data/derived/rg.csv")
+
+#view(rg %>% filter(str_detect(trait_1, "CT"),
+             # p < 0.05))
+
+#view(rg %>% filter(p.adj < 0.05))
+ 
+
+# if use = "pairwise.complete.obs" then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, "pairwise.complete.obs" only works with the "pearson" method.
+
+# we need a matrix for plotting
+
+#correlation.matrix <- round(cor(all.dgrp.phenos_scaled, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+
+
+```
+
+# Estimating sex-specific $r_g$
+
+Here we calculate genetic correlations within the sexes. The code chunk below produces the csv files `rg_female.csv` and `rg_male.csv`.
+
+We only show each correlation once i.e. this is not a mirrored correlation matrix.
+
+```{r}
+
+females <- selected.dgrp.phenos_scaled %>% select(!ends_with(".m"))
+males <- selected.dgrp.phenos_scaled %>% select(!ends_with(".f"))
+
+# Create a correlation matrix for female traits 
+
+
+if(!file.exists("data/derived/rg_female.csv")){
+  
+  spearman_results <- corr.test(females %>% select(-line), adjust = "holm", method = "spearman", ci = TRUE)
+  
+  # Wrangling the data into a useable tibble
+  
+  # First make a function to find the desired combinations of traits
+  
+  expand.grid.unique <- function(x, y, include.equals=FALSE)
+  {
+    x <- unique(x)
+    y <- unique(y)
+    g <- function(i)
+    {
+      z <- setdiff(y, x[seq_len(i-include.equals)])
+      
+      if(length(z)) cbind(x[i], z, deparse.level=0)
+    }
+    do.call(rbind, lapply(seq_along(x), g))
+  }
+  
+  # Use the function to find the desired combinations that match up with the spearman_results$ci2 output
+  
+  traits <- expand.grid.unique(spearman_results$r %>% rownames(),
+                               spearman_results$r %>% colnames()) %>% 
+    as_tibble() %>% 
+    rename(trait_1 = V1,
+           trait_2 = V2)
+  
+  # pull the relevant stats from the psych object
+  
+  ci <- spearman_results$ci2 %>%
+    as_tibble()
+  
+  # adjusted CIs aren't provided in the ci2 object, so we specifically call them
+  
+  ci_adjust <- spearman_results$ci.adj %>% 
+    as_tibble()
+  
+  # combine everything into the final output
+  
+  rg_female <- tibble(traits, ci, ci_adjust)
+
+  write_csv(rg_female, file = "data/derived/rg_female.csv")
+} else rg_female <- read_csv("data/derived/rg_female.csv")
+
+
+# Create a correlation matrix for male traits
+
+
+if(!file.exists("data/derived/rg_male.csv")){
+  
+  spearman_results <- corr.test(males %>% select(-line), adjust = "holm", method = "spearman", ci = TRUE)
+  
+  # Wrangling the data into a useable tibble
+  
+  # First make a function to find the desired combinations of traits
+  
+  expand.grid.unique <- function(x, y, include.equals=FALSE)
+  {
+    x <- unique(x)
+    y <- unique(y)
+    g <- function(i)
+    {
+      z <- setdiff(y, x[seq_len(i-include.equals)])
+      
+      if(length(z)) cbind(x[i], z, deparse.level=0)
+    }
+    do.call(rbind, lapply(seq_along(x), g))
+  }
+  
+  # Use the function to find the desired combinations that match up with the spearman_results$ci2 output
+  
+  traits <- expand.grid.unique(spearman_results$r %>% rownames(),
+                               spearman_results$r %>% colnames()) %>% 
+    as_tibble() %>% 
+    rename(trait_1 = V1,
+           trait_2 = V2)
+  
+  # pull the relevant stats from the psych object
+  
+  ci <- spearman_results$ci2 %>%
+    as_tibble()
+  
+  # adjusted CIs aren't provided in the ci2 object, so we specifically call them
+  
+  ci_adjust <- spearman_results$ci.adj %>% 
+    as_tibble()
+  
+  # combine everything into the final output
+  
+  rg_male <- tibble(traits, ci, ci_adjust)
+
+  write_csv(rg_male, file = "data/derived/rg_male.csv")
+} else rg_male <- read_csv("data/derived/rg_male.csv")
+
+```
+
+
+```{r, eval=FALSE}
+# insecticide response guild cor matrix
+
+insecticide.correlation.matrix <- round(cor(insecticide.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# pathogen response guild cor matrix
+
+pathogen.correlation.matrix <- round(cor(pathogen.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# sensory guild cor matrix
+
+sensory.correlation.matrix <- round(cor(sensory.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# physiological guild cor matrix
+
+physio.correlation.matrix <- round(cor(physio.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# morphologcial guild cor matrix
+
+morpho.correlation.matrix <- round(cor(morph.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# behavioural guild cor matrix
+
+behave.correlation.matrix <- round(cor(behavioural.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# life history guild cor matrix
+
+lh.correlation.matrix <- round(cor(lh.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# CHC guild cor matrix
+
+CHC.correlation.matrix <- round(cor(CHC.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Metabolome guild cor matrix
+
+metabolome.correlation.matrix <- round(cor(metabolome.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Microbiome guild cor matrix
+
+microbiome.correlation.matrix <- round(cor(microbiome.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Drug response guild cor matrix
+
+drug.correlation.matrix <- round(cor(drug.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Activity guild cor matrix
+
+activity.correlation.matrix <- round(cor(activity.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Reproduction guild cor matrix
+
+repro.correlation.matrix <- round(cor(repro.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# Stress resistance guild cor matrix
+
+stress.correlation.matrix <- round(cor(stress.dgrp.phenos_means, use = "pairwise.complete.obs", method = "spearman"), 2)
+```
+
+
+
+```{r, eval=FALSE}
+# Prepare to plot
+
+paletteLength <- 50
+
+# Load specific colours
+
+myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[7], "white", brewer.pal(9, "Oranges")[7]))(paletteLength)
+
+# Get custom defined breaks
+
+myBreaks <- c(seq(min(correlation.matrix, na.rm=T), 0, length.out=ceiling(paletteLength/2) + 1), 
+              seq(max(correlation.matrix, na.rm=T)/paletteLength, max(correlation.matrix, na.rm=T), length.out=floor(paletteLength/2)))
+```
+
+
+```{r, fig.height=50, fig.width=50, eval=FALSE}
+
+# Make the heatmap
+
+pheatmap::pheatmap(correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 1**: Spearman correlation coefficients between >1100 traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Insecticide response traits**
+
+```{r, fig.height=10, fig.width=10, eval=FALSE}
+pheatmap::pheatmap(insecticide.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 2**: Spearman correlation coefficients between insecticide response related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Pathogen response traits**
+
+```{r, fig.height=10, fig.width=10, eval=FALSE}
+pheatmap::pheatmap(pathogen.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 3**: Spearman correlation coefficients between pathogen response related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Sensory response traits**
+
+```{r, fig.height=15, fig.width=15, eval=FALSE}
+pheatmap::pheatmap(sensory.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 4**: Spearman correlation coefficients between sensory related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Physiological traits**
+
+```{r, fig.height=15, fig.width=15, eval=FALSE}
+pheatmap::pheatmap(physio.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 5**: Spearman correlation coefficients between physiological traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Morphological traits**
+
+```{r, fig.height=10, fig.width=10, eval=FALSE}
+pheatmap::pheatmap(morpho.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 6**: Spearman correlation coefficients between morphological traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Behavioural traits**
+
+```{r, fig.height=10, fig.width=10, eval=FALSE}
+pheatmap::pheatmap(behave.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 7**: Spearman correlation coefficients between behavioural traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Life history traits**
+
+```{r, fig.height=10, fig.width=10, eval=FALSE}
+pheatmap::pheatmap(lh.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 8**: Spearman correlation coefficients between life history traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**CHCs**
+
+```{r, fig.height=15, fig.width=15, eval=FALSE}
+pheatmap::pheatmap(CHC.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 9**: Spearman correlation coefficients between different CHCs measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Metabolome related traits**
+
+```{r, fig.height=40, fig.width=25, eval=FALSE}
+pheatmap::pheatmap(metabolome.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 10**: Spearman correlation coefficients between different metabolomic traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Microbiome related traits**
+
+```{r, fig.height=40, fig.width=25, eval=FALSE}
+pheatmap::pheatmap(microbiome.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 11**: Spearman correlation coefficients between different microbiome based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Drug response related traits**
+
+```{r, fig.height=40, fig.width=25, eval=FALSE}
+pheatmap::pheatmap(drug.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 12**: Spearman correlation coefficients between different drug response based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Activity related traits**
+
+```{r, fig.height=40, fig.width=25, eval=FALSE}
+pheatmap::pheatmap(activity.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 13**: Spearman correlation coefficients between different activity based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+$~$
+
+**Reproduction related traits**
+
+```{r, fig.height=40, fig.width=25, eval=FALSE}
+pheatmap::pheatmap(repro.correlation.matrix,
+                   col = myColor, breaks = myBreaks,
+                   cutree_rows = 6, cutree_cols = 6)
+```
+
+**Figure 13**: Spearman correlation coefficients between different reproduction related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+
+
+```{r shiny app, eval=FALSE, include=FALSE, cache=FALSE}
+
+# Shiny app: plot the correlation between any two phenotypes
+
+$~$
+
+#The above plot is essentially unreadable, so we also present a shiny app that allows you to look at any correlation between any pair of phenotypes in our dataset.
+
+axis_vars <- names(all.dgrp.phenos_means)
+
+ui <- navbarPage("Quantitative trait correlations in the DGRP",
+                 tabPanel("Trait correlation heat map",
+                          mainPanel(
+                            plotOutput("heatmap", height = "1000px", width = "400%")
+                          )),
+                 tabPanel("Visualising pairwise trait correlations",
+                          
+                          sidebarLayout(
+                            
+                            sidebarPanel(
+                              
+                              selectInput(inputId =  'xvar', label = 'Phenotype on X-axis', choices = axis_vars, selected = "female.fitness.early", width = '400px'),
+                              selectInput(inputId =  'yvar', label = 'Phenotype on Y-axis', choices = axis_vars, selected = "male.fitness.early", width = '400px'),
+                              tableOutput('summary')),
+                            
+                            mainPanel(
+                              plotOutput("phenotype_regression_plot", height = "500px", hover = "plot_hover"),
+                              verbatimTextOutput("hover_info"),
+                              tableOutput("trait_table")
+                            )
+                          )
+                 ),
+                 tabPanel("Dataset",
+                          sidebarLayout(
+                            
+                            sidebarPanel(
+                              
+                              selectInput(inputId =  'xvar', label = 'Phenotype on X-axis', choices = axis_vars, selected = "female.fitness.early", width = '400px'),
+                              selectInput(inputId =  'yvar', label = 'Phenotype on Y-axis', choices = axis_vars, selected = "male.fitness.early", width = '400px')
+                            ),
+                            
+                            mainPanel(dataTableOutput("dataset_table"))
+                          )
+                 )
+)
+
+server <- function(input, output){
+  
+  # first tab 
+  
+  output$heatmap <- renderPlot({
+    
+    paletteLength <- 50
+    
+    # Load specific colours
+    
+    myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[7], "white", brewer.pal(9, "Oranges")[7]))(paletteLength)
+    
+    # Get custom defined breaks
+    
+    myBreaks <- c(seq(min(correlation.matrix, na.rm=T), 0, length.out=ceiling(paletteLength/2) + 1), 
+                  seq(max(correlation.matrix, na.rm=T)/paletteLength, max(correlation.matrix, na.rm=T), length.out=floor(paletteLength/2)))
+    
+    pheatmap::pheatmap(correlation.matrix,
+                       col = myColor, breaks = myBreaks,
+                       cutree_rows = 6, cutree_cols = 6)
+  })
+  
+  # second tab
+  
+  selectedData <- reactive({
+    all.dgrp.phenos_means[, c(input$xvar, input$yvar)]
+  })
+  
+  output$phenotype_regression_plot <- renderPlot({
+    
+    # labels for axis
+    
+    xvar_name <- axis_vars[axis_vars == input$xvar]
+    yvar_name <- axis_vars[axis_vars == input$yvar]
+    
+    plot <- ggplot(data = selectedData(), 
+                   aes_string(x = paste0("`", input$xvar, "`"), 
+                              y = paste0("`", input$yvar, "`"))) +
+      geom_point(shape = 21, alpha = 0.75, size = 4, fill = wes_palette("Zissou1")[4], show.legend = FALSE) +
+      geom_smooth(method = 'lm', color='black') +
+      geom_hline(yintercept = 0, linetype = 2) +
+      geom_vline(xintercept = 0, linetype = 2) +
+      xlab(xvar_name) +
+      ylab(yvar_name) +
+      #coord_cartesian(xlim = c(-4, 4), ylim = c(-4, 4)) +
+      theme_bw() +
+      theme(panel.border= element_blank(),
+            axis.line=element_line(),
+            text = element_text(size=14),
+            panel.grid.major.x = element_blank(),
+            panel.grid.major.y = element_blank(),
+            panel.grid.minor.y = element_blank(),
+            panel.grid.minor.x = element_blank(),
+            axis.title.x = element_text(size = 16),
+            axis.title.y = element_text(size = 16))
+    
+    plot <- ggMarginal(
+      plot,
+      type = 'histogram',
+      margins = 'both',
+      size = 5,
+      colour = wes_palette("Zissou1")[1],
+      fill = wes_palette("Zissou1")[2]
+    )
+    
+    plot
+  })
+  
+  
+  # get point hover info
+  
+  output$hover_info <- renderText({
+    
+    xy_str <- function(e) {
+      if(is.null(e)) return("NULL\n")
+      paste0("x=", round(e$x, 2), " y=", round(e$y, 2), "\n")
+    }
+    
+    paste0(
+      "DGRP Line: not implemented\n",
+      "Phenotype values:", xy_str(input$plot_hover))
+  })
+  
+  # calculate the correlation between the specified phenotypes - we use the spearman method because it works for non-normal data
+  
+  cors_table <- reactive({cor.test(x = pull(all.dgrp.phenos_means, input$xvar), 
+                                   y = pull(all.dgrp.phenos_means, input$yvar), 
+                                   use = "pairwise.complete.obs", method = "spearman") %>% 
+      tidy() %>% 
+      mutate(`r^g` = estimate, p = p.value) %>% 
+      select(`r^g`, p, method)
+  })
+  
+  # build the table  
+  
+  output$summary <- renderTable({
+    cors_table()
+  })
+  
+  
+  # build a table with 2 rows - one for each phenotype. The purpose of this table is to provide additional useful information about the phenotypes that may not be immediately obvious from their names.  
+  
+  selected_table <- reactive({
+    data <- table[table$Trait %in% c(input$xvar, input$yvar), ]
+  })
+  
+  output$trait_table <-
+    renderTable({
+      selected_table()
+    })
+  
+  # third tab
+  
+  # Create a function to build HTML searchable tables
+
+  output$dataset_table <-
+    renderDT({
+      
+      my_data_table <- function(df){
+        datatable(
+          df, rownames=FALSE,
+          autoHideNavigation = TRUE,
+          extensions = c("Scroller",  "Buttons"),
+          options = list(
+            dom = 'Bfrtip',
+            deferRender=TRUE,
+            scrollX=TRUE, scrollY=400,
+            scrollCollapse=TRUE,
+            buttons =
+              list('pageLength', 'colvis', 'csv', list(
+                extend = 'pdf',
+                pageSize = 'A4',
+                orientation = 'landscape',
+                filename = 'DGRP_trait_means')),
+            pageLength = 218
+          )
+        )
+      }
+      
+      my_data_table(selectedData())
+    })
+  
+}
+
+shinyApp(ui = ui, server = server, options = list(height = 1200, width = 1000))
+
+
+```
+

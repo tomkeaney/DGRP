@@ -3,15 +3,23 @@ output_dir: ../docs
 navbar:
   title: "DGRP"
   left:
-  - text: Home
+  - text: Progress
     href: index.html
-  - text: About
-    href: about.html
+  - text: Data collation
+    href: Data_collation.html
+  - text: Line quant gen
+    href: Analysis.html
+  - text: SNP quant gen
+    href: SNP_heritabilities.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/tomkeaney/DGRP
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    theme: flatly
+    highlight: tango

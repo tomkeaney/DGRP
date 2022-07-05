@@ -1,11 +1,126 @@
 ---
-title: "Home"
+title: "Introduction"
+author: "Becca Belmonte, Mary Kate Corbally, Thomas Keaney"
 site: workflowr::wflow_site
-output:
-  workflowr::wflow_html:
-    toc: false
 editor_options:
   chunk_output_type: console
+output:
+  html_document:
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+    theme: yeti
+#runtime: shiny
 ---
 
-Welcome to my research website.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+# Ideas and questions
+
+$~$
+
+**Notes on progress**
+
+- Dobson data is modelled and included (I've used slightly different metrics - they should show the same results just on a different scale)
+
+- Pitchers - I've modelled centroid size but they provide landmark values all across the wing that I haven't used.
+
+
+**Emailing**
+
+Yes
+
+- Magwire 2012 (MK) - all but one dataset found on lab website (3/4)
+
+- Teets and Hahn 2018 - line means provided
+
+- Dobson 2015 - raw data provided
+
+- Takahara and Takahashi 2015 - line means provided
+
+- Jumbo-Lucioni et al (2012) - raw data provided
+
+- Zhou et al (2016) - line means provided
+
+Pending
+
+- Appel et al (2015) - email address doesn't exist? Currently failed.
+
+
+**General Qs**
+
+- We now have ~**1250** traits that we can include in our dataset.
+
+- People we should email for data: 
+
+    Bevers et al (2018) 
+    
+    Chaston et al (2016)
+    
+    Ayroles et al (2015) - they provide data as a matlab file - I need to be at Uni to download matlab
+    
+    Evangelou et al (2019) - we have their data, we just need to check how they measured a few things. 
+    
+    Maybe all the PCA people as well.
+
+- Old DGRP pipeline doesn't account for Wolbachia and Inversions. I remember some studies provide adjusted and unadjusted data. Need to screen every paper for this! **How should I model this?**
+
+- Mushroom toxin phenotype is calculated incorrectly - background death not accounted for. I've noted this in the trait description, but have not made any changes. Apparently easy to fix - email Paul. I think this is in Paul's insecticide paper...
+
+- Peterson et al 2019: am I being too harsh? What is our criteria for data quality?
+
+- We need to come up within common names for traits e.g. currently we have cold tolerance, cold hardiness and cold resistance in our dataset.
+
+- Wilson et al 2020 - they repeat their phenotyping on a subset of lines to explicitly validate their findings. Should we model these together or include these as separate datasets. Currently I have only included their first and most complete rep, as they were highly correlated and this is what they used for their GWA. This raises the larger question of whether we should model traits that have been measured multiple times as one larger composite measure or keep them separate. 
+
+- Ayroles data is in matlab format. Email for excel version or for line means?
+
+**Questions for Luke**
+
+- **Ask David:** parathion_model is a survival model. I need to tell it to predict survival only up to 48 hrs because that's how long they measured it for. How do I set an upper limit on the posterior? Currently, have fit binomial model for survival at 48hr instead.
+
+- **Answered:** MMP model (line ~780). The data generating process is a criteria to pass, which is then awarded points. Treat as current or try an ordinal model.
+
+- I have a few PCAs to do: Everett et al (2020), Muñoz-Muñoz et al (2016) - they have PCA data supplied, Dembeck et al (2015) - this is the CHC paper, Jin et al (2020) - metabolome data, Zhou et al (2020) - metabolome data (452 traits!!) 
+
+**Ideas from Charlie's lab**
+
+-   RNA seq data - could be interesting to look at, especially how it differs between sexes and the relationship to different traits.
+
+-   Weird correlations - what weird things does our analysis spit out? Good for a laugh/ paper attention if handled correctly + it might encourage people to get back in the lab and test them.
+
+-   Selective sweeps in DGRP - can we identify traits that correlate with them / discover new sweeps - Paul reckons that with our data this will be easy and is more than happy to help
+
+-   SD in DGRP - what phenotypes are associated? What about fitness? What about selective sweeps?
+
+-   Lab competition - Bevers et al (2018) reference a phenome dataset with 600+ traits that hasn't been published
+
+-   Inversion clines - some inversions correlate strongly with latitude. They might be a nice proxy, so we could use them to find phenotypes associated with latitude e.g. critical thermal maximum etc.
+
+**Edinburgh ideas**
+
+- Extreme lines for each trait in easy summary: shiny line table with colour shading indicating into which percentile they fall for a particular trait? 
+
+- Open access PDF links / pubmed
+
+- MK has a lot more info on rearing conditions, mating status etc - this something we want to include. We should probably include within line sample sizes...
+
+- Trait groupings
+
+- PRISMA
+
+**More ideas**
+
+- UK biobank has a plot where you input a trait and it creates a plot showing how all other traits correlate. Good for fitness paper as well... e.g. https://ukbb-rg.hail.is/rg_summary_6143_4.html
+
+- Average heritability
+
+- Striking correlations
+
+- We can do a little analysis on the variation explained by different lab conditions for a couple of phenotypes. To accurately estimate genetic correlations between traits, we assume that this between-lab variation is small in comparison to the genetic variation between lines. We can pick a commonly phenotype trait e.g. lifespan or CT-max, fit a model with a lab * line interaction and do some variance partitioning. If phenotypes are robust across lab environments we expect that this interaction will explain a very small amount of the variation in phenotype. 
+
+- Following on from the above idea, we could also try to look at how mutational variance affects phenotype in commonly measured traits. We could use year sampled as a proxy for the number of generations spent as a line (culturing protocol will be an important variable here e.g. are lines maintained by single fly crosses or just in standard vial conditions), and test if the variance in trait values are positively correlated with generation of culture. 
+
+
