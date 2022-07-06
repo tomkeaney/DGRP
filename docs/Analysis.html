@@ -633,15 +633,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeb81a9dcb1d3cc5571b2ed3b083e8d74191891f9ctargetblankb81a9dca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/b81a9dcb1d3cc5571b2ed3b083e8d74191891f9c" target="_blank">b81a9dc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeb81a9dcb1d3cc5571b2ed3b083e8d74191891f9ctargetblankb81a9dca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +651,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/b81a9dcb1d3cc5571b2ed3b083e8d74191891f9c" target="_blank">b81a9dc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -673,6 +673,7 @@ Ignored files:
     Ignored:    analysis/index_cache/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
+    Ignored:    data/derived/.DS_Store
 
 Untracked files:
     Untracked:  code/LICENSE
@@ -686,7 +687,12 @@ Untracked files:
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
     Untracked:  data/SNP_heritability_cleaned.csv
-    Untracked:  data/derived/
+    Untracked:  data/derived/all.dgrp.phenos_combined.csv
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/predicted_line_means.csv
+    Untracked:  data/derived/rg.csv
+    Untracked:  data/derived/rg_female.csv
+    Untracked:  data/derived/rg_male.csv
     Untracked:  data/gwas_data/
     Untracked:  data/input/
     Untracked:  fits/
@@ -739,6 +745,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/b81a9dcb1d3cc5571b2ed3b083e8d74191891f9c/analysis/Analysis.Rmd" target="_blank">b81a9dc</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Publish edits
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/f924e99a74781b05a8a36e8b7d8b16a83930da65/docs/Analysis.html" target="_blank">f924e99</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -896,15 +936,17 @@ dbl (727): line, 2.3-butanedione.olfactory.attraction.f, 2.3-butanedione.olf...
 <h1>Estimating <span class="math inline">\(r_g\)</span></h1>
 <p><span class="math inline">\(~\)</span></p>
 <p>We create a massive trait correlation matrix using the
-<code>cor()</code> function. We calculate spearman correlation
-coefficients (<span class="math inline">\(rho\)</span>) to estimate
-<span class="math inline">\(r_g\)</span>, as these are more robust to
-non-normality than the default pearson method.</p>
-<p>We also use the <code>corr.test</code> function from the
-<code>psych</code> package to get confidence intervals and p-values
-adjusted for multiple testing for each correlation.</p>
+<code>corr.test</code> function from the <code>psych</code> package. We
+calculate spearman correlation coefficients (<span
+class="math inline">\(rho\)</span>) to estimate <span
+class="math inline">\(r_g\)</span>, as these are more robust to
+non-normality than the default pearson method. The
+<code>corr.test</code> function also allows us to calculate confidence
+intervals and provides p-values adjusted for multiple testing for each
+bivariate correlation.</p>
 <p>Note that we perform ~260,000 bivariate correlations here, so the
-code takes a while to run.</p>
+code takes a while to run. It runs substantially faster if
+<code>ci = FALSE</code> in <code>corr.test</code></p>
 <p>The code chunk below produces the csv files <code>rg.csv</code>.</p>
 <p>We only show each correlation once i.e. this is not a mirrored
 correlation matrix.</p>
@@ -917,7 +959,7 @@ correlation matrix.</p>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wrangling the data into a useable tibble</span></span>
 <span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First make a function to find the desired combinations of traits</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First make a function to find the desired combinations of traits - each unique bivariate combination is presented once</span></span>
 <span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  expand.grid.unique <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">include.equals=</span><span class="cn">FALSE</span>)</span>
 <span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  {</span>
@@ -972,7 +1014,7 @@ dbl (7): lower, r, upper, p, p.adj, lower.adj, upper.adj
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># if use = &quot;pairwise.complete.obs&quot; then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, &quot;pairwise.complete.obs&quot; only works with the &quot;pearson&quot; method.</span></span>
 <span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># we need a matrix for plotting</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># we could also simply run</span></span>
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co">#correlation.matrix &lt;- round(cor(all.dgrp.phenos_scaled, use = &quot;pairwise.complete.obs&quot;, method = &quot;spearman&quot;), 2)</span></span></code></pre></div>
 </div>
