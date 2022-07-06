@@ -56,11 +56,9 @@ $~$
 
 $~$
 
-We create a massive trait correlation matrix using the `cor()` function. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method.  
+We create a massive trait correlation matrix using the `corr.test` function from the `psych` package. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method. The `corr.test` function also allows us to calculate confidence intervals and provides p-values adjusted for multiple testing for each bivariate correlation. 
 
-We also use the `corr.test` function from the `psych` package to get confidence intervals and p-values adjusted for multiple testing for each correlation.
-
-Note that we perform ~260,000 bivariate correlations here, so the code takes a while to run.
+Note that we perform ~260,000 bivariate correlations here, so the code takes a while to run. It runs substantially faster if `ci = FALSE` in `corr.test`
 
 The code chunk below produces the csv files `rg.csv`.
 
@@ -77,7 +75,7 @@ if(!file.exists("data/derived/rg.csv")){
   
   # Wrangling the data into a useable tibble
   
-  # First make a function to find the desired combinations of traits
+  # First make a function to find the desired combinations of traits - each unique bivariate combination is presented once
   
   expand.grid.unique <- function(x, y, include.equals=FALSE)
   {
@@ -125,7 +123,7 @@ if(!file.exists("data/derived/rg.csv")){
 
 # if use = "pairwise.complete.obs" then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, "pairwise.complete.obs" only works with the "pearson" method.
 
-# we need a matrix for plotting
+# we could also simply run
 
 #correlation.matrix <- round(cor(all.dgrp.phenos_scaled, use = "pairwise.complete.obs", method = "spearman"), 2)
 
