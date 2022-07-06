@@ -34,6 +34,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -130,6 +131,15 @@ code span.va { color: #000000; } /* Variable */
 code span.vs { color: #4e9a06; } /* VerbatimString */
 code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -317,6 +327,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -447,6 +460,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Introduction</h1>
@@ -480,7 +501,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-07-05
+<strong>Last updated:</strong> 2022-07-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -619,13 +640,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong5133de9">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 5133de9
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong5133de9"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -634,7 +657,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 5133de9.
+The results in this page were generated with repository version
+<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -673,6 +697,10 @@ Untracked files:
     Untracked:  data/gwas_data/
     Untracked:  data/input/
     Untracked:  fits/
+
+Unstaged changes:
+    Modified:   DGRP.Rproj
+    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -722,7 +750,41 @@ Message
 Rmd
 </td>
 <td>
-5133de9
+<a href="https://github.com/tomkeaney/DGRP/blob/86612ae2696c27e674526d1d1f89d18d7abcda74/analysis/index.Rmd" target="_blank">86612ae</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Publish edits
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/8b03a2f9a539a3555ff033a2ad4269c72c8e389c/docs/index.html" target="_blank">8b03a2f</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/5133de98630e74431cae4005a4f55365b1d59c76/analysis/index.Rmd" target="_blank">5133de9</a>
 </td>
 <td>
 ausevo
@@ -739,7 +801,7 @@ Publish the initial files for myproject
 Rmd
 </td>
 <td>
-9b3f007
+<a href="https://github.com/tomkeaney/DGRP/blob/9b3f007fc55dff5714780afb3da965e27a80f9ab/analysis/index.Rmd" target="_blank">9b3f007</a>
 </td>
 <td>
 ausevo
@@ -930,20 +992,6 @@ loaded via a namespace (and not attached):
 [33] rmarkdown_2.14   callr_3.7.0      magrittr_2.0.3   whisker_0.4     
 [37] ps_1.7.1         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
 [41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.1    </code></pre>
-<div class="alert alert-warning">
-<p>
-<strong>Warning:</strong> The above code chunk cached its results, but
-it won’t be re-run if previous chunks it depends on are updated. If you
-need to use caching, it is highly recommended to also set
-<code>knitr::opts_chunk$set(autodep = TRUE)</code> at the top of the
-file (in a chunk that is not cached). Alternatively, you can customize
-the option <code>dependson</code> for each individual chunk that is
-cached. Using either <code>autodep</code> or <code>dependson</code> will
-remove this warning. See the
-<a href="https://yihui.name/knitr/options/#cache"
->knitr cache options</a> for more details.
-</p>
-</div>
 </div>
 </div>
 
@@ -996,6 +1044,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
