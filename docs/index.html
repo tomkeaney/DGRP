@@ -477,7 +477,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -488,8 +488,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -502,9 +502,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>DGRP/</code> <span
@@ -598,24 +598,16 @@ versions is critical for reproducibility.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-session-info-chunk-inserted-by-workflowr
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory
-<code>index_cache</code> and re-run the analysis. To have workflowr
-automatically delete the cache directory prior to building the file, set
-<code>delete_cache = TRUE</code> when running <code>wflow_build()</code>
-or <code>wflow_publish()</code>.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
@@ -637,15 +629,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9651fe93fc237dce875b4ed5110b5c4771776ef7targetblank9651fe9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreefffc354533d904c14d7cce5995abe74067b9b04ctargetblankfffc354a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/9651fe93fc237dce875b4ed5110b5c4771776ef7" target="_blank">9651fe9</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/fffc354533d904c14d7cce5995abe74067b9b04c" target="_blank">fffc354</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9651fe93fc237dce875b4ed5110b5c4771776ef7targetblank9651fe9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreefffc354533d904c14d7cce5995abe74067b9b04ctargetblankfffc354a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -655,7 +647,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/9651fe93fc237dce875b4ed5110b5c4771776ef7" target="_blank">9651fe9</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/fffc354533d904c14d7cce5995abe74067b9b04c" target="_blank">fffc354</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -673,7 +665,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/index_cache/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
     Ignored:    data/derived/.DS_Store
@@ -743,6 +734,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/fffc354533d904c14d7cce5995abe74067b9b04c/analysis/index.Rmd" target="_blank">fffc354</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+ready for shiny app roll out
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/665a84d1d1fe8c49134ddded27a9ced0fea03f6b/docs/index.html" target="_blank">665a84d</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -864,7 +889,7 @@ we collected the data and the data cleaning process.</p></li>
 correlations</a>, which details how we estimated <span
 class="math inline">\(r_g\)</span>.</p></li>
 <li><p><a href="SNP_heritabilities.html">Calculating
-‘SNP-heritability’</a>,which details how we estimated heritability for
+‘SNP-heritability’</a>, which details how we estimated heritability for
 each trait.</p></li>
 </ol>
 <br>
