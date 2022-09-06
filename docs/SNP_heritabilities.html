@@ -491,7 +491,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -502,8 +502,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -516,9 +516,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>DGRP/</code> <span
@@ -541,21 +541,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -646,15 +643,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree006deee4c5fd8db5e0fc02301d9005cc0addb93dtargetblank006deeea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeed527563b89e7462962afe6b2cfce58d27e2d809targetblanked52756a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/006deee4c5fd8db5e0fc02301d9005cc0addb93d" target="_blank">006deee</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/ed527563b89e7462962afe6b2cfce58d27e2d809" target="_blank">ed52756</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree006deee4c5fd8db5e0fc02301d9005cc0addb93dtargetblank006deeea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeed527563b89e7462962afe6b2cfce58d27e2d809targetblanked52756a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -664,7 +661,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/006deee4c5fd8db5e0fc02301d9005cc0addb93d" target="_blank">006deee</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/ed527563b89e7462962afe6b2cfce58d27e2d809" target="_blank">ed52756</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -699,11 +696,9 @@ Untracked files:
     Untracked:  data/DGRP_gwas_bfiles/
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
-    Untracked:  data/derived/SNP_heritability_cleaned.csv
     Untracked:  data/derived/all.dgrp.phenos_combined.csv
     Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
     Untracked:  data/derived/predicted_line_means.csv
-    Untracked:  data/derived/rg.csv
     Untracked:  data/derived/rg_female.csv
     Untracked:  data/derived/rg_male.csv
     Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
@@ -713,8 +708,6 @@ Untracked files:
     Untracked:  fits/
 
 Unstaged changes:
-    Modified:   analysis/Data_collation.Rmd
-    Modified:   analysis/SNP_heritabilities.Rmd
     Modified:   analysis/index.Rmd
 
 </code></pre>
@@ -761,6 +754,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/ed527563b89e7462962afe6b2cfce58d27e2d809/analysis/SNP_heritabilities.Rmd" target="_blank">ed52756</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+final (lol) version for analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/2ac2cbcefab1fa1941cc6c9c0e95b159e06ce9fe/docs/SNP_heritabilities.html" target="_blank">2ac2cbc</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -946,7 +973,7 @@ matrix is needed to run the GREML models below.</p>
 * (C) 2010-present, Jian Yang, The University of Queensland
 * Please report bugs to Jian Yang &lt;jian.yang.qt@gmail.com&gt;
 *******************************************************************
-Analysis started at 16:40:55 AEST on Tue Sep 06 2022.
+Analysis started at 16:47:19 AEST on Tue Sep 06 2022.
 Hostname: 6300D-135452-M.local
 
 Options: 
@@ -974,8 +1001,8 @@ Saving GRM...
 GRM has been saved in the file [gcta_GRM.grm.bin]
 Number of SNPs in each pair of individuals has been saved in the file [gcta_GRM.grm.N.bin]
 
-Analysis finished at 16:41:03 AEST on Tue Sep 06 2022
-Overall computational time: 7.71 sec.</code></pre>
+Analysis finished at 16:47:26 AEST on Tue Sep 06 2022
+Overall computational time: 7.87 sec.</code></pre>
 </div>
 <div id="run-univariate-greml-models-to-find-heritabilites"
 class="section level2">
