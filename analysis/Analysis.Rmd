@@ -39,7 +39,7 @@ $~$
 
 $r_g$ is the genetic correlation between a trait X and a trait Y.
 
-We create a massive trait correlation matrix using the `corr.test` function from the `psych` package. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method. The `corr.test` function also allows us to calculate confidence intervals and provides p-values adjusted for multiple testing for each bivariate correlation. 
+We create a large trait correlation matrix using the `corr.test` function from the `psych` package. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method. The `corr.test` function also allows us to calculate confidence intervals and provides p-values adjusted for multiple testing for each bivariate correlation. 
 
 Note that we perform ~260,000 bivariate correlations here, so the code takes a while to run. It runs substantially faster if `ci = FALSE` in `corr.test`
 

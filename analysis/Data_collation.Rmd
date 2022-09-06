@@ -137,7 +137,7 @@ state_3_model <- brm(st_state_3 ~ 1 + Sex + (Sex|line),
                       iter = 6000, warmup = 2000, chains = 4, cores = 4,
                       seed = 2, file = "fits/state_3.model")
 
-pp_check(state_3_model)
+#pp_check(state_3_model)
 
 new_data <-
   expand_grid(line = Jumbo_mito_data$line,

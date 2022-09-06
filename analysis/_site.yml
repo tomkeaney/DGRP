@@ -3,6 +3,8 @@ output_dir: ../docs
 navbar:
   title: DGRP
   left:
+  - text: About
+    href: index.html
   - text: Data collation
     href: Data_collation.html
   - text: Calculating genetic trait correlations
