@@ -1,6 +1,5 @@
 ---
 title: "Calculating genetic trait correlations"
-author: "Becca Belmonte, Mary Kate Corbally, Thomas Keaney"
 output: html_document
 site: workflowr::wflow_site
 ---
