@@ -12,7 +12,7 @@
 <meta name="author" content="Becca Belmonte, Mary Kate Corbally, Thomas Keaney" />
 
 
-<title>Line heritability and genetic trait correlations</title>
+<title>Calculating genetic trait correlations</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -430,16 +430,13 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Progress</a>
-</li>
-<li>
   <a href="Data_collation.html">Data collation</a>
 </li>
 <li>
-  <a href="Analysis.html">Line quant gen</a>
+  <a href="Analysis.html">Calculating genetic trait correlations</a>
 </li>
 <li>
-  <a href="SNP_heritabilities.html">SNP quant gen</a>
+  <a href="SNP_heritabilities.html">Calculating 'SNP-heritability'</a>
 </li>
 <li>
   <a href="license.html">License</a>
@@ -470,8 +467,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Line heritability and genetic trait
-correlations</h1>
+<h1 class="title toc-ignore">Calculating genetic trait correlations</h1>
 <h4 class="author">Becca Belmonte, Mary Kate Corbally, Thomas
 Keaney</h4>
 
@@ -502,7 +498,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-07-06
+<strong>Last updated:</strong> 2022-09-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -633,15 +629,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree3fa8343ee205440a26c1ef04b9b2c5dcbac58ed1targetblank3fa8343a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree006deee4c5fd8db5e0fc02301d9005cc0addb93dtargetblank006deeea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/3fa8343ee205440a26c1ef04b9b2c5dcbac58ed1" target="_blank">3fa8343</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/006deee4c5fd8db5e0fc02301d9005cc0addb93d" target="_blank">006deee</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree3fa8343ee205440a26c1ef04b9b2c5dcbac58ed1targetblank3fa8343a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree006deee4c5fd8db5e0fc02301d9005cc0addb93dtargetblank006deeea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -651,7 +647,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/3fa8343ee205440a26c1ef04b9b2c5dcbac58ed1" target="_blank">3fa8343</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/006deee4c5fd8db5e0fc02301d9005cc0addb93d" target="_blank">006deee</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -686,20 +682,18 @@ Untracked files:
     Untracked:  data/DGRP_gwas_bfiles/
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
-    Untracked:  data/SNP_heritability_cleaned.csv
+    Untracked:  data/derived/SNP_heritability_cleaned.csv
     Untracked:  data/derived/all.dgrp.phenos_combined.csv
     Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
     Untracked:  data/derived/predicted_line_means.csv
     Untracked:  data/derived/rg.csv
     Untracked:  data/derived/rg_female.csv
     Untracked:  data/derived/rg_male.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/variance_components.csv
     Untracked:  data/gwas_data/
     Untracked:  data/input/
     Untracked:  fits/
-
-Unstaged changes:
-    Modified:   DGRP.Rproj
-    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -745,6 +739,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/006deee4c5fd8db5e0fc02301d9005cc0addb93d/analysis/Analysis.Rmd" target="_blank">006deee</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+final version for analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/72ef14ad65d3b8c890eeed7fe6ce590a76307023/docs/Analysis.html" target="_blank">72ef14a</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -858,22 +886,9 @@ Publish the initial files for myproject
 <h1>Load in necessary packages</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googlesheets4) <span class="co"># for reading google sheets</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap) <span class="co"># for heatmaps</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co"># for custom colours</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rcartocolor) <span class="co"># cool colours</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wesanderson) <span class="co"># cool colours</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># for scrolling tables</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pander) <span class="co"># more tables</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># for cool plots</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms) <span class="co"># for bayesian models</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes) <span class="co"># for more bayesian things</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny) <span class="co"># for interactive app</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT) <span class="co"># for interactive tables</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom) <span class="co"># convert results of functions into tables</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggExtra) <span class="co"># for marginal plots</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtips) <span class="co"># for shiny app</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych) <span class="co"># for getting p values and CIs for correlations</span></span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap) <span class="co"># for heatmaps</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom) <span class="co"># convert results of functions into tables</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych) <span class="co"># for getting p values and CIs for correlations</span></span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 <div id="load-in-the-data" class="section level1">
@@ -885,19 +900,20 @@ not to focus on the data from these studies because line means for these
 traits may also be associated with high levels of uncertainty, as they
 have only been measured in three and two flies per line respectively.
 They also make up ~ half of our dataset, which massively reduces our
-power to detect genetic correlations between traits.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is the full dataset, including the Jin and Everett data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>all.dgrp.phenos_scaled.csv <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/all.dgrp.phenos_scaled.csv&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># this is the filtered data which we choose to use</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>selected.dgrp.phenos_scaled <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/selected.dgrp.phenos_scaled.csv&quot;</span>)</span></code></pre></div>
+power to detect genetic correlations between traits. Calculating
+correlation coefficients with small samples is imprecise, therefore also
+choose to trim our analysis to only include traits that have been
+measured across &gt;79 lines.</p>
+<p>The collection and cleaning of these data can be viewed <a
+href="Data_collation.html">here</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>selected.dgrp.phenos_scaled <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/selected.dgrp.phenos_scaled.csv&quot;</span>)</span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 <div id="estimating-r_g" class="section level1">
 <h1>Estimating <span class="math inline">\(r_g\)</span></h1>
 <p><span class="math inline">\(~\)</span></p>
+<p><span class="math inline">\(r_g\)</span> is the genetic correlation
+between a trait X and a trait Y.</p>
 <p>We create a massive trait correlation matrix using the
 <code>corr.test</code> function from the <code>psych</code> package. We
 calculate spearman correlation coefficients (<span
@@ -922,7 +938,7 @@ correlation matrix.</p>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wrangling the data into a useable tibble</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First make a function to find the desired combinations of traits - each unique bivariate combination is presented once</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># First make a function to find the desired combinations of traits - each unique bivariate combination is presented once (twice in mirrored fashion is default)</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  expand.grid.unique <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">include.equals=</span><span class="cn">FALSE</span>)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  {</span>
@@ -963,7 +979,7 @@ correlation matrix.</p>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> rg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/rg.csv&quot;</span>)</span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(str_detect(trait_1, &quot;CT&quot;),</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>             <span class="co"># p &lt; 0.05))</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>              <span class="co">#p.adj &lt; 0.05))</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(p.adj &lt; 0.05))</span></span>
 <span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a> </span>
@@ -977,8 +993,10 @@ correlation matrix.</p>
 <div id="estimating-sex-specific-r_g" class="section level1">
 <h1>Estimating sex-specific <span
 class="math inline">\(r_g\)</span></h1>
-<p>Here we calculate genetic correlations within the sexes. The code
-chunk below produces the csv files <code>rg_female.csv</code> and
+<p>Here we calculate genetic correlations only considering traits
+measured in the same sex (although traits that were pooled across the
+sexes are included in both of the correlation matrices. The code chunk
+below produces the csv files <code>rg_female.csv</code> and
 <code>rg_male.csv</code>.</p>
 <p>We only show each correlation once i.e. this is not a mirrored
 correlation matrix.</p>
@@ -1083,213 +1101,119 @@ correlation matrix.</p>
 <span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(rg_male, <span class="at">file =</span> <span class="st">&quot;data/derived/rg_male.csv&quot;</span>)</span>
 <span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> rg_male <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/rg_male.csv&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># insecticide response guild cor matrix</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to plot</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>insecticide.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(insecticide.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>paletteLength <span class="ot">&lt;-</span> <span class="dv">50</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pathogen response guild cor matrix</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load specific colours</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>pathogen.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(pathogen.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>myColor <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Purples&quot;</span>)[<span class="dv">7</span>], <span class="st">&quot;white&quot;</span>, <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Oranges&quot;</span>)[<span class="dv">7</span>]))(paletteLength)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># sensory guild cor matrix</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get custom defined breaks</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sensory.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(sensory.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># physiological guild cor matrix</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>physio.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(physio.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># morphologcial guild cor matrix</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>morpho.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(morph.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># behavioural guild cor matrix</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>behave.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(behavioural.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># life history guild cor matrix</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>lh.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(lh.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># CHC guild cor matrix</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>CHC.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(CHC.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Metabolome guild cor matrix</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>metabolome.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(metabolome.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Microbiome guild cor matrix</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>microbiome.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(microbiome.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Drug response guild cor matrix</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>drug.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(drug.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Activity guild cor matrix</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>activity.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(activity.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproduction guild cor matrix</span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>repro.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(repro.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Stress resistance guild cor matrix</span></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>stress.correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(stress.dgrp.phenos_means, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to plot</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>myBreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">min</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="dv">0</span>, <span class="at">length.out=</span><span class="fu">ceiling</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1</span>), </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">seq</span>(<span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T)<span class="sc">/</span>paletteLength, <span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="at">length.out=</span><span class="fu">floor</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the heatmap</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>paletteLength <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load specific colours</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(correlation.matrix,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>myColor <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Purples&quot;</span>)[<span class="dv">7</span>], <span class="st">&quot;white&quot;</span>, <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Oranges&quot;</span>)[<span class="dv">7</span>]))(paletteLength)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get custom defined breaks</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>myBreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">min</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="dv">0</span>, <span class="at">length.out=</span><span class="fu">ceiling</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1</span>), </span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">seq</span>(<span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T)<span class="sc">/</span>paletteLength, <span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="at">length.out=</span><span class="fu">floor</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>)))</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the heatmap</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="sc">**</span>Figure <span class="dv">1</span><span class="sc">**</span><span class="er">:</span> Spearman correlation coefficients between <span class="sc">&gt;</span><span class="dv">1100</span> traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into <span class="sc">*</span><span class="dv">6</span><span class="sc">*</span> clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Insecticide response traits</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(correlation.matrix,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(insecticide.correlation.matrix,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 1</strong>: Spearman correlation coefficients between
-&gt;1100 traits measured across the DGRP. The tree shows hierarchical
-clustering of line means, where traits are split into <em>6</em>
-clusters, with grouping of the most similar traits. Note that the trees
-on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Insecticide response traits</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(insecticide.correlation.matrix,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 2: Spearman correlation coefficients between insecticide response related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Pathogen response traits**</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(pathogen.correlation.matrix,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 3**: Spearman correlation coefficients between pathogen response related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Sensory response traits**</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(sensory.correlation.matrix,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 4**: Spearman correlation coefficients between sensory related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Physiological traits**</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(physio.correlation.matrix,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 5**: Spearman correlation coefficients between physiological traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#Morphological traits**</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(morpho.correlation.matrix,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 6**: Spearman correlation coefficients between morphological traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#Behavioural traits**</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(behave.correlation.matrix,</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 7**: Spearman correlation coefficients between behavioural traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#Life history traits**</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(lh.correlation.matrix,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 2</strong>: Spearman correlation coefficients between
-insecticide response related traits measured across the DGRP. The tree
-shows hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Pathogen response traits</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(pathogen.correlation.matrix,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 3</strong>: Spearman correlation coefficients between
-pathogen response related traits measured across the DGRP. The tree
-shows hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Sensory response traits</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(sensory.correlation.matrix,</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 4</strong>: Spearman correlation coefficients between
-sensory related traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Physiological traits</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(physio.correlation.matrix,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 5</strong>: Spearman correlation coefficients between
-physiological traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Morphological traits</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(morpho.correlation.matrix,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 6</strong>: Spearman correlation coefficients between
-morphological traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Behavioural traits</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(behave.correlation.matrix,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 7</strong>: Spearman correlation coefficients between
-behavioural traits measured across the DGRP. The tree shows hierarchical
-clustering of line means, where traits are split into <em>6</em>
-clusters, with grouping of the most similar traits. Note that the trees
-on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Life history traits</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(lh.correlation.matrix,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 8</strong>: Spearman correlation coefficients between
-life history traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>CHCs</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(CHC.correlation.matrix,</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 9</strong>: Spearman correlation coefficients between
-different CHCs measured across the DGRP. The tree shows hierarchical
-clustering of line means, where traits are split into <em>6</em>
-clusters, with grouping of the most similar traits. Note that the trees
-on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Metabolome related traits</strong></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(metabolome.correlation.matrix,</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 10</strong>: Spearman correlation coefficients between
-different metabolomic traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Microbiome related traits</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(microbiome.correlation.matrix,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 11</strong>: Spearman correlation coefficients between
-different microbiome based traits measured across the DGRP. The tree
-shows hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Drug response related traits</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(drug.correlation.matrix,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 12</strong>: Spearman correlation coefficients between
-different drug response based traits measured across the DGRP. The tree
-shows hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Activity related traits</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(activity.correlation.matrix,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 13</strong>: Spearman correlation coefficients between
-different activity based traits measured across the DGRP. The tree shows
-hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Reproduction related traits</strong></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(repro.correlation.matrix,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span></code></pre></div>
-<p><strong>Figure 13</strong>: Spearman correlation coefficients between
-different reproduction related traits measured across the DGRP. The tree
-shows hierarchical clustering of line means, where traits are split into
-<em>6</em> clusters, with grouping of the most similar traits. Note that
-the trees on the x and y axis are identical.</p>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 8**: Spearman correlation coefficients between life history traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#CHCs**</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(CHC.correlation.matrix,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 9**: Spearman correlation coefficients between different CHCs measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Metabolome related traits**</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(metabolome.correlation.matrix,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 10**: Spearman correlation coefficients between different metabolomic traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Microbiome related traits**</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(microbiome.correlation.matrix,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 11**: Spearman correlation coefficients between different microbiome based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Drug response related traits**</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(drug.correlation.matrix,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 12**: Spearman correlation coefficients between different drug response based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#Activity related traits**</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(activity.correlation.matrix,</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 13**: Spearman correlation coefficients between different activity based traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#Reproduction related traits**</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(repro.correlation.matrix,</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 13**: Spearman correlation coefficients between different reproduction related traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></span></code></pre></div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1298,7 +1222,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>R version 4.2.1 (2022-06-23)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur ... 10.16
@@ -1314,59 +1238,30 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] psych_2.2.5         ggtips_0.8.9        ggExtra_0.10.0     
- [4] broom_0.8.0         DT_0.23             shiny_1.7.1        
- [7] tidybayes_3.0.2     brms_2.17.0         Rcpp_1.0.8.3       
-[10] patchwork_1.1.1     pander_0.6.5        kableExtra_1.3.4   
-[13] wesanderson_0.3.6   rcartocolor_2.0.0   RColorBrewer_1.1-3 
-[16] pheatmap_1.0.12     googlesheets4_1.0.0 forcats_0.5.1      
-[19] stringr_1.4.0       dplyr_1.0.9         purrr_0.3.4        
-[22] readr_2.1.2         tidyr_1.2.0         tibble_3.1.7       
-[25] ggplot2_3.3.6       tidyverse_1.3.1     Matrix_1.4-1       
-[28] workflowr_1.7.0    
+ [1] psych_2.2.5     broom_0.8.0     pheatmap_1.0.12 forcats_0.5.1  
+ [5] stringr_1.4.0   dplyr_1.0.9     purrr_0.3.4     readr_2.1.2    
+ [9] tidyr_1.2.0     tibble_3.1.7    ggplot2_3.3.6   tidyverse_1.3.1
+[13] Matrix_1.4-1    workflowr_1.7.0
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.4.0         backports_1.4.1      systemfonts_1.0.4   
-  [4] plyr_1.8.7           igraph_1.3.2         svUnit_1.0.6        
-  [7] crosstalk_1.2.0      rstantools_2.2.0     inline_0.3.19       
- [10] digest_0.6.29        htmltools_0.5.2      fansi_1.0.3         
- [13] magrittr_2.0.3       checkmate_2.1.0      tzdb_0.3.0          
- [16] modelr_0.1.8         RcppParallel_5.1.5   matrixStats_0.62.0  
- [19] vroom_1.5.7          xts_0.12.1           svglite_2.1.0       
- [22] prettyunits_1.1.1    colorspace_2.0-3     rvest_1.0.2         
- [25] ggdist_3.1.1         haven_2.5.0          xfun_0.31           
- [28] callr_3.7.0          crayon_1.5.1         jsonlite_1.8.0      
- [31] zoo_1.8-10           glue_1.6.2           gtable_0.3.0        
- [34] gargle_1.2.0         webshot_0.5.3        distributional_0.3.0
- [37] pkgbuild_1.3.1       rstan_2.21.5         abind_1.4-5         
- [40] scales_1.2.0         mvtnorm_1.1-3        DBI_1.1.3           
- [43] miniUI_0.1.1.1       viridisLite_0.4.0    xtable_1.8-4        
- [46] bit_4.0.4            stats4_4.2.1         StanHeaders_2.21.0-7
- [49] htmlwidgets_1.5.4    httr_1.4.3           threejs_0.3.3       
- [52] arrayhelpers_1.1-0   posterior_1.2.2      ellipsis_0.3.2      
- [55] pkgconfig_2.0.3      loo_2.5.1            farver_2.1.0        
- [58] sass_0.4.1           dbplyr_2.2.1         utf8_1.2.2          
- [61] tidyselect_1.1.2     rlang_1.0.3          reshape2_1.4.4      
- [64] later_1.3.0          munsell_0.5.0        cellranger_1.1.0    
- [67] tools_4.2.1          cli_3.3.0            generics_0.1.2      
- [70] ggridges_0.5.3       evaluate_0.15        fastmap_1.1.0       
- [73] yaml_2.3.5           bit64_4.0.5          processx_3.6.1      
- [76] knitr_1.39           fs_1.5.2             nlme_3.1-158        
- [79] whisker_0.4          mime_0.12            xml2_1.3.3          
- [82] compiler_4.2.1       bayesplot_1.9.0      shinythemes_1.2.0   
- [85] rstudioapi_0.13      reprex_2.0.1         bslib_0.3.1         
- [88] stringi_1.7.6        ps_1.7.1             Brobdingnag_1.2-7   
- [91] lattice_0.20-45      markdown_1.1         shinyjs_2.1.0       
- [94] tensorA_0.36.2       vctrs_0.4.1          pillar_1.7.0        
- [97] lifecycle_1.0.1      jquerylib_0.1.4      bridgesampling_1.1-2
-[100] httpuv_1.6.5         R6_2.5.1             promises_1.2.0.1    
-[103] gridExtra_2.3        codetools_0.2-18     colourpicker_1.1.1  
-[106] gtools_3.9.2.2       assertthat_0.2.1     rprojroot_2.0.3     
-[109] withr_2.5.0          mnormt_2.1.0         shinystan_2.6.0     
-[112] parallel_4.2.1       hms_1.1.1            grid_4.2.1          
-[115] coda_0.19-4          rmarkdown_2.14       googledrive_2.0.0   
-[118] git2r_0.30.1         getPass_0.2-2        lubridate_1.8.0     
-[121] base64enc_0.1-3      dygraphs_1.1.1.6    </code></pre>
+ [1] httr_1.4.3         sass_0.4.1         bit64_4.0.5        vroom_1.5.7       
+ [5] jsonlite_1.8.0     modelr_0.1.8       bslib_0.3.1        assertthat_0.2.1  
+ [9] getPass_0.2-2      cellranger_1.1.0   yaml_2.3.5         pillar_1.7.0      
+[13] backports_1.4.1    lattice_0.20-45    glue_1.6.2         digest_0.6.29     
+[17] RColorBrewer_1.1-3 promises_1.2.0.1   rvest_1.0.2        colorspace_2.0-3  
+[21] htmltools_0.5.2    httpuv_1.6.5       pkgconfig_2.0.3    haven_2.5.0       
+[25] scales_1.2.0       processx_3.6.1     whisker_0.4        later_1.3.0       
+[29] tzdb_0.3.0         git2r_0.30.1       generics_0.1.2     ellipsis_0.3.2    
+[33] withr_2.5.0        cli_3.3.0          mnormt_2.1.0       magrittr_2.0.3    
+[37] crayon_1.5.1       readxl_1.4.0       evaluate_0.15      ps_1.7.1          
+[41] fs_1.5.2           fansi_1.0.3        nlme_3.1-158       xml2_1.3.3        
+[45] tools_4.2.1        hms_1.1.1          lifecycle_1.0.1    munsell_0.5.0     
+[49] reprex_2.0.1       callr_3.7.0        compiler_4.2.1     jquerylib_0.1.4   
+[53] rlang_1.0.3        grid_4.2.1         rstudioapi_0.13    rmarkdown_2.14    
+[57] gtable_0.3.0       DBI_1.1.3          R6_2.5.1           lubridate_1.8.0   
+[61] knitr_1.39         bit_4.0.4          fastmap_1.1.0      utf8_1.2.2        
+[65] rprojroot_2.0.3    stringi_1.7.6      parallel_4.2.1     Rcpp_1.0.8.3      
+[69] vctrs_0.4.1        dbplyr_2.2.1       tidyselect_1.1.2   xfun_0.31         </code></pre>
 </div>
 </div>
 
