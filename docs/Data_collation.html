@@ -9,7 +9,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Becca Belmonte, Mary Kate Corbally, Thomas Keaney" />
 
 
 <title>Data collation</title>
@@ -485,8 +484,6 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Data collation</h1>
-<h4 class="author">Becca Belmonte, Mary Kate Corbally, Thomas
-Keaney</h4>
 
 </div>
 
@@ -494,7 +491,7 @@ Keaney</h4>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -505,8 +502,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -519,9 +516,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>DGRP/</code> <span
@@ -615,141 +612,16 @@ versions is critical for reproducibility.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongdetected">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>Cache:</strong> detected </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
-<div id="strongCachestrongdetected" class="panel-collapse collapse">
+<div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-The following chunks had caches available:
-<ul>
-<li>
-combine google sheet data
-</li>
-<li>
-load in fitness data
-</li>
-<li>
-load packages
-</li>
-<li>
-save big dataset
-</li>
-<li>
-session-info-chunk-inserted-by-workflowr
-</li>
-<li>
-unnamed-chunk-1
-</li>
-<li>
-unnamed-chunk-10
-</li>
-<li>
-unnamed-chunk-11
-</li>
-<li>
-unnamed-chunk-12
-</li>
-<li>
-unnamed-chunk-13
-</li>
-<li>
-unnamed-chunk-14
-</li>
-<li>
-unnamed-chunk-15
-</li>
-<li>
-unnamed-chunk-16
-</li>
-<li>
-unnamed-chunk-17
-</li>
-<li>
-unnamed-chunk-18
-</li>
-<li>
-unnamed-chunk-19
-</li>
-<li>
-unnamed-chunk-2
-</li>
-<li>
-unnamed-chunk-20
-</li>
-<li>
-unnamed-chunk-21
-</li>
-<li>
-unnamed-chunk-22
-</li>
-<li>
-unnamed-chunk-23
-</li>
-<li>
-unnamed-chunk-24
-</li>
-<li>
-unnamed-chunk-25
-</li>
-<li>
-unnamed-chunk-26
-</li>
-<li>
-unnamed-chunk-27
-</li>
-<li>
-unnamed-chunk-28
-</li>
-<li>
-unnamed-chunk-29
-</li>
-<li>
-unnamed-chunk-3
-</li>
-<li>
-unnamed-chunk-30
-</li>
-<li>
-unnamed-chunk-31
-</li>
-<li>
-unnamed-chunk-32
-</li>
-<li>
-unnamed-chunk-33
-</li>
-<li>
-unnamed-chunk-34
-</li>
-<li>
-unnamed-chunk-35
-</li>
-<li>
-unnamed-chunk-4
-</li>
-<li>
-unnamed-chunk-5
-</li>
-<li>
-unnamed-chunk-6
-</li>
-<li>
-unnamed-chunk-7
-</li>
-<li>
-unnamed-chunk-8
-</li>
-<li>
-unnamed-chunk-9
-</li>
-</ul>
-<p>To ensure reproducibility of the results, delete the cache directory
-<code>Data_collation_cache</code> and re-run the analysis. To have
-workflowr automatically delete the cache directory prior to building the
-file, set <code>delete_cache = TRUE</code> when running
-<code>wflow_build()</code> or <code>wflow_publish()</code>.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
@@ -771,15 +643,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeed527563b89e7462962afe6b2cfce58d27e2d809targetblanked52756a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreee3c284a7e2df921ce2a709c619e51517cfaf582btargetblanke3c284aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/ed527563b89e7462962afe6b2cfce58d27e2d809" target="_blank">ed52756</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/e3c284a7e2df921ce2a709c619e51517cfaf582b" target="_blank">e3c284a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeed527563b89e7462962afe6b2cfce58d27e2d809targetblanked52756a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreee3c284a7e2df921ce2a709c619e51517cfaf582btargetblanke3c284aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -789,7 +661,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/ed527563b89e7462962afe6b2cfce58d27e2d809" target="_blank">ed52756</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/e3c284a7e2df921ce2a709c619e51517cfaf582b" target="_blank">e3c284a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -807,7 +679,6 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/Data_collation_cache/
     Ignored:    analysis/index_cache/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
@@ -882,6 +753,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/e3c284a7e2df921ce2a709c619e51517cfaf582b/analysis/Data_collation.Rmd" target="_blank">e3c284a</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+final version for analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/dcb2918aef2511da6e4d1b4e9ff50f2ee0b0dd29/docs/Data_collation.html" target="_blank">dcb2918</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1143,6 +1048,43 @@ tibble/dataframe. This is the entire current dataset.</strong></p>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(state_3_model)</span></code></pre></div>
 <p><img src="figure/Data_collation.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/dcb2918aef2511da6e4d1b4e9ff50f2ee0b0dd29/docs/figure/Data_collation.Rmd/unnamed-chunk-2-1.png" target="_blank">dcb2918</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>new_data <span class="ot">&lt;-</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">line =</span> Jumbo_mito_data<span class="sc">$</span>line,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">Sex =</span> <span class="fu">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>)) <span class="sc">%&gt;%</span> </span>
