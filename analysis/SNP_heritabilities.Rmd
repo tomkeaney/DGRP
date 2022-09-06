@@ -1,5 +1,5 @@
 ---
-title: "Estimating SNP heritability and genetic correlations"
+title: "Estimating 'SNP-heritability'"
 site: workflowr::wflow_site
 editor_options:
   chunk_output_type: console
@@ -13,18 +13,19 @@ knitr::opts_chunk$set(
 
 # Prepare for `GCTA` analysis
 
+$~$
+
 ## Load packages and build helper functions
 
-Here we load the necessary packages to build this document and code in 'tidy' style. We also set the file path so that R can access the `gcta64` software. Finally, we build a helper function to pass `GCTA` commands to the terminal. This function allows us to code entirely within R-studio, which is our strong preference.
+$~$
+
+Here we load the necessary packages to build this document and code in 'tidy' style. We also set the file path so that R can access the `gcta64` software. Finally, we build a helper function to pass `GCTA` commands to the terminal. This function allows us to code entirely within R-studio, which is our preference.
 
 ```{r}
 library(tidyverse)
 library(glue)
 library(kableExtra)
 library(DT)
-library(MetBrewer)
-library(patchwork)
-library(rcartocolor)
 
 gcta <- file.path(getwd(), "code/gcta64")
 options(readr.show_col_types = FALSE)
@@ -37,35 +38,35 @@ run_command <- function(shell_command, wd = getwd(), path = ""){
   cat(system(glue("cd ", wd, path, "\n",shell_command), intern = TRUE), sep = '\n')
 }
 
-
-### useful code that I didn't end up needing
-
-  #remove the suffix that denotes the sex the trait was measured in and replace the level 'both' with 'pooled'
- # mutate(Sex = recode(Sex, Both = "Pooled"),
-  #       Trait = case_when(
-   #        str_ends(Trait, ".f") | str_ends(Trait, ".m")  ~ gsub('.{2}$', '', Trait)),
-    #     `Trait 2` = case_when(
-     #      str_ends(`Trait 2`, ".f") | str_ends(`Trait 2`, ".m")  ~ gsub('.{2}$', '', `Trait 2`))) %>% 
-
 ```
 
-## Load phenotype data
+$~$
+
+## Load and clean phenotype data
+
+$~$
+
+Here we load in the unscaled phenotype data we collated [here](Data_collation.html). 
+
+- We then trim the dataset to only include traits that are measured across \>80 lines. 
+
+- Two traits cause GCTA to call an error: `paraquat.resistance.2021.f` & `starvation.resistance.high.carb.diet.m`. We simply do not estimate heritability for these two traits. The error is _Error: the information matrix is not invertible._
+
+This takes the number of traits from 1214 to 972. 
+
+We then fix the names of traits and DGRP lines to conform with `GCTA` and `Plink` e.g. */* is not an acceptable file name, and line is required in front of the line number e.g. `line21`.
 
 ```{r}
 traits <- read_csv("data/derived/all.dgrp.phenos_unscaled.csv") 
 
 traits_for_analysis <- 
   traits %>% 
-  # filter(!(`Trait guild` %in% allowed_guilds) | is.na(`Trait guild`)) %>% 
   group_by(Trait) %>% 
   summarise(lines_measured = length(unique(line))) %>% 
   ungroup() %>% 
   filter(lines_measured > 79) %>%
-  filter(Trait != "paraquat.resistance.2021.f" & Trait != "starvation.resistance.high.carb.diet.m") %>% # these traits call a gcta error, we remove for now
-  pull(Trait)  # find traits with 80+ replicates
- 
-
-traits_for_analysis <- traits_for_analysis[!(grepl("fitness.late", traits_for_analysis))]
+  filter(Trait != "paraquat.resistance.2021.f" & Trait != "starvation.resistance.high.carb.diet.m") %>% # these traits call a gcta error, we remove them
+  pull(Trait) # find traits with 80+ replicates
 
 # replace any slashes in the trait name, e.g. "1/3-Methylhistidine.high.yeast.f", as this is not ok to use as a file name
 traits_for_analysis <- str_replace_all(traits_for_analysis, "[/]", "_") 
@@ -73,30 +74,21 @@ traits_for_analysis <- str_replace_all(traits_for_analysis, "[/]", "_")
 line_mean_phenotypes <- traits %>%
   mutate(Trait = str_replace_all(Trait, "[/]", "_")) %>%  # change to match `traits_for_analysis` list
   filter(Trait %in% traits_for_analysis) %>%
-   filter(Trait != "paraquat.resistance.2021.f" & Trait != "starvation.resistance.high.carb.diet.m") %>% # these traits produce a gcta error, we remove for now
   select(line, Trait, trait_value) %>% 
-  #distinct(line, Trait, .keep_all = TRUE) %>% # Remove this line once Tom resolves the duplicates
   spread(Trait, trait_value) %>% 
   mutate_at(vars(-line), ~ as.numeric(scale(.x))) %>%  # scale the traits
   mutate(line = paste("line", line, sep = "")) # add "line" in front of the line number to fit with plink/gcta formatting
 ```
 
+$~$
 
 # Use `GCTA` to estimate the genetic variances and heritabilities for each trait
 
-Here we estimate 'SNP-heritability' for each phenotype using a genomic relatedness matrix Restricted Maximum Likelihood (GREML) approach. GREML uses a set of SNPs $S$ that are known across a population of individuals (or lines, in our case) to estimate the relatedness between random individuals (lines) and compares that with phenotypic variation across that set of individuals. This allows us to estimate the variation in phenotype that is explained by the known set of SNPs in our population. We can then divide this variance by the total variation found for the phenotype, giving the SNP-heritability. Note that SNP-heritability should be smaller than other estimates of heritability such as broad- or narrow-sense heritability, as it is limited to additive effects from a subset of the genome, while the latter two estimates encompass a broader range of genetic effects. 
+$~$
+
+Here we estimate 'SNP-heritability' for each phenotype using a Genomic relatedness matrix REstricted Maximum Likelihood (GREML) approach. GREML uses a set of SNPs $S$ that are known across a population of individuals (or DGRP lines, in our case) to estimate the relatedness between random individuals (lines) and compares that with their phenotypic similarity. This allows us to estimate the variation in phenotype that is explained by the known set of SNPs in our population. We can then divide this variance by the total variation found for the phenotype, giving the 'SNP-heritability', $h^2_{SNP}$. Note that SNP-heritability should be smaller than other estimates of heritability such as broad- or narrow-sense heritability, as it is limited to additive effects from **known** SNPs (and unknown causal variants in close linkage with these), while the latter two estimates encompass a more-complete range of genetic effects. 
 
 We use the `GCTA` software to run this analysis. 
-
-A few helpful exerts from the literature about GREML are provided below:
-
-> "Data from a GWAS that are collected to detect statistical associations between SNPs and complex traits are usually analyzed by testing each SNP individually for an association with the trait. To account for the large number of significance tests carried out, a very stringent P value is used. This reduces the occurrence of false positives, but it may cause many real associations to be missed, especially if individual SNPs have a small effect on the trait." 
-
-`r tufte::quote_footer('--- Yang et al 2010')`
-
-> "In contrast to single-SNP association analysis, the basic concept behind the `GCTA` method is to fit the effects of all the SNPs as random effects using a mixed linear model (MLM)."
-
-`r tufte::quote_footer('--- Yang et al 2011')`
 
 ## Make a genomic relatedness matrix for all the lines
 
@@ -147,19 +139,19 @@ do_univariate_greml <- function(trait1){
 
 # Now run the model for every trait and create a large tibble using map_dfr
 
-if(!file.exists("data/gwas_data/variance_components.csv")){
+if(!file.exists("data/derived/variance_components.csv")){
   variance_components <-
     map_dfr(traits_for_analysis, do_univariate_greml) %>% 
     filter(Source %in% c("V(G)", "V(e)", "Vp", "V(G)/Vp")) %>% 
     mutate(Variance = as.numeric(Variance)) %>% 
     rename(Parameter = Source) %>% 
     as_tibble()
-  write_csv(variance_components, file = "data/gwas_data/variance_components.csv")
-} else variance_components <- read_csv("data/gwas_data/variance_components.csv")
+  write_csv(variance_components, file = "data/derived/variance_components.csv")
+} else variance_components <- read_csv("data/derived/variance_components.csv")
 
 ```
 
-Currently two phenotypes call errors when we run the univariate GREML model: `paraquat.resistance.2021.f` and `starvation.resistance.high.carb.diet.m`. The error is _Error: the information matrix is not invertible._
+
 
 For now we simply don't run models for these traits, so there are no variance estimates for these traits.
 
@@ -170,8 +162,7 @@ $~$
 
 ```{r}
 trait_info <- traits %>%
-  mutate(Trait = str_replace_all(Trait, "[/]", "_"),
-         Sex = fct_recode(Sex, Pooled = "Both")) %>% 
+  mutate(Trait = str_replace_all(Trait, "[/]", "_")) %>% 
   select(-trait_value) %>% 
   distinct(Trait, Sex, `Trait guild`, `Trait description`, Reference)
 
@@ -189,25 +180,24 @@ variance_components_wide <-
          `Vp` = `Variance_Vp`,
          `V(G)/Vp` = `Variance_V(G)/Vp`)
   
-# Below we remove the suffix that denotes the sex the trait was measured in and replace the level 'both' with 'pooled'
+# Below we remove the suffix that denotes the sex the trait was measured in
 
 SNP_heritability <-
   variance_components_wide %>% 
-  mutate(Sex = recode(Sex, Both = "Pooled"),
-         Trait = case_when(
+  mutate(Trait = case_when(
            str_ends(Trait, ".f") | str_ends(Trait, ".m")  ~ gsub('.{2}$', '', Trait))) %>% 
   select(Trait, Sex, everything()) %>%  # reorder the columns for the table %>% 
   arrange(Trait)
 
 
-write_csv(SNP_heritability, file = "data/SNP_heritability_cleaned.csv")
+write_csv(SNP_heritability, file = "data/derived/SNP_heritability_cleaned.csv")
 ```
 
 $~$
 
 # Table 1
 
-Table 1. Phenotypic variance for the traits in our dataset ($V_p$), SNP genetic variance ($V_{SNP}$), residual variance ($V_e$) and heritability ($h^2_{SNP}$).
+Table 1. Phenotypic variance for the traits in our dataset ($V_p$), SNP variance ($V_{SNP}$), residual variance ($V_e$) and heritability ($h^2_{SNP}$).
 
 ```{r}
 # Create a function to build HTML searchable tables
@@ -229,7 +219,7 @@ my_data_table <- function(df){
           extend = 'pdf',
           pageSize = 'A4',
           orientation = 'landscape',
-          filename = 'Literature_table')),
+          filename = 'Variance_table')),
       pageLength = 1000
     )
   )

@@ -16,22 +16,10 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FAL
 library(Matrix)
 library(tidyverse)
 library(googlesheets4) # for reading google sheets
-library(pheatmap) # for heatmaps
-library(RColorBrewer) # for custom colours
-library(rcartocolor) # cool colours
-library(wesanderson) # cool colours
-library(kableExtra) # for scrolling tables
-library(pander) # more tables
-library(patchwork) # for cool plots
 library(brms) # for bayesian models
 library(tidybayes) # for more bayesian things
-library(shiny) # for interactive app
 library(DT) # for interactive tables
 library(broom) # convert results of functions into tables
-library(ggExtra) # for marginal plots
-library(ggtips) # for shiny app
-library(psych) # for getting p values and CIs for correlations
-
 ```
 
 
@@ -177,9 +165,9 @@ $~$
 
 Some studies only provide the raw data they collected when measuring DGRP phenotypes. We need line mean data to calculate genetic correlations between traits. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line. Each analysis is presented in a separate tab below.
 
-To make fitting priors easier, we standardise the data to have a mean of 0 and a standard deviation of 1.
+Where the response follows a Gaussian distribution, we standardise the data to have a mean of 0 and a standard deviation of 1. We do this to make prior specification more straightforward.
 
-**The brms models won't run unless you have `stan` and `brms` installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, I've made it so you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe. This is the entire current dataset.**
+**The Bayesian models won't run unless you have `stan` and the `brms` package installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, I've made it so you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe. This is the entire current dataset.**
 
 ## Analysis of raw data {.tabset}
 
@@ -216,9 +204,7 @@ state_3_model <- brm(st_state_3 ~ 1 + Sex + (Sex|line),
                       iter = 6000, warmup = 2000, chains = 4, cores = 4,
                       seed = 2, file = "fits/state_3.model")
 
-state_3_model <- read_rds("fits/state_3.model.rds")
-
-#pp_check(state_3_model)
+pp_check(state_3_model)
 
 new_data <-
   expand_grid(line = Jumbo_mito_data$line,
@@ -228,7 +214,11 @@ new_data <-
      
 fitted_state_3 <- fitted(state_3_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Jumbo_mito_data$state_3) + mean(Jumbo_mito_data$state_3),
+         Q2.5 = Q2.5*sd(Jumbo_mito_data$state_3) + mean(Jumbo_mito_data$state_3),
+         Q97.5 = Q97.5*sd(Jumbo_mito_data$state_3) + mean(Jumbo_mito_data$state_3))
 
 state_3_estimates <- tibble(new_data, fitted_state_3) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -251,12 +241,12 @@ Jumbo_line_means <- function(estimates, y, Trait, description){
 
 # females
 
-state_3_f_line_means <- Jumbo_line_means(state_3_estimates, "Female", "mitochondrial_state_3_respiration.f", "Mean mitochondrial state 3 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 3 respiration occurs when protons re-enter the mitochondrial matrix in the presence of ADP, which results in the production of ATP. Higher values indicate higher respiration rates.")
+state_3_f_line_means <- Jumbo_line_means(state_3_estimates, "Female", "mitochondrial.state.3.respiration.f", "Mean mitochondrial state 3 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 3 respiration occurs when protons re-enter the mitochondrial matrix in the presence of ADP, which results in the production of ATP. Higher values indicate higher respiration rates.")
 
 
 # males
 
-state_3_m_line_means <- Jumbo_line_means(state_3_estimates, "Male", "mitochondrial_state_3_respiration.m", "Mean mitochondrial state 3 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 3 respiration occurs when protons re-enter the mitochondrial matrix in the presence of ADP, which results in the production of ATP. Higher values indicate higher respiration rates.")
+state_3_m_line_means <- Jumbo_line_means(state_3_estimates, "Male", "mitochondrial.state.3.respiration.m", "Mean mitochondrial state 3 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 3 respiration occurs when protons re-enter the mitochondrial matrix in the presence of ADP, which results in the production of ATP. Higher values indicate higher respiration rates.")
 
 
 # respiration state 4 model
@@ -275,7 +265,11 @@ state_4_model <- brm(st_state_4 ~ 1 + Sex + (Sex|line),
      
 fitted_state_4 <- fitted(state_4_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Jumbo_mito_data$state_4) + mean(Jumbo_mito_data$state_4),
+         Q2.5 = Q2.5*sd(Jumbo_mito_data$state_4) + mean(Jumbo_mito_data$state_4),
+         Q97.5 = Q97.5*sd(Jumbo_mito_data$state_4) + mean(Jumbo_mito_data$state_4))
 
 state_4_estimates <- tibble(new_data, fitted_state_4) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -284,16 +278,18 @@ state_4_estimates <- tibble(new_data, fitted_state_4) %>%
 
 # females
 
-state_4_f_line_means <- Jumbo_line_means(state_4_estimates, "Female", "mitochondrial_state_4_respiration.f", "Mean mitochondrial state 4 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 4 respiration occurs when protons leak into the mitochondrial matrix in the absence of ADP, which is required for ATP synthase. Higher values indicate higher respiration rates.")
+state_4_f_line_means <- Jumbo_line_means(state_4_estimates, "Female", "mitochondrial.state.4.respiration.f", "Mean mitochondrial state 4 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 4 respiration occurs when protons leak into the mitochondrial matrix in the absence of ADP, which is required for ATP synthase. Higher values indicate higher respiration rates.")
 
 # males
 
-state_4_m_line_means <- Jumbo_line_means(state_4_estimates, "Male", "mitochondrial_state_4_respiration.m", "Mean mitochondrial state 4 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 4 respiration occurs when protons leak into the mitochondrial matrix in the absence of ADP, which is required for ATP synthase. Higher values indicate higher respiration rates.")
+state_4_m_line_means <- Jumbo_line_means(state_4_estimates, "Male", "mitochondrial.state.4.respiration.m", "Mean mitochondrial state 4 respiration rate, measured as oxygen consumption (pmol/s* mg of protein). Mitochondria were sourced from the thorax and respiration was measured in vitro. State 4 respiration occurs when protons leak into the mitochondrial matrix in the absence of ADP, which is required for ATP synthase. Higher values indicate higher respiration rates.")
 
 # P:O ratio model
 
+
+
 PO_ratio_model <- brm(st_po_ratio ~ 1 + Sex + (Sex|line),
-                      data = Jumbo_mito_data, family = gaussian,
+                      data = Jumbo_mito_data %>% filter(po_ratio != "NA"), family = gaussian,
                       prior = c(prior(normal(0, 0.5), class = Intercept),
                                 prior(normal(0, 0.5), class = b),
                                 prior(exponential(1), class = sd)),
@@ -302,10 +298,14 @@ PO_ratio_model <- brm(st_po_ratio ~ 1 + Sex + (Sex|line),
 
 #pp_check(PO_ratio_model)
 
+Jumbo_PO_data <- Jumbo_mito_data %>% filter(po_ratio != "NA")
      
-fitted_PO_ratio <- fitted(PO_ratio_model,
-       newdata = new_data) %>% 
-  as_tibble()
+fitted_PO_ratio <- fitted(PO_ratio_model, newdata = new_data) %>% 
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Jumbo_PO_data$po_ratio) + mean(Jumbo_PO_data$po_ratio),
+         Q2.5 = Q2.5*sd(Jumbo_PO_data$po_ratio) + mean(Jumbo_PO_data$po_ratio),
+         Q97.5 = Q97.5*sd(Jumbo_PO_data$po_ratio) + mean(Jumbo_PO_data$po_ratio))
 
 PO_ratio_estimates <- tibble(new_data, fitted_PO_ratio) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -314,11 +314,11 @@ PO_ratio_estimates <- tibble(new_data, fitted_PO_ratio) %>%
 
 # females
 
-PO_ratio_f_line_means <- Jumbo_line_means(PO_ratio_estimates, "Female", "mitochondrial_PO_ratio.f", "Mean phosphate/oxygen ratio (P:O ratio) - a measure of the efficiency with which mitochondria convert oxygen into ATP. The ratio was here calculated as the amount of ADP consumed per oxygen being reduced during state 3 respriation. Mitochondria were sourced from the thorax and respiration was measured in vitro. Higher values indicate more efficient ATP production.")
+PO_ratio_f_line_means <- Jumbo_line_means(PO_ratio_estimates, "Female", "mitochondrial.PO.ratio.f", "Mean phosphate/oxygen ratio (P:O ratio) - a measure of the efficiency with which mitochondria convert oxygen into ATP. The ratio was here calculated as the amount of ADP consumed per oxygen being reduced during state 3 respriation. Mitochondria were sourced from the thorax and respiration was measured in vitro. Higher values indicate more efficient ATP production.")
 
 # males
 
-PO_ratio_m_line_means <- Jumbo_line_means(PO_ratio_estimates, "Male", "mitochondrial_PO_ratio.m", "Mean phosphate/oxygen ratio (P:O ratio) - a measure of the efficiency with which mitochondria convert oxygen into ATP. The ratio was here calculated as the amount of ADP consumed per oxygen being reduced during state 3 respriation. Mitochondria were sourced from the thorax and respiration was measured in vitro. Higher values indicate more efficient ATP production.")
+PO_ratio_m_line_means <- Jumbo_line_means(PO_ratio_estimates, "Male", "mitochondrial.PO.ratio.m", "Mean phosphate/oxygen ratio (P:O ratio) - a measure of the efficiency with which mitochondria convert oxygen into ATP. The ratio was here calculated as the amount of ADP consumed per oxygen being reduced during state 3 respriation. Mitochondria were sourced from the thorax and respiration was measured in vitro. Higher values indicate more efficient ATP production.")
 
 Jumbo_traits <- 
   rbind(state_3_f_line_means, 
@@ -366,9 +366,12 @@ new_data <-
               Sex = c("F", "M")) %>% 
   distinct(Line, Sex)
 
-fitted_T1_leg_total <- fitted(T1_leg_length_model,
-       newdata = new_data) %>% 
-  as_tibble()
+fitted_T1_leg_total <- fitted(T1_leg_length_model, newdata = new_data) %>% 
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T1_leg_props$Total) + mean(Grubbs_2013_T1_leg_props$Total),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T1_leg_props$Total) + mean(Grubbs_2013_T1_leg_props$Total),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T1_leg_props$Total) + mean(Grubbs_2013_T1_leg_props$Total))
 
 # build a function to create tibbles holding sex specific line means
 
@@ -408,7 +411,12 @@ T2_leg_length_model <- brm(st_Total ~ 1 + Sex + (Sex|Line),
 
 fitted_T2_leg_total <- fitted(T2_leg_length_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T2_leg_props$Total) + mean(Grubbs_2013_T2_leg_props$Total),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T2_leg_props$Total) + mean(Grubbs_2013_T2_leg_props$Total),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T2_leg_props$Total) + mean(Grubbs_2013_T2_leg_props$Total))
+
 
 T2_leg_length_estimates <- tibble(new_data, fitted_T2_leg_total) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -435,7 +443,11 @@ T1_femur_model <- brm(st_Femur ~ 1 + Sex + (Sex|Line),
 
 fitted_T1_femur <- fitted(T1_femur_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T1_leg_props$Femur) + mean(Grubbs_2013_T1_leg_props$Femur),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T1_leg_props$Femur) + mean(Grubbs_2013_T1_leg_props$Femur),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T1_leg_props$Femur) + mean(Grubbs_2013_T1_leg_props$Femur))
 
 T1_femur_estimates <- tibble(new_data, fitted_T1_femur) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -460,7 +472,11 @@ T2_femur_model <- brm(st_Femur ~ 1 + Sex + (Sex|Line),
 
 fitted_T2_femur <- fitted(T2_femur_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T2_leg_props$Femur) + mean(Grubbs_2013_T2_leg_props$Femur),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T2_leg_props$Femur) + mean(Grubbs_2013_T2_leg_props$Femur),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T2_leg_props$Femur) + mean(Grubbs_2013_T2_leg_props$Femur))
 
 T2_femur_estimates <- tibble(new_data, fitted_T2_femur) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -486,7 +502,11 @@ T1_tibia_model <- brm(st_Tibia ~ 1 + Sex + (Sex|Line),
 
 fitted_T1_tibia <- fitted(T1_tibia_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T1_leg_props$Tibia) + mean(Grubbs_2013_T1_leg_props$Tibia),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T1_leg_props$Tibia) + mean(Grubbs_2013_T1_leg_props$Tibia),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T1_leg_props$Tibia) + mean(Grubbs_2013_T1_leg_props$Tibia))
 
 T1_tibia_estimates <- tibble(new_data, fitted_T1_tibia) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -511,7 +531,11 @@ T2_tibia_model <- brm(st_Tibia ~ 1 + Sex + (Sex|Line),
 
 fitted_T2_tibia <- fitted(T2_tibia_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T2_leg_props$Tibia) + mean(Grubbs_2013_T2_leg_props$Tibia),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T2_leg_props$Tibia) + mean(Grubbs_2013_T2_leg_props$Tibia),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T2_leg_props$Tibia) + mean(Grubbs_2013_T2_leg_props$Tibia))
 
 T2_tibia_estimates <- tibble(new_data, fitted_T2_tibia) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -537,7 +561,11 @@ T1_tarsus_model <- brm(st_Tarsus ~ 1 + Sex + (Sex|Line),
 
 fitted_T1_tarsus <- fitted(T1_tarsus_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T1_leg_props$Tarsus) + mean(Grubbs_2013_T1_leg_props$Tarsus),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T1_leg_props$Tarsus) + mean(Grubbs_2013_T1_leg_props$Tarsus),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T1_leg_props$Tarsus) + mean(Grubbs_2013_T1_leg_props$Tarsus))
 
 T1_tarsus_estimates <- tibble(new_data, fitted_T1_tarsus) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -561,7 +589,11 @@ T2_tarsus_model <- brm(st_Tarsus ~ 1 + Sex + (Sex|Line),
 
 fitted_T2_tarsus <- fitted(T2_tarsus_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Grubbs_2013_T2_leg_props$Tarsus) + mean(Grubbs_2013_T2_leg_props$Tarsus),
+         Q2.5 = Q2.5*sd(Grubbs_2013_T2_leg_props$Tarsus) + mean(Grubbs_2013_T2_leg_props$Tarsus),
+         Q97.5 = Q97.5*sd(Grubbs_2013_T2_leg_props$Tarsus) + mean(Grubbs_2013_T2_leg_props$Tarsus))
 
 T2_tarsus_estimates <- tibble(new_data, fitted_T2_tarsus) %>% 
   mutate(Sex = if_else(Sex == "F", "Female", "Male"))
@@ -621,12 +653,12 @@ weight_microbiome_effect_lines <- inner_join(a, b)
 
 # build a function to create tibbles holding specific line means
 
-Dobson_line_means <- function(estimates, Trait, description){
+Dobson_line_means <- function(estimates, Trait, guild, description){
   estimates %>% 
   mutate(Trait = Trait,
          Sex = "Male",
          Reference = "Dobson et al (2015) Nature Communications",
-          `Trait guild` = "Metabolome",
+          `Trait guild` = guild,
          `Trait description` = description,
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -651,48 +683,40 @@ new_data <-
   distinct(line, trt, wolb, day)
               
 
-fitted_dryweight <- fitted(weight_microbiome_model,
-       newdata = new_data) %>% 
-  as_tibble()
+fitted_dryweight <- fitted(weight_microbiome_model, newdata = new_data) %>% 
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dobson_NI_microbiome.dryweight$weight.5.flies) + mean(Dobson_NI_microbiome.dryweight$weight.5.flies),
+         Q2.5 = Q2.5*sd(Dobson_NI_microbiome.dryweight$weight.5.flies) + mean(Dobson_NI_microbiome.dryweight$weight.5.flies),
+         Q97.5 = Q97.5*sd(Dobson_NI_microbiome.dryweight$weight.5.flies) + mean(Dobson_NI_microbiome.dryweight$weight.5.flies))
 
 dry_weight_estimates_axenic <- tibble(new_data, fitted_dryweight) %>% 
   filter(trt == "a")
 
-weight.anexic_line_means <- Dobson_line_means(dry_weight_estimates_axenic, "weight.anexic.m", "Mean combined dry weight of 5 adult flies that lacked a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate heavier flies.")
+weight.anexic_line_means <- Dobson_line_means(dry_weight_estimates_axenic, "weight.anexic.m", "Microbiome", "Mean combined dry weight of 5 adult flies that lacked a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate heavier flies.")
 
 dry_weight_estimates_gnotobiotic <- tibble(new_data, fitted_dryweight) %>% 
   filter(trt == "b")
 
-weight.gnotobiotic_line_means <- Dobson_line_means(dry_weight_estimates_gnotobiotic, "weight.gnotobiotic.m", "Mean combined dry weight of 5 adult flies that possessed a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate heavier flies.")
+weight.gnotobiotic_line_means <- Dobson_line_means(dry_weight_estimates_gnotobiotic, "weight.gnotobiotic.m", "Microbiome", "Mean combined dry weight of 5 adult flies that possessed a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate heavier flies.")
 
 # Now get the difference between treatments
 
-post_weight <- posterior_samples(weight_microbiome_model)
+axenic <- 
+  left_join(weight_microbiome_effect_lines, dry_weight_estimates_axenic) %>% 
+  select(line, Estimate) %>% 
+  rename(axenic_estimate = Estimate)
 
-gnoto_anexic_diff_means_weight <- post_weight %>% 
-  select(starts_with("r_line") & contains("trtb")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of removing the microbiome on weight, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 3)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",trtb")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "weight.microbiome.effect.m",
-         Reference = "Dobson et al (2015) Nature Communications",
-         `Trait guild` = "Microbiome",
-         Sex = "Male",
-         `Trait description` = "Mean change in the combined dry weight of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota had a greater positive effect on weight. Note that the presence of micriobiota on average increased dry weight.",
-         trait_value = mean
-         ) %>%
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(line)
+gnoto <-
+  left_join(weight_microbiome_effect_lines, dry_weight_estimates_gnotobiotic) %>% 
+  select(line, Estimate) %>% 
+  rename(gnoto_estimate = Estimate)
 
-# this predicts differences for lines that haven't been measured in both treatments (how?). We can remedy this by inner_joining with a tibble containing a column of lines for which we have measures for both treatments 
+dry_weight_estimates_diff <-
+  left_join(axenic, gnoto) %>% 
+  mutate(Estimate = gnoto_estimate - axenic_estimate)
 
-gnoto_anexic_diff_means_weight <- 
-  inner_join(weight_microbiome_effect_lines, gnoto_anexic_diff_means_weight)
-
+gnoto_anexic_diff_weight_line_means <- Dobson_line_means(dry_weight_estimates_diff, "weight.microbiome.effect.m", "Microbiome", "Mean change in the combined dry weight of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota had a greater positive effect on weight. Note that the presence of micriobiota on average increased dry weight.")
 
 
 # Glucose
@@ -738,45 +762,39 @@ new_data <-
 
 fitted_glucose <- fitted(glucose_microbiome_model,
        newdata = new_data, allow_new_levels = TRUE) %>% # Why do we need to allow new levels? Might be an issue
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dobson_glucose_microbiome$glucose) + mean(Dobson_glucose_microbiome$glucose),
+         Q2.5 = Q2.5*sd(Dobson_glucose_microbiome$glucose) + mean(Dobson_glucose_microbiome$glucose),
+         Q97.5 = Q97.5*sd(Dobson_glucose_microbiome$glucose) + mean(Dobson_glucose_microbiome$glucose))
 
 glucose_estimates_axenic <- tibble(new_data, fitted_glucose) %>% 
   filter(trt == "a")
 
-glucose.anexic_line_means <- Dobson_line_means(glucose_estimates_axenic, "glucose.anexic.m", "Mean combined glucose content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher glucose content.")
+glucose.anexic_line_means <- Dobson_line_means(glucose_estimates_axenic, "glucose.anexic.m", "Microbiome", "Mean combined glucose content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher glucose content.")
 
 glucose_estimates_gnotobiotic <- tibble(new_data, fitted_glucose) %>% 
   filter(trt == "b")
 
-glucose.gnotobiotic_line_means <- Dobson_line_means(glucose_estimates_gnotobiotic, "glucose.gnotobiotic.m", "Mean combined glucose content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glucose content.")
+glucose.gnotobiotic_line_means <- Dobson_line_means(glucose_estimates_gnotobiotic, "glucose.gnotobiotic.m", "Micobiome", "Mean combined glucose content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glucose content.")
 
 # Now get the difference between treatments
 
-post_glucose <- posterior_samples(glucose_microbiome_model)
+axenic_glucose <- 
+  left_join(glucose_microbiome_effect_lines, glucose_estimates_axenic) %>% 
+  select(line, Estimate) %>% 
+  rename(axenic_estimate = Estimate)
 
-gnoto_anexic_diff_means_glucose <- post_glucose %>% 
-  select(starts_with("r_line") & contains("trtb")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of removing the microbiome on glucose, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 3)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",trtb")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "glucose.microbiome.effect.m",
-         Reference = "Dobson et al (2015) Nature Communications",
-         `Trait guild` = "Microbiome",
-         Sex = "Male",
-         `Trait description` = "Mean change in the combined glucose content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher glucose content. Note though that the presence of micriobiota on average decreased glucose content.",
-         trait_value = mean
-         ) %>%
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(line)
+gnoto_glucose <-
+  left_join(glucose_microbiome_effect_lines, glucose_estimates_gnotobiotic) %>% 
+  select(line, Estimate) %>% 
+  rename(gnoto_estimate = Estimate)
 
-# this predicts differences for lines that haven't been measured in both treatments (how?). We can remedy this by inner_joining with a tibble containing a column of lines for which we have measures for both treatments 
+glucose_estimates_diff <-
+  left_join(axenic_glucose, gnoto_glucose) %>% 
+  mutate(Estimate = gnoto_estimate - axenic_estimate)
 
-gnoto_anexic_diff_means_glucose <- 
-  inner_join(glucose_microbiome_effect_lines, gnoto_anexic_diff_means_glucose)
+gnoto_anexic_diff_glucose_line_means <- Dobson_line_means(glucose_estimates_diff, "glucose.microbiome.effect.m", "Microbiome", "Mean change in the combined glucose content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher glucose content. Note though that the presence of micriobiota on average decreased glucose content.")
 
 
 # Glycogen
@@ -788,7 +806,7 @@ Dobson_glycogen_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.gl
          day = as.factor(day),
          # standardise
          st_glycogen = (glycogen - mean(glycogen)) / sd(glycogen)) %>% 
-  select(c(line, wolb, st_glycogen, trt, day, weight.5.flies))
+  select(c(line, wolb, glycogen, st_glycogen, trt, day, weight.5.flies))
 
 # The data is a bit tricky. Not all lines have been measured in both treatments. Below we look to see first which lines were measured in treatments a and b, then what lines were measured in both. We need this when we estimate the mean difference between treatments for each line
 
@@ -820,46 +838,39 @@ new_data <-
 
 fitted_glycogen <- fitted(glycogen_microbiome_model,
        newdata = new_data) %>%
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dobson_glycogen_microbiome$glycogen) + mean(Dobson_glycogen_microbiome$glycogen),
+         Q2.5 = Q2.5*sd(Dobson_glycogen_microbiome$glycogen) + mean(Dobson_glycogen_microbiome$glycogen),
+         Q97.5 = Q97.5*sd(Dobson_glycogen_microbiome$glycogen) + mean(Dobson_glycogen_microbiome$glycogen))
 
 glycogen_estimates_axenic <- tibble(new_data, fitted_glycogen) %>% 
   filter(trt == "a")
 
-glycogen.anexic_line_means <- Dobson_line_means(glycogen_estimates_axenic, "glycogen.anexic.m", "Mean combined glycogen content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher glycogen content.")
+glycogen.anexic_line_means <- Dobson_line_means(glycogen_estimates_axenic, "glycogen.anexic.m", "Microbiome", "Mean combined glycogen content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher glycogen content.")
 
 glycogen_estimates_gnotobiotic <- tibble(new_data, fitted_glycogen) %>% 
   filter(trt == "b")
 
-glycogen.gnotobiotic_line_means <- Dobson_line_means(glycogen_estimates_gnotobiotic, "glycogen.gnotobiotic.m", "Mean combined glycogen content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glycogen content.")
+glycogen.gnotobiotic_line_means <- Dobson_line_means(glycogen_estimates_gnotobiotic, "glycogen.gnotobiotic.m", "Micobiome",  "Mean combined glycogen content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glycogen content.")
 
 # Now get the difference between treatments
 
-post_glycogen <- posterior_samples(glycogen_microbiome_model)
+axenic_glycogen <- 
+  left_join(glycogen_microbiome_effect_lines, glycogen_estimates_axenic) %>% 
+  select(line, Estimate) %>% 
+  rename(axenic_estimate = Estimate)
 
-gnoto_anexic_diff_means_glycogen <- post_glycogen %>% 
-  select(starts_with("r_line") & contains("trtb")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of removing the microbiome on glycogen, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 3)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",trtb")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "glycogen.microbiome.effect.m",
-         Reference = "Dobson et al (2015) Nature Communications",
-         `Trait guild` = "Microbiome",
-         Sex = "Male",
-         `Trait description` = "Mean change in the combined glycogen content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher glycogen content. Note that the presence of micriobiota on average increased glycogen content.",
-         trait_value = mean
-         ) %>%
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(line)
+gnoto_glycogen <-
+  left_join(glycogen_microbiome_effect_lines, glycogen_estimates_gnotobiotic) %>% 
+  select(line, Estimate) %>% 
+  rename(gnoto_estimate = Estimate)
 
-# this predicts differences for lines that haven't been measured in both treatments (how?). We can remedy this by inner_joining with a tibble containing a column of lines for which we have measures for both treatments 
+glycogen_estimates_diff <-
+  left_join(axenic_glycogen, gnoto_glycogen) %>% 
+  mutate(Estimate = gnoto_estimate - axenic_estimate)
 
-gnoto_anexic_diff_means_glycogen <- 
-  inner_join(glycogen_microbiome_effect_lines, gnoto_anexic_diff_means_glycogen)
-
+gnoto_anexic_diff_glycogen_line_means <- Dobson_line_means(glycogen_estimates_diff, "glycogen.microbiome.effect.m", "Microbiome", "Mean change in the combined glycogen content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher glycogen content. Note that the presence of micriobiota on average increased glycogen content.")
 
 # Protein
 
@@ -870,7 +881,7 @@ Dobson_protein_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.pro
          day = as.factor(day),
          # standardise
          st_protein = (protein - mean(protein)) / sd(protein)) %>% 
-  select(c(line, wolb, st_protein, trt, day, weight.5.flies))
+  select(c(line, wolb, protein, st_protein, trt, day, weight.5.flies))
 
 # The data is a bit tricky. Not all lines have been measured in both treatments. Below we look to see first which lines were measured in treatments a and b, then what lines were measured in both. We need this when we estimate the mean difference between treatments for each line
 
@@ -902,47 +913,39 @@ new_data <-
 
 fitted_protein <- fitted(protein_microbiome_model,
        newdata = new_data) %>%
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dobson_protein_microbiome$protein) + mean(Dobson_protein_microbiome$protein),
+         Q2.5 = Q2.5*sd(Dobson_protein_microbiome$protein) + mean(Dobson_protein_microbiome$protein),
+         Q97.5 = Q97.5*sd(Dobson_protein_microbiome$protein) + mean(Dobson_protein_microbiome$protein))
 
 protein_estimates_axenic <- tibble(new_data, fitted_protein) %>% 
   filter(trt == "a")
 
-protein.anexic_line_means <- Dobson_line_means(protein_estimates_axenic, "protein.anexic.m", "Mean combined protein content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher protein content.")
+protein.anexic_line_means <- Dobson_line_means(protein_estimates_axenic, "protein.anexic.m", "Microbiome", "Mean combined protein content extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher protein content.")
 
 protein_estimates_gnotobiotic <- tibble(new_data, fitted_protein) %>% 
   filter(trt == "b")
 
-protein.gnotobiotic_line_means <- Dobson_line_means(protein_estimates_gnotobiotic, "protein.gnotobiotic.m", "Mean combined protein content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher protein content.")
+protein.gnotobiotic_line_means <- Dobson_line_means(protein_estimates_gnotobiotic, "protein.gnotobiotic.m", "Microbiome", "Mean combined protein content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher protein content.")
 
 # Now get the difference between treatments
 
-post_protein <- posterior_samples(protein_microbiome_model)
+axenic_protein <- 
+  left_join(protein_microbiome_effect_lines, protein_estimates_axenic) %>% 
+  select(line, Estimate) %>% 
+  rename(axenic_estimate = Estimate)
 
-gnoto_anexic_diff_means_protein <- post_protein %>% 
-  select(starts_with("r_line") & contains("trtb")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of removing the microbiome on protein, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 3)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",trtb")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "protein.microbiome.effect.m",
-         Reference = "Dobson et al (2015) Nature Communications",
-         `Trait guild` = "Microbiome",
-         Sex = "Male",
-         `Trait description` = "Mean change in the combined protein content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher protein content. Note that the presence of micriobiota on average increased protein content.",
-         trait_value = mean
-         ) %>%
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(line)
+gnoto_protein <-
+  left_join(protein_microbiome_effect_lines, protein_estimates_gnotobiotic) %>% 
+  select(line, Estimate) %>% 
+  rename(gnoto_estimate = Estimate)
 
-# this predicts differences for lines that haven't been measured in both treatments (how?). We can remedy this by inner_joining with a tibble containing a column of lines for which we have measures for both treatments 
+protein_estimates_diff <-
+  left_join(axenic_protein, gnoto_protein) %>% 
+  mutate(Estimate = gnoto_estimate - axenic_estimate)
 
-gnoto_anexic_diff_means_protein <- 
-  inner_join(protein_microbiome_effect_lines, gnoto_anexic_diff_means_protein)
-
-
+gnoto_anexic_diff_protein_line_means <- Dobson_line_means(protein_estimates_diff, "protein.microbiome.effect.m", "Microbiome", "Mean change in the combined protein content of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher protein content. Note that the presence of micriobiota on average increased protein content.")
 
 # TAG glycerol
 
@@ -953,7 +956,7 @@ Dobson_TAG_glycerol_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtere
          day = as.factor(day),
          # standardise
          st_TAG_glycerol = (TAG_glycerol - mean(TAG_glycerol)) / sd(TAG_glycerol)) %>% 
-  select(c(line, st_TAG_glycerol, trt, day, weight.5.flies))
+  select(c(line, TAG_glycerol, st_TAG_glycerol, trt, day, weight.5.flies))
 
 # The data is a bit tricky. Not all lines have been measured in both treatments. Below we look to see first which lines were measured in treatments a and b, then what lines were measured in both. We need this when we estimate the mean difference between treatments for each line
 
@@ -983,62 +986,56 @@ new_data <-
               
 
 fitted_TAG_glycerol <- fitted(TAG_glycerol_microbiome_model,
-       newdata = new_data) %>%
-  as_tibble()
+                              newdata = new_data) %>%
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dobson_TAG_glycerol_microbiome$TAG_glycerol) + mean(Dobson_TAG_glycerol_microbiome$TAG_glycerol),
+         Q2.5 = Q2.5*sd(Dobson_TAG_glycerol_microbiome$TAG_glycerol) + mean(Dobson_TAG_glycerol_microbiome$TAG_glycerol),
+         Q97.5 = Q97.5*sd(Dobson_TAG_glycerol_microbiome$TAG_glycerol) + mean(Dobson_TAG_glycerol_microbiome$TAG_glycerol))
 
 TAG_glycerol_estimates_axenic <- tibble(new_data, fitted_TAG_glycerol) %>% 
   filter(trt == "a")
 
-TAG_glycerol.anexic_line_means <- Dobson_line_means(TAG_glycerol_estimates_axenic, "triglyceride.anexic.m", "Mean combined triglyceride (TAG) content after glycerol substraction extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher TAG content.")
+TAG_glycerol.anexic_line_means <- Dobson_line_means(TAG_glycerol_estimates_axenic, "triglyceride.anexic.m", "Microbiome", "Mean combined triglyceride (TAG) content after glycerol substraction extracted from 5 adult flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on sterile food. Higher values indicate higher TAG content.")
 
 TAG_glycerol_estimates_gnotobiotic <- tibble(new_data, fitted_TAG_glycerol) %>% 
   filter(trt == "b")
 
-TAG_glycerol.gnotobiotic_line_means <- Dobson_line_means(TAG_glycerol_estimates_gnotobiotic, "triglyceride.gnotobiotic.m", "Mean combined triglyceride (TAG) content after glycerol substraction extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher TAG content.")
+TAG_glycerol.gnotobiotic_line_means <- Dobson_line_means(TAG_glycerol_estimates_gnotobiotic, "triglyceride.gnotobiotic.m", "Microbiome", "Mean combined triglyceride (TAG) content after glycerol substraction extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher TAG content.")
 
 # Now get the difference between treatments
 
-post_TAG_glycerol <- posterior_samples(TAG_glycerol_microbiome_model)
+axenic_TAG_glycerol <- 
+  left_join(TAG_glycerol_microbiome_effect_lines, TAG_glycerol_estimates_axenic) %>% 
+  select(line, Estimate) %>% 
+  rename(axenic_estimate = Estimate)
 
-gnoto_anexic_diff_means_TAG_glycerol <- post_TAG_glycerol %>% 
-  select(starts_with("r_line") & contains("trtb")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of removing the microbiome on TAG_glycerol, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 3)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",trtb")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "TAG_glycerol.microbiome.effect.m",
-         Reference = "Dobson et al (2015) Nature Communications",
-         `Trait guild` = "Microbiome",
-         Sex = "Male",
-         `Trait description` = "Mean change in the combined triglycerdie content after glycerol substraction of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher TAG content. Note though that the presence of micriobiota on average decreased TAG content.",
-         trait_value = mean
-         ) %>%
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(line)
+gnoto_TAG_glycerol <-
+  left_join(TAG_glycerol_microbiome_effect_lines, TAG_glycerol_estimates_gnotobiotic) %>% 
+  select(line, Estimate) %>% 
+  rename(gnoto_estimate = Estimate)
 
-# this predicts differences for lines that haven't been measured in both treatments (how?). We can remedy this by inner_joining with a tibble containing a column of lines for which we have measures for both treatments 
+TAG_glycerol_estimates_diff <-
+  left_join(axenic_TAG_glycerol, gnoto_TAG_glycerol) %>% 
+  mutate(Estimate = gnoto_estimate - axenic_estimate)
 
-gnoto_anexic_diff_means_TAG_glycerol <- 
-  inner_join(TAG_glycerol_microbiome_effect_lines, gnoto_anexic_diff_means_TAG_glycerol)
+gnoto_anexic_diff_TAG_glycerol_line_means <- Dobson_line_means(TAG_glycerol_estimates_diff, "TAG.glycerol.microbiome.effect.m", "Microbiome", "Mean change in combined triglyceride content after glycerol substraction of 5 adult flies that possessed a microbiome compared with flies that lacked a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared either on sterile medium or on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate that the addition of microbiota resulted in a higher TAG content. Note though that the presence of micriobiota on average decreased TAG content.")
 
 Dobson_traits <- rbind(weight.anexic_line_means, 
                        weight.gnotobiotic_line_means, 
-                       gnoto_anexic_diff_means_weight,
+                       gnoto_anexic_diff_weight_line_means,
                        glucose.anexic_line_means, 
                        glucose.gnotobiotic_line_means, 
-                       gnoto_anexic_diff_means_glucose,
+                       gnoto_anexic_diff_glucose_line_means,
                        glycogen.anexic_line_means, 
                        glycogen.gnotobiotic_line_means, 
-                       gnoto_anexic_diff_means_glycogen,
+                       gnoto_anexic_diff_glycogen_line_means,
                        protein.anexic_line_means, 
                        protein.gnotobiotic_line_means, 
-                       gnoto_anexic_diff_means_protein,
+                       gnoto_anexic_diff_protein_line_means,
                        TAG_glycerol.anexic_line_means, 
                        TAG_glycerol.gnotobiotic_line_means, 
-                       gnoto_anexic_diff_means_TAG_glycerol)
+                       gnoto_anexic_diff_TAG_glycerol_line_means)
 
 ```
 
@@ -1204,7 +1201,7 @@ fitted_mating_latency <- fitted(mating_latency_model,
 
 mating_latency_m_estimates <- tibble(new_data, fitted_mating_latency) 
 
-mating_latency_m_line_means <- Gaertner_line_means(mating_latency_m_estimates, "mating.latency.2015.m", "Reproduction", "Mean latency until a DGRP male was observed copulating with a virgin female, detected by scan sampling 30 times over a 15 minute period. Lower values indicate males that began mating faster, which could be interpreted as males that are more attractive to females.")
+mating_latency_m_line_means <- Gaertner_line_means(mating_latency_m_estimates, "mating.latency.2015.m", "Behavioural", "Mean latency until a DGRP male was observed copulating with a virgin female, detected by scan sampling 30 times over a 15 minute period. Lower values indicate males that began mating faster, which could be interpreted as males that are more attractive to females.")
 
 Gaertner_traits <- rbind(orient_to_female_m_line_means, 
                          approach_female_m_line_means, 
@@ -1241,8 +1238,12 @@ new_data <-
   distinct(line)
 
 fitted_caffeine_resistance <- fitted(caffeine_resistance_model,
-       newdata = new_data) %>% 
-  as_tibble()
+                                     newdata = new_data) %>% 
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Najarro_2015_caff_resistance$CaffeineResistance) + mean(Najarro_2015_caff_resistance$CaffeineResistance),
+         Q2.5 = Q2.5*sd(Najarro_2015_caff_resistance$CaffeineResistance) + mean(Najarro_2015_caff_resistance$CaffeineResistance),
+         Q97.5 = Q97.5*sd(Najarro_2015_caff_resistance$CaffeineResistance) + mean(Najarro_2015_caff_resistance$CaffeineResistance))
 
 caffeine_resistance_line_means <- tibble(new_data, fitted_caffeine_resistance) %>% 
   mutate(Trait = "caffeine.resistance.f",
@@ -1261,7 +1262,7 @@ We need to do some wrangling to fit an appropriate model for these data. The res
 
 The authors calculate the learning score using the formula $learning.score =\frac{(Trained.odour - Control.odour)*100}{Trained.odour + control.odour}$. A value of 0 represents an even split of flies between both odours. We can convert this to the proportion scale, where this even split now = 0.5.
 
-We can transfrom our data using the following formula:
+We can transform our data using the following formula:
 
 $normalised.learning.score = \frac{learning.score - min(learning.score)}{max(learing.score) - min(learning.score)}$
 
@@ -1418,7 +1419,11 @@ new_data <-
 
 fitted_wing_size <- fitted(wing_size_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Munoz_2016_wing_size$CS) + mean(Munoz_2016_wing_size$CS),
+         Q2.5 = Q2.5*sd(Munoz_2016_wing_size$CS) + mean(Munoz_2016_wing_size$CS),
+         Q97.5 = Q97.5*sd(Munoz_2016_wing_size$CS) + mean(Munoz_2016_wing_size$CS))
 
 # females
 
@@ -1454,7 +1459,7 @@ Munoz_traits <- rbind(wing_size_f_line_means,
 
 ### Freda, 2017
 
-We have line mean data for larvae, but raw data for adults. Therefore we only model the adult data here.
+We have line mean data for larvae, but raw data for adults. Therefore, we only need to model the adult data here.
 
 ```{r}
 Freda_2017_cold_hardiness <- read_csv("data/input/Freda_2017_ThermalHardiness.csv") %>% 
@@ -1487,7 +1492,7 @@ cold_hardiness_f_line_means <- tibble(new_data, fitted_cold_hardiness) %>%
   mutate(Trait = "cold.hardiness.f",
          Sex = "Female",
          Reference = "Freda et al (2017) Integrative and Comparative Biology",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of surviving adults 24 hours post exposure to an hour of cold shock (-5°C). Higher values indicate flies that are more resistant to cold shock.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -1500,7 +1505,7 @@ cold_hardiness_m_line_means <- tibble(new_data, fitted_cold_hardiness) %>%
   mutate(Trait = "cold.hardiness.m",
          Sex = "Male",
          Reference = "Freda et al (2017) Integrative and Comparative Biology",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of surviving adults 24 hours post exposure to an hour of cold shock (-5°C). Higher values indicate flies that are more resistant to cold shock.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -1538,7 +1543,11 @@ new_data <-
 
 fitted_boric_acid <- fitted(boric_acid_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Najarro_2017_boric_acid$lifespan) + mean(Najarro_2017_boric_acid$lifespan),
+         Q2.5 = Q2.5*sd(Najarro_2017_boric_acid$lifespan) + mean(Najarro_2017_boric_acid$lifespan),
+         Q97.5 = Q97.5*sd(Najarro_2017_boric_acid$lifespan) + mean(Najarro_2017_boric_acid$lifespan))
 
 boric_acid_line_means <- tibble(new_data, fitted_boric_acid) %>% 
   mutate(line = str_remove(line, "RAL"),
@@ -1590,7 +1599,7 @@ cop_lat_line_means <- tibble(new_data, fitted_cop_lat) %>%
   mutate(Trait = "copulation.latency.m",
          Sex = "Male",
          Reference = "Dean et al (2020) Evolution",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Behavioural",
          `Trait description` = "Mean time (mins) from a male flies introduction to a female until the onset of mating. Lower values indicate shorter copulation latencies and potentially more attractive males",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -1630,7 +1639,7 @@ insem_capac_line_means <- tibble(new_data, fitted_insem_capac) %>%
   mutate(Trait = "insemination.capacity.m",
          Sex = "Male",
          Reference = "Dean et al (2020) Evolution",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Life history",
          `Trait description` = "Mean proportion of 10 females that a single male successfully inseminated in 48 hours. Insemination was verified by identification of viable pupal progeny. Higher values indicate males with a greater insemination capacity.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -1782,7 +1791,11 @@ new_data <-
 fitted_kv_LT50 <- fitted(kv_LT50_model,
        newdata = new_data,
        re_formula = value ~ (Sex|line)) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Palmer_2018_LT50$value) + mean(Palmer_2018_LT50$value),
+         Q2.5 = Q2.5*sd(Palmer_2018_LT50$value) + mean(Palmer_2018_LT50$value),
+         Q97.5 = Q97.5*sd(Palmer_2018_LT50$value) + mean(Palmer_2018_LT50$value))
 
 # females
 
@@ -1835,7 +1848,11 @@ new_data <-
 fitted_kv_titre <- fitted(kv_titre_model,
        newdata = new_data,
        re_formula = value ~ (1|line)) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Palmer_2018_KV_titre_data$value) + mean(Palmer_2018_KV_titre_data$value),
+         Q2.5 = Q2.5*sd(Palmer_2018_KV_titre_data$value) + mean(Palmer_2018_KV_titre_data$value),
+         Q97.5 = Q97.5*sd(Palmer_2018_KV_titre_data$value) + mean(Palmer_2018_KV_titre_data$value))
 
 # females
 
@@ -1897,7 +1914,7 @@ Teets_line_means <- function(estimates, value, Trait, description){
   filter(Temp == value) %>% 
   mutate(Trait = Trait,
          Reference = "Teets and Hahn (2018) Journal of Evolutionary Biology",
-         `Trait guild` ="Physiological",
+         `Trait guild` ="Temperature related",
          `Trait description` = description,
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -1960,7 +1977,11 @@ new_data <-
 
 fitted_starvation_resistance <- fitted(starvation_resistance_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Everman_2019_starvation_resistance$Lifespan_hrs) + mean(Everman_2019_starvation_resistance$Lifespan_hrs),
+         Q2.5 = Q2.5*sd(Everman_2019_starvation_resistance$Lifespan_hrs) + mean(Everman_2019_starvation_resistance$Lifespan_hrs),
+         Q97.5 = Q97.5*sd(Everman_2019_starvation_resistance$Lifespan_hrs) + mean(Everman_2019_starvation_resistance$Lifespan_hrs))
 
 # females
 
@@ -1969,7 +1990,7 @@ starvation_resistance_f_line_means <- tibble(new_data, fitted_starvation_resista
   mutate(Trait = "starvation.resistance.2019.f",
          Sex = "Female",
          Reference = "Everman et al (2019) Genetics",
-         `Trait guild` = "Life history",
+         `Trait guild` = "Stress response",
          `Trait description` = "Mean hours survived on inedible food medium, used as a measure of starvation resistance. Higher values indicate flies that exhibited greater starvation resistance.",
          trait_value = Estimate) %>% 
   mutate(line = str_remove(line, "RAL-")) %>% 
@@ -1983,7 +2004,7 @@ starvation_resistance_m_line_means <- tibble(new_data, fitted_starvation_resista
   mutate(Trait = "starvation.resistance.2019.m",
          Sex = "Male",
          Reference = "Everman et al (2019) Genetics",
-         `Trait guild` = "Life history",
+         `Trait guild` = "Stress response",
          `Trait description` = "Mean hours survived on inedible food medium, used as a measure of starvation resistance. Higher values indicate flies that exhibited greater starvation resistance.",
          trait_value = Estimate) %>% 
   mutate(line = str_remove(line, "RAL-")) %>% 
@@ -2040,7 +2061,7 @@ cold_hardiness_18_l_line_means <- tibble(new_data, fitted_ch_18_l) %>%
   mutate(Trait = "cold.hardiness.18C.larvae",
          Sex = "Both",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of third instar larvae that survived exposure to -6.5°C for an hour. These larvae were otherwise reared at 18°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2077,7 +2098,7 @@ cold_hardiness_18_f_line_means <- tibble(new_data, fitted_ch_18_f) %>%
   mutate(Trait = "cold.hardiness.18C.f",
          Sex = "Female",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to -6.5°C for an hour. These flies were originally reared at 18°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2111,7 +2132,7 @@ cold_hardiness_18_m_line_means <- tibble(new_data, fitted_ch_18_m) %>%
   mutate(Trait = "cold.hardiness.18C.m",
          Sex = "Male",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to -6.5°C for an hour. These flies were originally reared at 18°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2149,7 +2170,7 @@ cold_hardiness_25_l_line_means <- tibble(new_data, fitted_ch_25_l) %>%
   mutate(Trait = "cold.hardiness.25C.larvae",
          Sex = "Both",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of third instar larvae that survived exposure to -6.5°C for an hour. These larvae were otherwise reared at 25°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2184,7 +2205,7 @@ cold_hardiness_25_f_line_means <- tibble(new_data, fitted_ch_25_f) %>%
   mutate(Trait = "cold.hardiness.25C.f",
          Sex = "Female",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to -6.5°C for an hour. These flies were originally reared at 25°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2218,7 +2239,7 @@ cold_hardiness_25_m_line_means <- tibble(new_data, fitted_ch_25_m) %>%
   mutate(Trait = "cold.hardiness.25C.m",
          Sex = "Male",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to -6.5°C for an hour. These flies were originally reared at 25°C. Higher values indicate greater cold hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2254,8 +2275,8 @@ heat_hardiness_18_l_line_means <- tibble(new_data, fitted_hh_18_l) %>%
   mutate(Trait = "heat.hardiness.18C.larvae",
          Sex = "Both",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
-         `Trait description` = "Mean proportion of third instar larvae that survived exposure to -38°C for an hour. These larvae were otherwise reared at 18°C. Higher values indicate greater heat hardiness.",
+         `Trait guild` = "Temperature related",
+         `Trait description` = "Mean proportion of third instar larvae that survived exposure to 38°C for an hour. These larvae were otherwise reared at 18°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
@@ -2289,7 +2310,7 @@ heat_hardiness_18_f_line_means <- tibble(new_data, fitted_hh_18_f) %>%
   mutate(Trait = "heat.hardiness.18C.f",
          Sex = "Female",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to 38°C for an hour. These flies were originally reared at 18°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2323,7 +2344,7 @@ heat_hardiness_18_m_line_means <- tibble(new_data, fitted_hh_18_m) %>%
   mutate(Trait = "heat.hardiness.18C.m",
          Sex = "Male",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to 38°C for an hour. These flies were originally reared at 18°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2361,7 +2382,7 @@ heat_hardiness_25_l_line_means <- tibble(new_data, fitted_ch_25_l) %>%
   mutate(Trait = "heat.hardiness.25C.larvae",
          Sex = "Both",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of third instar larvae that survived exposure to 38°C for an hour. These larvae were otherwise reared at 25°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2396,7 +2417,7 @@ heat_hardiness_25_f_line_means <- tibble(new_data, fitted_hh_25_f) %>%
   mutate(Trait = "heat.hardiness.25C.f",
          Sex = "Female",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to 38°C for an hour. These flies were originally reared at 25°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2430,7 +2451,7 @@ heat_hardiness_25_m_line_means <- tibble(new_data, fitted_hh_25_m) %>%
   mutate(Trait = "heat.hardiness.25C.m",
          Sex = "Male",
          Reference = "Freda et al (2019) Heredity",
-         `Trait guild` = "Physiological",
+         `Trait guild` = "Temperature related",
          `Trait description` = "Mean proportion of adult flies that survived exposure to 38°C for an hour. These flies were originally reared at 25°C. Higher values indicate greater heat hardiness.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2452,7 +2473,7 @@ Freda_2019_traits <- rbind(cold_hardiness_18_l_line_means,
 
 ### Pitchers et al 2019
 
-This study phenotypes wing shape and area. They then run a multivariate GWA. Here, we just model the mean centroid size for each line.
+This study measures wing shape and area. They then run a multivariate GWA. Here, we just model the mean centroid size for each line.
 
 For whatever reason, this is a hard trait to model.
 
@@ -2496,7 +2517,11 @@ new_data <-
 
 fitted_wing_houle <- fitted(wing_centroid_size_model_Hou,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Houle_data$csmm) + mean(Houle_data$csmm),
+         Q2.5 = Q2.5*sd(Houle_data$csmm) + mean(Houle_data$csmm),
+         Q97.5 = Q97.5*sd(Houle_data$csmm) + mean(Houle_data$csmm))
 
 centroid_size_Houle_f_line_means <- tibble(new_data, fitted_wing_houle) %>%
   filter(Sex == "F") %>% 
@@ -2504,7 +2529,7 @@ centroid_size_Houle_f_line_means <- tibble(new_data, fitted_wing_houle) %>%
          Sex = "Female",
          Reference = "Pitchers et al (2019) Evolution",
          `Trait guild` = "Morphological",
-         `Trait description` = "Mean wing centroid size for flies measured in the Houle lab. Higher values indicate larger wings.",
+         `Trait description` = "Mean left wing centroid size for flies measured in the Houle lab. Images were taken of live flies using the 'Wingmachine' system. Higher values indicate larger wings.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
@@ -2516,7 +2541,7 @@ centroid_size_Houle_m_line_means <-
          Sex = "Male",
          Reference = "Pitchers et al (2019) Evolution",
          `Trait guild` = "Morphological",
-         `Trait description` = "Mean wing centroid size for flies measured in the Houle lab. Higher values indicate larger wings.",
+         `Trait description` = "Mean left wing centroid size for flies measured in the Houle lab. Images were taken of live flies using the 'Wingmachine' system. Higher values indicate larger wings.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
@@ -2543,14 +2568,18 @@ new_data <-
 
 fitted_wing_dworkin_f <- fitted(wing_centroid_size_model_Dwo_f,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm),
+         Q2.5 = Q2.5*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm),
+         Q97.5 = Q97.5*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm))
 
 centroid_size_Dworkin_f_line_means <- tibble(new_data, fitted_wing_dworkin_f) %>%
   mutate(Trait = "wing.centroid.size.2019_Dworkin.f",
          Sex = "Female",
          Reference = "Pitchers et al (2019) Evolution",
          `Trait guild` = "Morphological",
-         `Trait description` = "Mean wing centroid size for flies measured in the Dworkin lab. Higher values indicate larger wings.",
+         `Trait description` = "Mean left wing centroid size for flies measured in the Dworkin lab. Images were taken of dissected wings using an Olympus microscope. Higher values indicate larger wings.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
@@ -2574,14 +2603,18 @@ new_data <-
 
 fitted_wing_dworkin_m <- fitted(wing_centroid_size_model_Dwo_m,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm),
+         Q2.5 = Q2.5*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm),
+         Q97.5 = Q97.5*sd(Dworkin_data$csmm) + mean(Dworkin_data$csmm))
 
 centroid_size_Dworkin_m_line_means <- tibble(new_data, fitted_wing_dworkin_m) %>%
   mutate(Trait = "wing.centroid.size.2019_Dworkin.m",
          Sex = "Male",
          Reference = "Pitchers et al (2019) Evolution",
          `Trait guild` = "Morphological",
-         `Trait description` = "Mean wing centroid size for flies measured in the Dworkin lab. Higher values indicate larger wings.",
+         `Trait description` = "Mean wing centroid size for flies measured in the Dworkin lab. Images were taken of dissected wings using an Olympus microscope. Higher values indicate larger wings.",
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
@@ -2630,7 +2663,11 @@ new_data <-
 fitted_activity <- fitted(activity_model,
        newdata = new_data,
        re_formula = distance_cm ~ (treatment|line)) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Rohde_2019_data$distance_cm) + mean(Rohde_2019_data$distance_cm),
+         Q2.5 = Q2.5*sd(Rohde_2019_data$distance_cm) + mean(Rohde_2019_data$distance_cm),
+         Q97.5 = Q97.5*sd(Rohde_2019_data$distance_cm) + mean(Rohde_2019_data$distance_cm))
 
 activity_line_estimates <- tibble(new_data, fitted_activity) %>% 
   select(line, treatment, Estimate) %>% 
@@ -2662,28 +2699,31 @@ activity_mph_line_means <- activity_line_estimates %>%
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(line)
 
-# now lets get means for the effect of mph on movement, which we get directly from the posterior samples
+# now lets get means for the effect of mph on movement by getting the difference between treatments
 
-post_mph_effect <- posterior_samples(activity_model)
+SUC_activity <- 
+  activity_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(SUC_estimate = trait_value)
 
-mph_effect_line_means <- post_mph_effect %>% 
-  select(starts_with("r_line") & contains("treatment1")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is plasticity, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) *-1 %>% round(digits = 2)) %>% # we multiply by -1 to match Rohde et als scale.
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",treatment1")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "MPH.effect.on.activity.m",
+mph_activity <- 
+  activity_mph_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(mph_estimate = trait_value)
+
+activity_estimates_diff <-
+  left_join(SUC_activity, mph_activity) %>% 
+  mutate(Estimate = mph_estimate - SUC_estimate)
+
+mph_effect_line_means <- activity_estimates_diff %>%
+  mutate(Trait = "MPH.effect.on.activity.m",
+         Sex = "Male",
          Reference = "Rohde et al (2019) Genetics",
          `Trait guild` = "Drug response",
-         Sex = "Male",
-         `Trait description` = "Mean difference in distance moved during a 10-min trial in a circular arena (16mm diameter x 6mm height) between flies fed a control 5% sucrose solution and a 5% sucrose solution supplemented with 1.5 mg ml^-1 methylphenidate (MPH). MPH is a drug used to treat the symptoms of attention-deficit/hyperactivity disorder (ADHD) in humans. Higher values indicate less activity when flies were supplemented with MPH.",
-         trait_value = mean
-  ) %>%
+         `Trait description` = "Mean difference in distance moved during a 10-min trial in a circular arena (16mm diameter x 6mm height) between flies fed a control 5% sucrose solution and a 5% sucrose solution supplemented with 1.5 mg ml^-1 methylphenidate (MPH). MPH is a drug used to treat the symptoms of attention-deficit/hyperactivity disorder (ADHD) in humans. Positive values indicate greater activity when flies were supplemented with MPH.",
+         trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(trait_value)
+  arrange(line)
 
 Rohde_traits <- rbind(activity_line_means,
                       activity_mph_line_means,
@@ -2824,7 +2864,7 @@ Zwoinska_line_means <- function(estimates, value, Trait, sex, description){
   mutate(Trait = Trait,
          Sex = sex,
          Reference = "Zwoinska et al (2020) Frontiers in Genetics",
-         `Trait guild` ="Reproduction",
+         `Trait guild` = "Life history",
          `Trait description` = description,
          trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2854,7 +2894,7 @@ fertility_m_temp_effect_line_means <- as_draws_df(fertility_male_model_ordered) 
   mutate(line = gsub("\\[|\\]", "", line),
          Trait = "fertility.thermal.susceptibility.m",
          Reference = "Zwoinska et al (2020) Frontiers in Genetics",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Temperature related",
          Sex = "Male",
          `Trait description` = "Mean slope of the change in male fertility (the proportion of males that produced viable larvae), between 25C, 27C and 29C rearing conditions. Lower slope values indicate a greater decrease in fertility with an increase in temperature. This is a measure of thermal susceptibility.",
          trait_value = mean
@@ -2905,7 +2945,7 @@ backup_approach <- cbind(a, c) %>%
   summarise(trait_value = mean(fertility_diff)) %>% 
   mutate(Trait = "fertility.thermal.susceptibility.m",
          Reference = "Zwoinska et al (2020) Frontiers in Genetics",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Temperature related",
          Sex = "Male",
          `Trait description` = "Mean change in male fertility (the proportion of males that produced viable larvae), between 25C and 29C rearing conditions. Higher values indicate a greater decrease in fertility. This is a measure of thermal susceptibility or thermal plasticity in fertility.") %>%
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -2982,7 +3022,7 @@ fertility_f_temp_effect_line_means <- as_draws_df(fertility_female_model_ordered
   mutate(line = gsub("\\[|\\]", "", line),
          Trait = "fertility.thermal.susceptibility.f",
          Reference = "Zwoinska et al (2020) Frontiers in Genetics",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Temperature related",
          Sex = "Female",
          `Trait description` = "Mean slope of the change in female fertility (the proportion of males that produced viable larvae), between 25C, 27C and 29C rearing conditions. Lower slope values indicate a greater decrease in fertility with an increase in temperature. This is a measure of thermal susceptibility.",
          trait_value = mean
@@ -3027,7 +3067,7 @@ backup_approach <- cbind(a_female, c_female) %>%
   summarise(trait_value = mean(fertility_diff)) %>% 
   mutate(Trait = "fertility.thermal.susceptibility.f",
          Reference = "Zwoinska et al (2020) Frontiers in Genetics",
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Temperature related",
          Sex = "Female",
          `Trait description` = "Mean change in female fertility (the proportion of males that produced viable larvae), between 25C and 29C rearing conditions. Higher values indicate a greater decrease in fertility. This is a measure of thermal susceptibility or thermal plasticity in fertility.") %>%
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -3079,7 +3119,7 @@ aggression_m_line_means <- tibble(new_data, fitted_aggression) %>%
          Sex = "Male",
          Reference = "Chowdhury et al Nature Communications Biology",
          `Trait guild` = "Behavioural",
-         `Trait description` = "Mean number of aggressive lunges made in 20 min window following removal of a divider, by pairs of DGRP males of same genotype. Trials were run after males were kept isolated for five days. Highe rvalues indicate more aggressive males.",
+         `Trait description` = "Mean number of aggressive lunges made in 20 min window following removal of a divider, by pairs of DGRP males of same genotype. Trials were run after males were kept isolated for five days. Higher values indicate more aggressive males.",
          trait_value = Estimate) %>% 
   mutate(line = str_remove(line, "RAL-")) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
@@ -3124,7 +3164,11 @@ new_data <-
 
 fitted_female_climbing <- fitted(climbing_female_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Watanabe_female_data$Climbing) + mean(Watanabe_female_data$Climbing),
+         Q2.5 = Q2.5*sd(Watanabe_female_data$Climbing) + mean(Watanabe_female_data$Climbing),
+         Q97.5 = Q97.5*sd(Watanabe_female_data$Climbing) + mean(Watanabe_female_data$Climbing))
 
 climbing_f_line_estimates <- tibble(new_data, fitted_female_climbing)
 
@@ -3149,25 +3193,31 @@ climbing_post_exercise_f_line_means <- Watanabe_line_means(climbing_f_line_estim
 
 # get predictions from the model for each line (note fitted() isn't used, instead we grab the estimates straight from the models posterior). Once again, the line rankings produced here are very similar to the slopes estimates presented in Watanabe and Riddle (2021).
 
-post_climbing_female <- as_draws_df(climbing_female_model)
+# Now get the difference between treatments
 
-climbing_f_exercise_effect_line_means <- post_climbing_female %>% 
-  select(starts_with("r_line") & contains("TreatmentT")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of exercise, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 2)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",TreatmentT")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "climbing.exercise.effect.f",
+control_climbing_f <- 
+  climbing_f_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(control_estimate = trait_value)
+
+exercise_climbing_f <- 
+  climbing_post_exercise_f_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(exercise_estimate = trait_value)
+
+climbing_estimates_diff <-
+  left_join(control_climbing_f, exercise_climbing_f) %>% 
+  mutate(Estimate = exercise_estimate - control_estimate)
+
+climbing_f_exercise_effect_line_means <- climbing_estimates_diff %>%
+  mutate(Trait = "climbing.exercise.effect.f",
+         Sex = "Female",
          Reference = "Watanabe and Riddle (2021) Royal Society Open Science",
          `Trait guild` = "Activity",
-         Sex = "Female",
-         `Trait description` = "Mean change in the climbing ability of adults, between flies that were and were not exposed to exercise five days previously. Higher values indicate a greater increase in climbing ability with exercise.",
-         trait_value = mean) %>%
+         `Trait description` = "Mean change in the climbing ability of adults, between flies that were and were not exposed to exercise five days previously. Positive values indicate an increase in climbing ability with exercise.",
+         trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(trait_value)
+  arrange(line)
 
 # males
 
@@ -3199,7 +3249,11 @@ new_data <-
 
 fitted_male_climbing <- fitted(climbing_male_model,
        newdata = new_data) %>% 
-  as_tibble()
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(Estimate = Estimate*sd(Watanabe_male_data$Climbing) + mean(Watanabe_male_data$Climbing),
+         Q2.5 = Q2.5*sd(Watanabe_male_data$Climbing) + mean(Watanabe_male_data$Climbing),
+         Q97.5 = Q97.5*sd(Watanabe_male_data$Climbing) + mean(Watanabe_male_data$Climbing))
 
 climbing_m_line_estimates <- tibble(new_data, fitted_male_climbing)
 
@@ -3207,28 +3261,32 @@ climbing_m_line_means <- Watanabe_line_means(climbing_m_line_estimates, "C", "cl
 
 climbing_post_exercise_m_line_means <- Watanabe_line_means(climbing_m_line_estimates, "T", "climbing.post.exercise.m", "Male", "Mean climbing index, following five days consecutive days of forced exercise (two hours a day). Higher values indicate greater climbing ability.")
 
-# get predictions from the model for each line (note fitted() isn't used, instead we grab the estimates straight from the models posterior). Once again, the line rankings produced here are very similar to the slopes estimates presented in Watanabe and Riddle (2021).
+# Now get the difference between treatments
 
-post_climbing_male <- posterior_samples(climbing_male_model)
+control_climbing_m <- 
+  climbing_m_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(control_estimate = trait_value)
 
-climbing_m_exercise_effect_line_means <- post_climbing_male %>% 
-  select(starts_with("r_line") & contains("TreatmentT")) %>% 
-  gather() %>% 
-  group_by(key) %>% 
-  # the trait in question is the effect of exercise, which is measured by the line specific random slope between treatments - we can get this straight from our posterior samples, without adding anything else 
-  summarise(mean = mean(value) %>% round(digits = 2)) %>% 
-  mutate(line = str_remove(key, "r_line")) %>% 
-  mutate(line = str_remove(line, ",TreatmentT")) %>% 
-  mutate(line = gsub("\\[|\\]", "", line),
-         Trait = "climbing.exercise.effect.m",
+exercise_climbing_m <- 
+  climbing_post_exercise_m_line_means %>% 
+  select(line, trait_value) %>% 
+  rename(exercise_estimate = trait_value)
+
+climbing_estimates_diff_m <-
+  left_join(control_climbing_m, exercise_climbing_m) %>% 
+  mutate(Estimate = exercise_estimate - control_estimate)
+
+climbing_m_exercise_effect_line_means <- climbing_estimates_diff_m %>%
+  mutate(Trait = "climbing.exercise.effect.m",
+         Sex = "Male",
          Reference = "Watanabe and Riddle (2021) Royal Society Open Science",
          `Trait guild` = "Activity",
-         Sex = "Male",
-         `Trait description` = "Mean change in the climbing ability of adults, between flies that were and were not exposed to exercise five days previously. Higher values indicate a greater increase in climbing ability with exercise.",
-         trait_value = mean
-         ) %>%
+         `Trait description` = "Mean change in the climbing ability of adults, between flies that were and were not exposed to exercise five days previously. Positive values indicate an increase in climbing ability with exercise.",
+         trait_value = Estimate) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-  arrange(trait_value)
+  arrange(line)
+
 
 Watanabe_traits <- rbind(climbing_f_line_means,
                          climbing_f_exercise_effect_line_means,
@@ -3295,18 +3353,18 @@ Wong_Holman_line_means <- function(fitness, description){
         filter(Trait == fitness) %>% 
   mutate(Reference = "Wong and Holman (in prep)",
          Sex = if_else(str_detect(Trait, ".f"), "Female", "Male"),
-         `Trait guild` = "Reproduction",
+         `Trait guild` = "Life history",
          `Trait description` = description) %>% 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference)
 }
 
-fitness_young_f_line_means <- Wong_Holman_line_means("fitness.early.f", "Mean absolute number of first instar larvae produced when 2-5 day old focal DGRP females were placed in a vial with some competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
+fitness_young_f_line_means <- Wong_Holman_line_means("fitness.early.f", "Mean absolute number of first instar larvae produced when 2-5 day old focal DGRP females were placed in a vial with competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
 
-fitness_old_f_line_means <- Wong_Holman_line_means("fitness.late.f", "Mean absolute number of first instar larvae produced when 14-17 day old focal DGRP females were placed in a vial with some competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
+fitness_old_f_line_means <- Wong_Holman_line_means("fitness.late.f", "Mean absolute number of first instar larvae produced when 14-17 day old focal DGRP females were placed in a vial with competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
 
-fitness_young_m_line_means <- Wong_Holman_line_means("fitness.early.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with some competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
+fitness_young_m_line_means <- Wong_Holman_line_means("fitness.early.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
 
-fitness_old_m_line_means <- Wong_Holman_line_means("fitness.late.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with some competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
+fitness_old_m_line_means <- Wong_Holman_line_means("fitness.late.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
 
 ```
 
@@ -3323,7 +3381,8 @@ if(!file.exists("data/derived/all.dgrp.phenos_combined.csv")){
           fitness_young_f_line_means, 
           fitness_old_f_line_means,
           fitness_young_m_line_means,
-          fitness_old_m_line_means)
+          fitness_old_m_line_means) %>% 
+    mutate(Sex = recode(Sex, Both = "Pooled"))
   
   write_csv(all.dgrp.phenos_combined, file = "data/derived/all.dgrp.phenos_combined.csv")
 } else all.dgrp.phenos_combined <- read_csv("data/derived/all.dgrp.phenos_combined.csv")
@@ -3341,23 +3400,21 @@ $~$
 
 We have phenotype line means for 238 lines. As of the start of 2018, there are only 205 DGRP lines. There appear to be some lines that have been used in very few studies, suggesting they have been mistakenly labelled at some point.
 
-After checking Bloomington (<https://bdsc.indiana.edu/Home/Search>) and flybase (<http://flybase.org/reports/FBrf0222220>) we found the following anomalies.
+After checking Bloomington (<https://bdsc.indiana.edu/Home/Search>) and flybase (<http://flybase.org/reports/FBlc0000504.html>) we found the following anomalies.
 
--   Chapman et al (2020): lines 273, 331, 501, 568, 709, 831, 846 - yet to be investigated, but these lines are not phenotyped in any other study...
+-   Chapman et al (2020): lines 273, 331, 501, 568, 709, 831, 846 - these lines are not phenotyped in any other study and are not documented on flybase.
 
--   Palmer et al (2018): line 575 - yet to be investigated
+-   Palmer et al (2018): line 575 - not on flybase
 
--   Magwire et al (2012): line 343 - yet to be investigated (only aberrant line from study)
+-   Chowdhury et al (2019): line 471 - not on flybase (only aberrant line from study)
 
--   Chowdhury et al (2019): line 471 - yet to be investigated (only aberrant line from study)
+-   Houston (2019): line 285 - not on flybase
 
--   Houston (2019): line 285 - yet to be investigated
-
--   Watanabe ad Riddle (2021): line 854 - yet to be investigated
+-   Watanabe ad Riddle (2021): line 854 - not on flybase
 
 -   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for mysterious lines. No obvious typos and the paper states they GWA for 178 lines, which matches the number reported in File S2, which is where I sourced the data.
 
--   Katzenberger et al (2015): line 521 - no obvious typo (data is ordered by in increasing trait value). One-off issue.
+-   Katzenberger et al (2015): line 521 - no obvious typo (data is ordered by increasing trait value). One-off issue.
 
 -   Turner, Miller and Cochrane (2013): line 760 - no obvious typo. One off.
 
@@ -3390,7 +3447,6 @@ all.dgrp.phenos_combined <-
          line != "273",
          line != "285",
          line != "331",
-         line != "343",
          line != "424",
          line != "471",
          line != "501",
@@ -3408,37 +3464,15 @@ all.dgrp.phenos_combined <-
          line != "917"
   )
 
-# all.dgrp.phenos_combined %>% distinct(line)
+ #all.dgrp.phenos_combined %>% distinct(line)
 
 ```
 
-This still leaves 218 lines, which considering most studies report the DGRP to consist of 205 lines, is unexpected.
+This still leaves 219 lines, which considering most studies report the DGRP to consist of 205 lines, is unexpected.
 
-However, the DGRP record on flybase (<http://flybase.org/reports/FBlc0000504.html>) indicates that a total of 219 lines have been included in the DGRP at some point since its creation. We have phenotype measurements for 218 lines, and this can be explained by some lines being withdrawn from the Bloomington stock centre. Lines were withdrawn because they were very sick, sequence data was not available, or they were essentially duplicates (that is, they exhibit high genomic relatedness with another one of the lines) of other lines.
+However, the DGRP record on flybase (<http://flybase.org/reports/FBlc0000504.html>) indicates that a total of 219 lines have been included in the DGRP at some point since its creation. We have phenotype measurements for all 219 lines, and this can be explained by some lines being withdrawn from the Bloomington stock centre. Lines were withdrawn because they were very sick, sequence data was not available, or they were essentially duplicates (that is, they exhibit high genomic relatedness with another one of the lines) of other lines.
 
-The lines that have been withdrawn but are included in our dataset are: 49, 325, 343, 80, 272, 378, 387, 393, 398, 476, 514, 554, 556, 591, 750 and 771. We choose **not to remove** these lines from our dataset, as many of the studies we include in our dataset make use of these lines.
-
-$~$
-
-### Accounting for population structure
-
-**NOT DONE**
-
-The lines that makeup the DGRP all originate from females collected at a farmer's market in North Carolina. D. melanogaster populations are quite viscous, so there are a few lines that are related to one another above and below the random expectation. Our analyses assume that lines are independent of one another. To account for this, we have two choices. We can do some complex modelling, or we can simply remove line 'duplicates' from the dataset.
-
-The DGRP website provides the DGRP relatedness matrix we need to do this. A value of 0 indicates random relatedness, a negative value indicates that lines are less related than expected at random, and a positive value indicates that lines are more related than the population average.
-
-For each pair of lines that have a relatedness coefficient < -0.2 or > 0.2 we can remove the line with the higher number ID.
-
-```{r}
-relatedness_matrix <- read_csv("data/input/relatedness_matrix.csv")
-
-relatedness_matrix <- relatedness_matrix %>% as.matrix()
-
-#relatedness_matrix %>% select(line_390, var) %>% filter(line_390 > 0.1)
-  
-```
-
+The lines that have been withdrawn but are included in our dataset are: 80, 272, 343, 378, 387, 393, 398, 476, 514, 554, 556, 591, 750, 771. We choose **not to remove** these lines from our dataset, as many of the studies we include in our dataset make use of these lines.
 
 $~$
 
@@ -3461,27 +3495,14 @@ $~$
 
 $~$
 
-Some traits appear to be quantitative, but in reality function as binary traits i.e. they either are resistant to a pesticide or they aren't, or they develop a mushroom body abnormality or they don't. Here we focus on quantitative traits, so we remove these binary traits from our dataset. **We probably don't need to remove these - seek advice**
-
-Other traits have been measured in heterozygotes. A common cause for this manifests when the goal of a study is to observe whether genetic variation affects the response to a genetic disease or the expression of a transgenic construct. These studies are not ideal for our database, as the phenotypes they observe may be affected be dominance and epistatic interactions that are absent in the nearly completely homozygous DGRP lines. We remove these studies from our dataset.
+Some traits have been measured in heterozygotes. This generally occurs when the goal of a study is to observe whether genetic variation affects the response to a genetic disease encoded by a particular variant or the expression of a transgenic construct. These studies are not ideal for our database, as the phenotypes they observe may be affected be dominance and epistatic interactions that are absent in the nearly completely homozygous DGRP lines. We remove these studies from our dataset.
 
 ```{r}
 
 # Remove binary traits and those measured in heterozyogtes
 
 all.dgrp.phenos_combined_subset <- all.dgrp.phenos_combined_subset %>% 
-  filter(# binary traits
-         #Trait != "mushroom.abnormal.alpha.m", 
-         #Trait != "mushroom.abnormal.beta.m", 
-         #Trait != "mushroom.fusion.beta.m", 
-         #Trait != "mushroom.missing.alpha.m", 
-         #Trait != "mushroom.missing.beta.m", 
-         #Trait != "mushroom.short.alpha.m", 
-         #Trait != "mushroom.short.beta.m", 
-         #Trait != "mushroom.thin.alpha.m", 
-         #Trait != "mushroom.thin.beta.m",
-         # heterozygotes
-         Trait != "recombination.rate.3R.f", 
+  filter( Trait != "recombination.rate.3R.f", 
          Trait != "recombination.rate.X.f", 
          Trait != "eye.area.diabetes.susceptibility.2014a.m", 
          Trait != "eye.area.diabetes.susceptibility.2014a.f",
@@ -3500,7 +3521,6 @@ all.dgrp.phenos_combined_subset <- all.dgrp.phenos_combined_subset %>%
          Trait != "Canton S(B).olfactory.response.benzaldehyde.f", 
          Trait != "neur.olfactory.response.benzaldehyde.f", 
          Trait != "Sema5c.olfactory.response.benzaldehyde.f")
-
 ```
 
 $~$
@@ -3517,6 +3537,8 @@ For some traits, a small number of lines have >1 trait value. We fix the dataset
 
 -   Adebambo et al (2020) Frontiers in Genetics, include the line 229 twice. Values are identical so we simply remove the duplication. It is unclear whether this is a scribing error on our side or in the provided data.
 
+**If there are 0 rows in the problems tibble that we create in the below code chunk, it means we've fixed them all**
+
 ```{r}
 # the code below reports lines that have > 1 measurement for any of the traits in our dataset 
 
@@ -3526,56 +3548,77 @@ For some traits, a small number of lines have >1 trait value. We fix the dataset
   arrange(-n) %>% 
   filter(n > 1)
 )
-
-# If there are 0 rows in the problems tibble, it means we've fixed them all
-
 ```
 
 $~$
 
-### Removing data poor traits
-
-$~$
-
-Some traits have been measured across a small number of lines. Correlation estimates are imprecise for these traits, so we have trimmed the dataset to only contain traits that have been measured in \> 20 lines (**this is probably still too few**).
-
-```{r}
-
-# this lists traits in ascending order by the number of lines they are measured in
-
-trait_test <- 
-  all.dgrp.phenos_combined_subset %>% group_by(Trait) %>% 
-  summarise(n_lines = length(line)) %>% 
-  arrange(n_lines)
-
-# Remove traits that have been measured in < 20 lines
-
-all.dgrp.phenos_combined_subset <- 
-  all.dgrp.phenos_combined_subset %>% 
-  group_by(Trait) %>% 
-  filter(length(line) > 20) %>% 
-  ungroup() %>% 
-  arrange(Reference)
-
-```
-
-$~$
-
-### Save the cleaned dataset
+### Save and show the cleaned dataset
 
 ```{r}
 # now save our cleaned dataset
 
 write_csv(all.dgrp.phenos_combined_subset, file = "data/derived/all.dgrp.phenos_unscaled.csv")
 
+# how many traits did we start with: all.dgrp.phenos_combined %>% distinct(Trait)
+#after cleaning: all.dgrp.phenos_combined_subset %>% distinct(Trait)
+
 ```
 
 
-All up we have removed 48 traits, taking our total from 1231 to 1183
+All up we have removed 18 traits, taking our total from 1232 to 1214
+
+The full list of traits we document can be viewed here:
+
+```{r}
+
+lines_measured <- 
+  all.dgrp.phenos_combined_subset %>% 
+  group_by(Trait) %>% 
+  summarise(`# lines measured` = n()) %>% 
+  arrange(Trait)
+
+table <- all.dgrp.phenos_combined_subset %>% 
+  distinct(Trait, .keep_all = TRUE) %>% 
+  arrange(Trait) %>% 
+  select(-c(trait_value))
+  
+
+full_table <- left_join(lines_measured, table) %>% 
+  select(-line) %>% 
+  arrange(Trait)
+
+
+# Create a function to build HTML searchable tables
+
+my_data_table <- function(df){
+  datatable(
+    df, rownames=FALSE,
+    autoHideNavigation = TRUE,
+    extensions = c("Scroller",  "Buttons"),
+    options = list(
+      autoWidth = TRUE,
+      dom = 'Bfrtip',
+      deferRender=TRUE,
+      scrollX=TRUE, scrollY=1000,
+      scrollCollapse=TRUE,
+      buttons =
+        list('pageLength', 'colvis', 'csv', list(
+          extend = 'pdf',
+          pageSize = 'A4',
+          orientation = 'landscape',
+          filename = 'Trait_table')),
+      pageLength = 1214
+    )
+  )
+}
+
+my_data_table(full_table)
+```
+
 
 $~$
 
-### Create data for our analysis
+### Trim data for our analysis
 
 For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and the microbiome traits measured in Everett _et al_ (2020).
 
@@ -3584,6 +3627,85 @@ selected.dgrp.phenos_unscaled <-
   all.dgrp.phenos_combined_subset %>% 
   filter(Reference != "Jin et al (2020) PLOS Genetics" & Reference != "Everett et al (2020) Genome Research")
 ```
+
+Correlation estimates are imprecise for traits that have been measured across a small number of lines. Therefore, we further trim the dataset to only include traits that have been phenotyped across \>80 lines.
+
+```{r}
+
+# this lists traits in ascending order by the number of lines they are measured in
+
+trait_test <- 
+  selected.dgrp.phenos_unscaled %>% group_by(Trait) %>% 
+  summarise(n_lines = length(line)) %>% 
+  arrange(n_lines)
+
+# Remove traits that have been measured in < 80 lines
+
+selected.dgrp.phenos_unscaled <- 
+  selected.dgrp.phenos_unscaled %>% 
+  group_by(Trait) %>% 
+  filter(length(line) > 79) %>% 
+  ungroup() %>% 
+  arrange(Reference)
+
+```
+
+Save the data
+
+```{r}
+write_csv(selected.dgrp.phenos_unscaled, file = "data/derived/selected.dgrp.phenos_unscaled.csv")
+```
+
+
+This leaves us with 516 traits for analysis. They can be viewed here:
+
+```{r}
+
+lines_measured <- 
+  selected.dgrp.phenos_unscaled %>% 
+  group_by(Trait) %>% 
+  summarise(`# lines measured` = n()) %>% 
+  arrange(Trait)
+
+table <- selected.dgrp.phenos_unscaled %>% 
+  distinct(Trait, .keep_all = TRUE) %>% 
+  arrange(Trait) %>% 
+  select(-c(trait_value))
+  
+
+trimmed_table <- left_join(lines_measured, table) %>% 
+  select(-line) %>% 
+  arrange(Trait)
+
+# Create a function to build HTML searchable tables
+
+my_data_table <- function(df){
+  datatable(
+    df, rownames=FALSE,
+    autoHideNavigation = TRUE,
+    extensions = c("Scroller",  "Buttons"),
+    options = list(
+      autoWidth = TRUE,
+      dom = 'Bfrtip',
+      deferRender=TRUE,
+      scrollX=TRUE, scrollY=1000,
+      scrollCollapse=TRUE,
+      buttons =
+        list('pageLength', 'colvis', 'csv', list(
+          extend = 'pdf',
+          pageSize = 'A4',
+          orientation = 'landscape',
+          filename = 'Analysis_trait_table')),
+      pageLength = 516
+    )
+  )
+}
+
+my_data_table(trimmed_table)
+
+
+```
+
 
 $~$
 
@@ -3637,172 +3759,5 @@ if(!file.exists("data/derived/selected.dgrp.phenos_scaled.csv")){
   
   write_csv(selected.dgrp.phenos_scaled, file = "data/derived/selected.dgrp.phenos_scaled.csv")
 } else selected.dgrp.phenos_scaled <- read_csv("data/derived/selected.dgrp.phenos_scaled.csv")
-  
-```
-
-We can also subset the data by trait guild and then scale
-
-```{r}
-# now lets subset the data by guild - this function will make it easier
-
-scaling_function <- function(data){
-  split(data, data$Trait) %>% # split divides the data into trait groups
-    lapply(function(x){
-      trait_name <- x$Trait[1]
-      x <- x[,c(1,4)]
-      names(x) <- c("line", "value")
-      x <- x %>% 
-        group_by(line) %>% 
-        summarise(mean = mean(value))
-      names(x) <- c("line", trait_name)
-      x}) %>% 
-    purrr::reduce(full_join, by = "line", match = "first") %>% 
-    mutate_at(vars(-("line")), ~ as.numeric(scale(.x))) %>% 
-    select(-line) # this is the scaling step
-}
-
-# insecticide response
-
-insecticide.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Insecticide response")
-
-insecticide.dgrp.phenos_scaled <- scaling_function(insecticide.dgrp.phenos)
-
-# morphology
-
-moprh.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Morphological")
-
-morph.dgrp.phenos_scaled <- scaling_function(moprh.dgrp.phenos)
-
-# pthogen response
-
-pathogen.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Pathogen response")
-
-pathogen.dgrp.phenos_scaled <- scaling_function(pathogen.dgrp.phenos)
-
-# sensory
-
-sensory.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Sensory")
-
-sensory.dgrp.phenos_scaled <- scaling_function(sensory.dgrp.phenos)
-
-# physiological
-
-physio.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Physiological")
-
-physio.dgrp.phenos_scaled <- scaling_function(physio.dgrp.phenos)
-
-# behavioural
-
-behavioural.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Behavioural")
-
-behavioural.dgrp.phenos_scaled <- scaling_function(behavioural.dgrp.phenos)
-
-# life history
-
-lh.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Life history")
-
-lh.dgrp.phenos_scaled <- scaling_function(lh.dgrp.phenos)
-
-# CHCs
-
-CHC.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "CHC")
-
-CHC.dgrp.phenos_scaled <- scaling_function(CHC.dgrp.phenos)
-
-# Metabolome
-
-metabolome.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Metabolome")
-
-metabolome.dgrp.phenos_scaled <- scaling_function(metabolome.dgrp.phenos)
-
-# Microbiome
-
-microbiome.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Microbiome")
-
-microbiome.dgrp.phenos_scaled <- scaling_function(microbiome.dgrp.phenos)
-
-# drug response
-
-drug.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Drug response")
-
-drug.dgrp.phenos_scaled <- scaling_function(drug.dgrp.phenos)
-
-# Activity
-
-activity.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Activity")
-
-activity.dgrp.phenos_scaled <- scaling_function(activity.dgrp.phenos)
-
-# Reproduction
-
-repro.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Reproduction")
-
-repro.dgrp.phenos_scaled <- scaling_function(repro.dgrp.phenos)
-
-# Stress resistance
-
-stress.dgrp.phenos <- all.dgrp.phenos_combined_subset %>% 
-  filter(`Trait guild` == "Stress resistance")
-
-stress.dgrp.phenos_scaled <- scaling_function(stress.dgrp.phenos)
-```
-
-## Table 3: Details for each phenotype included in the dataset.
-
-```{r, message=FALSE}
-
-lines_measured <- 
-  all.dgrp.phenos_combined_subset %>% 
-  group_by(Trait) %>% 
-  summarise(`Number of DGRP lines measured` = n()) %>% 
-  arrange(Trait)
-
-table <-all.dgrp.phenos_combined_subset %>% 
-  distinct(Trait, .keep_all = TRUE) %>% 
-  arrange(Trait) %>% 
-  select(-c(trait_value))
-  
-
-table <- left_join(lines_measured, table) %>% 
-  select(-line) %>% 
-  arrange(Trait)
-
-# Create a function to build HTML searchable tables
-
-my_data_table <- function(df){
-  datatable(
-    df, rownames=FALSE,
-    autoHideNavigation = TRUE,
-    extensions = c("Scroller",  "Buttons"),
-    options = list(
-      dom = 'Bfrtip',
-      deferRender=TRUE,
-      scrollX=TRUE, scrollY=800,
-      scrollCollapse=TRUE,
-      buttons =
-        list('pageLength', 'colvis', 'csv', list(
-          extend = 'pdf',
-          pageSize = 'A4',
-          orientation = 'landscape',
-          filename = 'DGRP_phenotype_details')),
-      pageLength = 100
-    )
-  )
-}
-
-my_data_table(table)
   
 ```

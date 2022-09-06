@@ -3,13 +3,11 @@ output_dir: ../docs
 navbar:
   title: DGRP
   left:
-  - text: Progress
-    href: index.html
   - text: Data collation
     href: Data_collation.html
-  - text: Line quant gen
+  - text: Calculating genetic trait correlations
     href: Analysis.html
-  - text: SNP quant gen
+  - text: Calculating 'SNP-heritability'
     href: SNP_heritabilities.html
   - text: License
     href: license.html
@@ -23,3 +21,4 @@ output:
     toc_float: yes
     theme: flatly
     highlight: tango
+    code_folding: hide
