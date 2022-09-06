@@ -17,7 +17,7 @@ We document three different steps in our analysis:
 
 2. [Calculating genetic trait correlations](Analysis.html), which details how we estimated $r_g$.
 
-3. [Calculating 'SNP-heritability'](SNP_heritabilities.html),which details how we estimated heritability for each trait.
+3. [Calculating 'SNP-heritability'](SNP_heritabilities.html), which details how we estimated heritability for each trait.
 
 
 ```{r, include=FALSE, eval=FALSE}
