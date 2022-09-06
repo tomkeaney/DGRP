@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Becca Belmonte, Mary Kate Corbally, Thomas Keaney" />
 
 
-<title>Introduction</title>
+<title>About</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -430,16 +429,16 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Progress</a>
+  <a href="index.html">About</a>
 </li>
 <li>
   <a href="Data_collation.html">Data collation</a>
 </li>
 <li>
-  <a href="Analysis.html">Line quant gen</a>
+  <a href="Analysis.html">Calculating genetic trait correlations</a>
 </li>
 <li>
-  <a href="SNP_heritabilities.html">SNP quant gen</a>
+  <a href="SNP_heritabilities.html">Calculating 'SNP-heritability'</a>
 </li>
 <li>
   <a href="license.html">License</a>
@@ -470,9 +469,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Introduction</h1>
-<h4 class="author">Becca Belmonte, Mary Kate Corbally, Thomas
-Keaney</h4>
+<h1 class="title toc-ignore">About</h1>
 
 </div>
 
@@ -501,7 +498,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-07-06
+<strong>Last updated:</strong> 2022-09-06
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -640,15 +637,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9651fe93fc237dce875b4ed5110b5c4771776ef7targetblank9651fe9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/9651fe93fc237dce875b4ed5110b5c4771776ef7" target="_blank">9651fe9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9651fe93fc237dce875b4ed5110b5c4771776ef7targetblank9651fe9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -658,7 +655,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/9651fe93fc237dce875b4ed5110b5c4771776ef7" target="_blank">9651fe9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -676,10 +673,10 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/Data_collation_cache/
     Ignored:    analysis/index_cache/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
+    Ignored:    data/derived/.DS_Store
 
 Untracked files:
     Untracked:  code/LICENSE
@@ -692,15 +689,16 @@ Untracked files:
     Untracked:  data/DGRP_gwas_bfiles/
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
-    Untracked:  data/SNP_heritability_cleaned.csv
-    Untracked:  data/derived/
+    Untracked:  data/derived/all.dgrp.phenos_combined.csv
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/predicted_line_means.csv
+    Untracked:  data/derived/rg_female.csv
+    Untracked:  data/derived/rg_male.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/variance_components.csv
     Untracked:  data/gwas_data/
     Untracked:  data/input/
     Untracked:  fits/
-
-Unstaged changes:
-    Modified:   DGRP.Rproj
-    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -745,6 +743,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/9651fe93fc237dce875b4ed5110b5c4771776ef7/analysis/index.Rmd" target="_blank">9651fe9</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-06
+</td>
+<td>
+ready for shiny app roll out
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/f924e99a74781b05a8a36e8b7d8b16a83930da65/docs/index.html" target="_blank">f924e99</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -820,140 +852,21 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<div id="ideas-and-questions" class="section level1">
-<h1>Ideas and questions</h1>
-<p><span class="math inline">\(~\)</span></p>
-<p><strong>Notes on progress</strong></p>
-<ul>
-<li><p>Dobson data is modelled and included (I’ve used slightly
-different metrics - they should show the same results just on a
-different scale)</p></li>
-<li><p>Pitchers - I’ve modelled centroid size but they provide landmark
-values all across the wing that I haven’t used.</p></li>
-</ul>
-<p><strong>Emailing</strong></p>
-<p>Yes</p>
-<ul>
-<li><p>Magwire 2012 (MK) - all but one dataset found on lab website
-(3/4)</p></li>
-<li><p>Teets and Hahn 2018 - line means provided</p></li>
-<li><p>Dobson 2015 - raw data provided</p></li>
-<li><p>Takahara and Takahashi 2015 - line means provided</p></li>
-<li><p>Jumbo-Lucioni et al (2012) - raw data provided</p></li>
-<li><p>Zhou et al (2016) - line means provided</p></li>
-</ul>
-<p>Pending</p>
-<ul>
-<li>Appel et al (2015) - email address doesn’t exist? Currently
-failed.</li>
-</ul>
-<p><strong>General Qs</strong></p>
-<ul>
-<li><p>We now have ~<strong>1250</strong> traits that we can include in
-our dataset.</p></li>
-<li><p>People we should email for data:</p>
-<p>Bevers et al (2018)</p>
-<p>Chaston et al (2016)</p>
-<p>Ayroles et al (2015) - they provide data as a matlab file - I need to
-be at Uni to download matlab</p>
-<p>Evangelou et al (2019) - we have their data, we just need to check
-how they measured a few things.</p>
-<p>Maybe all the PCA people as well.</p></li>
-<li><p>Old DGRP pipeline doesn’t account for Wolbachia and Inversions. I
-remember some studies provide adjusted and unadjusted data. Need to
-screen every paper for this! <strong>How should I model
-this?</strong></p></li>
-<li><p>Mushroom toxin phenotype is calculated incorrectly - background
-death not accounted for. I’ve noted this in the trait description, but
-have not made any changes. Apparently easy to fix - email Paul. I think
-this is in Paul’s insecticide paper…</p></li>
-<li><p>Peterson et al 2019: am I being too harsh? What is our criteria
-for data quality?</p></li>
-<li><p>We need to come up within common names for traits e.g. currently
-we have cold tolerance, cold hardiness and cold resistance in our
-dataset.</p></li>
-<li><p>Wilson et al 2020 - they repeat their phenotyping on a subset of
-lines to explicitly validate their findings. Should we model these
-together or include these as separate datasets. Currently I have only
-included their first and most complete rep, as they were highly
-correlated and this is what they used for their GWA. This raises the
-larger question of whether we should model traits that have been
-measured multiple times as one larger composite measure or keep them
-separate.</p></li>
-<li><p>Ayroles data is in matlab format. Email for excel version or for
-line means?</p></li>
-</ul>
-<p><strong>Questions for Luke</strong></p>
-<ul>
-<li><p><strong>Ask David:</strong> parathion_model is a survival model.
-I need to tell it to predict survival only up to 48 hrs because that’s
-how long they measured it for. How do I set an upper limit on the
-posterior? Currently, have fit binomial model for survival at 48hr
-instead.</p></li>
-<li><p><strong>Answered:</strong> MMP model (line ~780). The data
-generating process is a criteria to pass, which is then awarded points.
-Treat as current or try an ordinal model.</p></li>
-<li><p>I have a few PCAs to do: Everett et al (2020), Muñoz-Muñoz et al
-(2016) - they have PCA data supplied, Dembeck et al (2015) - this is the
-CHC paper, Jin et al (2020) - metabolome data, Zhou et al (2020) -
-metabolome data (452 traits!!)</p></li>
-</ul>
-<p><strong>Ideas from Charlie’s lab</strong></p>
-<ul>
-<li><p>RNA seq data - could be interesting to look at, especially how it
-differs between sexes and the relationship to different traits.</p></li>
-<li><p>Weird correlations - what weird things does our analysis spit
-out? Good for a laugh/ paper attention if handled correctly + it might
-encourage people to get back in the lab and test them.</p></li>
-<li><p>Selective sweeps in DGRP - can we identify traits that correlate
-with them / discover new sweeps - Paul reckons that with our data this
-will be easy and is more than happy to help</p></li>
-<li><p>SD in DGRP - what phenotypes are associated? What about fitness?
-What about selective sweeps?</p></li>
-<li><p>Lab competition - Bevers et al (2018) reference a phenome dataset
-with 600+ traits that hasn’t been published</p></li>
-<li><p>Inversion clines - some inversions correlate strongly with
-latitude. They might be a nice proxy, so we could use them to find
-phenotypes associated with latitude e.g. critical thermal maximum
-etc.</p></li>
-</ul>
-<p><strong>Edinburgh ideas</strong></p>
-<ul>
-<li><p>Extreme lines for each trait in easy summary: shiny line table
-with colour shading indicating into which percentile they fall for a
-particular trait?</p></li>
-<li><p>Open access PDF links / pubmed</p></li>
-<li><p>MK has a lot more info on rearing conditions, mating status etc -
-this something we want to include. We should probably include within
-line sample sizes…</p></li>
-<li><p>Trait groupings</p></li>
-<li><p>PRISMA</p></li>
-</ul>
-<p><strong>More ideas</strong></p>
-<ul>
-<li><p>UK biobank has a plot where you input a trait and it creates a
-plot showing how all other traits correlate. Good for fitness paper as
-well… e.g. <a href="https://ukbb-rg.hail.is/rg_summary_6143_4.html"
-class="uri">https://ukbb-rg.hail.is/rg_summary_6143_4.html</a></p></li>
-<li><p>Average heritability</p></li>
-<li><p>Striking correlations</p></li>
-<li><p>We can do a little analysis on the variation explained by
-different lab conditions for a couple of phenotypes. To accurately
-estimate genetic correlations between traits, we assume that this
-between-lab variation is small in comparison to the genetic variation
-between lines. We can pick a commonly phenotype trait e.g. lifespan or
-CT-max, fit a model with a lab * line interaction and do some variance
-partitioning. If phenotypes are robust across lab environments we expect
-that this interaction will explain a very small amount of the variation
-in phenotype.</p></li>
-<li><p>Following on from the above idea, we could also try to look at
-how mutational variance affects phenotype in commonly measured traits.
-We could use year sampled as a proxy for the number of generations spent
-as a line (culturing protocol will be an important variable here
-e.g. are lines maintained by single fly crosses or just in standard vial
-conditions), and test if the variance in trait values are positively
-correlated with generation of culture.</p></li>
-</ul>
+<p>This website is a companion page to our main page <a
+href="...">Becca’s shiny app here</a>. Here you can find all of the code
+used to produce the analysis shown on the main page, with step by step
+annotation.</p>
+<p>We document three different steps in our analysis:</p>
+<ol style="list-style-type: decimal">
+<li><p><a href="Data_collation.html">Data collation</a>, which shows how
+we collected the data and the data cleaning process.</p></li>
+<li><p><a href="Analysis.html">Calculating genetic trait
+correlations</a>, which details how we estimated <span
+class="math inline">\(r_g\)</span>.</p></li>
+<li><p><a href="SNP_heritabilities.html">Calculating
+‘SNP-heritability’</a>,which details how we estimated heritability for
+each trait.</p></li>
+</ol>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -992,7 +905,6 @@ loaded via a namespace (and not attached):
 [33] rmarkdown_2.14   callr_3.7.0      magrittr_2.0.3   whisker_0.4     
 [37] ps_1.7.1         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
 [41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.1    </code></pre>
-</div>
 </div>
 
 
