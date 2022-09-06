@@ -22,68 +22,6 @@ library(DT) # for interactive tables
 library(broom) # convert results of functions into tables
 ```
 
-
-$~$
-
-## Study eligibility criteria and an overview of our search
-
-$~$
-
-PRIMSA guideline: Specify study characteristics (e.g., PICOS, length of follow-up) and report characteristics (e.g. years considered, language, publication status) used as criteria for eligibility, giving rationale.
-
-1) Studies must measure some quantitative phenotype using the DGRP.
-
-2) Studies must measure the quantitative phenotype in homozygous DGRP flies. Phenotypes measured in DGRP F1s are affected by dominance and epistatic interactions that are not present in DGRP homozygotes. This means we are unable to calculate genetic correlations between heterozygous and homozygous flies. 
-
-3) Studies must phenotype > 20 DGRP lines (**likely to be a lot more than this**). Correlation coefficients are unreliable when there are few data points (perhaps 80+ when we do correlation analysis).
-
-4) Studies with poor data collection protocols are removed. For example, studies that calculate line means with n = 1.
-
-5) Studies of all publication status (preprints, theses, accepted journal articles) are considered.
-
-6) Studies must have available data, whether this is raw or line means. Data can be sourced from the manuscript, supplementary files or tables, a data repository (e.g. dryad or github) or by correspondence with the authors.
-
-7) Studies published at any time up to 22/7/2021 were considered (the shiny app can be continuously updated to remain current, with step by step instructions included in our manuscript on how to do this). The DGRP was formally introduced to the scientific community in 2012, so the vast majority of considered studies were published after this year. However, the DGRP was made available to some research groups before this point, so we do not impose a strict lower bound on our search year criteria. 
-
-8) We only include studies conveyed in English. This is a convenience criterion.
-
-$~$
-
-**Table 1.** A (growing) list of the studies we assessed in our search for DGRP quantitative trait means.
-
-```{r}
-Literature_table <- read_csv("data/Literature_table.csv") %>% 
-   select(-c(Model)) %>% 
-   arrange(Year)
-
-
-# Create a function to build HTML searchable tables
-
-my_data_table <- function(df){
-  datatable(
-    df, rownames=FALSE,
-    autoHideNavigation = TRUE,
-    extensions = c("Scroller",  "Buttons"),
-    options = list(
-      dom = 'Bfrtip',
-      deferRender=TRUE,
-      scrollX=TRUE, scrollY=1000,
-      scrollCollapse=TRUE,
-      buttons =
-        list('pageLength', 'colvis', 'csv', list(
-          extend = 'pdf',
-          pageSize = 'A4',
-          orientation = 'landscape',
-          filename = 'Literature_table')),
-      pageLength = 145
-    )
-  )
-}
-
-my_data_table(Literature_table)
-
-```
-
 $~$
 
 ## Loading the published DGRP data from Google sheets
@@ -91,10 +29,6 @@ $~$
 $~$
 
 A high percentage of the relevant literature provides the data we need in line mean form. This is the ideal format for our analysis. We worked collaboratively to conduct a non-exhaustive search of the literature for phenotypic trait measurements for DGRP lines; we collated the data in google sheets. Below we save this data as a CSV file and load it into R.
-
-Other points to consider:
-
-Wolbachia presence is only accounted for if the data provided is already corrected. I can correct data if needed.
 
 ```{r}
 
@@ -163,9 +97,9 @@ $~$
 
 ## Estimating line means from raw data
 
-Some studies only provide the raw data they collected when measuring DGRP phenotypes. We need line mean data to calculate genetic correlations between traits. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line. Each analysis is presented in a separate tab below.
+Some studies only provide the raw data they collected when measuring DGRP phenotypes. We need line mean data to calculate heritability and genetic correlations between traits. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line. Each analysis is presented in a separate tab below.
 
-Where the response follows a Gaussian distribution, we standardise the data to have a mean of 0 and a standard deviation of 1. We do this to make prior specification more straightforward.
+Where the response follows a Gaussian distribution, we standardise the response to have a mean of 0 and a standard deviation of 1. We do this to make prior specification more straightforward.
 
 **The Bayesian models won't run unless you have `stan` and the `brms` package installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, I've made it so you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe. This is the entire current dataset.**
 
