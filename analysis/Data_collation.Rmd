@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FAL
 # Load in necessary packages
 
 ```{r load packages}
-
 library(Matrix)
 library(tidyverse)
 library(googlesheets4) # for reading google sheets
@@ -19,77 +18,96 @@ library(brms) # for bayesian models
 library(tidybayes) # for more bayesian things
 library(DT) # for interactive tables
 library(broom) # convert results of functions into tables
+library(osfr) # For accessing data on the repository OSF
 ```
 
 $~$
 
-## Loading the published DGRP data from Google sheets
+## Loading the line mean phenotype data from Google sheets
 
 $~$
 
-A high percentage of the relevant literature provides the data we need in line mean form. This is the ideal format for our analysis. We worked collaboratively to conduct a non-exhaustive search of the literature for phenotypic trait measurements for DGRP lines; we collated the data in google sheets. Below we save this data as a CSV file and load it into R.
+A high percentage of the papers about the DGRP provide estimates of the mean phenotype of multiple DGRP lines ("line mean data"). We worked collaboratively to conduct a non-exhaustive search of the literature for phenotypic trait measurements for DGRP lines, and collated all the line mean data using Google Sheets. The R code below downloads the data from Google Sheets, saves it as a .csv file, and loads it into R. 
 
 ```{r}
+remake_data_from_googlesheets <- FALSE
 
-# load in phenotype data from google sheets
-
-# This is a little shaky without an authorisation token: select NO when given Y/N option. There can be an issue with the quota resource limit of google sheets. To remedy this you can create you're own API key, so that you don't have to share quota with the rest of the world's R users for the googlesheets package. However, if the file exists, this code chunk will simply load it.
-
-# Specify API key that you have created from the Google cloud platform
-
-gs4_auth_configure(api_key = "AIzaSyBdGLfqg7uNKB_abkJN8GzxF9S5Le8KuRI")
-gs4_deauth()
-
-# load the data
-
-if(!file.exists("data/input/all.dgrp.phenos.csv")){
+if(remake_data_from_googlesheets){
+  
+  # load in phenotype data from google sheets
+  
+  # This is a little shaky without an authorisation token: select NO when given Y/N option. There can be an issue with the quota resource limit of google sheets. To remedy this you can create you're own API key, so that you don't have to share quota with the rest of the world's R users for the googlesheets package. However, if the file exists, this code chunk will simply load it.
+  
+  # Specify API key that you have created from the Google cloud platform
+  gs4_auth_configure(api_key = "AIzaSyBdGLfqg7uNKB_abkJN8GzxF9S5Le8KuRI")
+  gs4_deauth()
+  
   line_mean_url <- "https://docs.google.com/spreadsheets/d/1YjKoSY_p_BZQA6jlhNy7daApuSsLlcojtUD6GmXBYfg/edit#gid=0"
-  line_mean_googlesheet_info <- gs4_get(line_mean_url)$sheets %>% select(name, index) 
+  line_mean_googlesheet_info <- gs4_get(line_mean_url)$sheets %>% 
+    select(name, index) 
+  number_sheets <- nrow(line_mean_googlesheet_info)
   
-  line_means_phenos <- lapply(1:nrow(line_mean_googlesheet_info), function(i) {x <- read_sheet(line_mean_url, sheet = i); Sys.sleep(3); return(x)})
+  line_means_phenos <- lapply(
+    1:number_sheets, 
+    function(i) {
+      print(paste("Reading Google Sheet number ", i, " of ", number_sheets, "...", sep = ""))
+      x <- read_sheet(line_mean_url, sheet = i)
+      Sys.sleep(3)
+      return(x)
+    })
   
-  reference_table <- do.call("rbind", lapply(line_means_phenos, function(x) tibble(Trait = names(x)[2], Reference = x$reference[1], Sex = x$Sex[1], `Trait guild` = x$Guild[1], `Trait description` = x$Explanation[1])))
+  reference_table <- do.call(
+    "rbind", 
+    lapply(line_means_phenos, 
+           function(x) tibble(Trait = names(x)[2], 
+                              Reference = x$reference[1], 
+                              Sex = x$Sex[1], 
+                              `Trait guild` = x$Guild[1], 
+                              `Trait description` = x$Explanation[1])))
   
-  line_means_phenos <- lapply(line_means_phenos, function(x) x[,1:2])[order(-sapply(line_means_phenos, nrow))]
+  line_means_phenos <- lapply(
+    line_means_phenos, 
+    function(x) x[,1:2])[order(-sapply(line_means_phenos, nrow))]
   
-  #all.dgrp.phenos <- do.call("rbind", lapply(line_means_phenos, function(x) {
-  # x$Trait <- names(x)[2]
-  #names(x)[2] <- "trait_value"
-  #x %>% arrange(line) %>% as.data.frame()
-  #})) %>% 
   
-  # left_join(reference_table, by = "Trait") %>%
-  #  filter(!is.na(line),
-  #        !is.na(trait_value)) %>% 
-  #  select(c(line, Trait, Sex, trait_value, `Trait description`, Reference)) %>% 
-  #  mutate(trait_value = as.numeric(trait_value),
-  #        line = unlist(line)) %>%
-  #  as_tibble()
+  all.dgrp.phenos.1 <- lapply(
+    line_means_phenos, 
+    function(x) {
+      mutate(x, Trait = names(x)[2])}) 
   
-  # I made this two steps because this was easier for me to understand
+  new_colnames <- c("line", "trait_value", "Trait") 
   
-  all.dgrp.phenos.1 <- lapply(line_means_phenos, function(x) {
-    mutate(x, Trait = names(x)[2])}) # this step creates a new column called "Trait", using the name of the second column in each dataframe in the list
-  
-  colnames <- c("line", "trait_value", "Trait") # give the columns in each dataframe within the list the same names so we can use rbind
-  
-  all.dgrp.phenos.2 <- lapply(all.dgrp.phenos.1, setNames, colnames)
+  all.dgrp.phenos.2 <- lapply(all.dgrp.phenos.1, setNames, new_colnames)
   
   all.dgrp.phenos <- do.call("rbind", all.dgrp.phenos.2) %>% 
     arrange(Trait, line) %>% 
     as.data.frame() %>% 
-    
     left_join(reference_table, by = "Trait") %>%
-    filter(!is.na(line),
-           !is.na(trait_value)) %>% 
-    select(c(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference)) %>% 
-    mutate(trait_value = as.numeric(trait_value),
-           line = unlist(line)) %>%
+    filter(!is.na(line) & !is.na(trait_value)) %>% 
+    select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
     as_tibble()
   
-  write_csv(all.dgrp.phenos, file = "data/input/all.dgrp.phenos.csv")
-} else all.dgrp.phenos <- read_csv("data/input/all.dgrp.phenos.csv")
-
+  if(!dir.exists("data/input")) dir.create("data/input")
+  
+  all.dgrp.phenos %>% 
+    select(line, Trait, Sex, trait_value) %>% 
+    write_csv("data/input/all.line.mean.phenos.csv")
+  
+  all.dgrp.phenos %>% 
+    select(Trait, `Trait guild`, `Trait description`, Reference) %>% 
+    distinct() %>% 
+    write_csv("data/input/all.line.mean.phenos_metadata.csv")
+  
+  
+} else {
+  # if(!file.exists("data/input/all.dgrp.phenos.csv")){
+  #   osf_retrieve_node("https://osf.io/2h5pw/") %>% osf_ls_files() %>%
+  #     filter(name == "all.dgrp.phenos.csv") %>% 
+  #     osf_download(path = "data/input")
+  # }
+  all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
+    left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"))
+}
 ```
 
 $~$
@@ -561,7 +579,7 @@ Grubbs_traits <- rbind(T1_leg_length_f_line_means,
 
 From **Supplementary Table 1**'s caption: "In the second approach (c), simpler models were fitted, in which microbiota, weight and Wolbachia status were additive, with genotype nested in experimental block as a random effect. The statistical analysis presented in Fig.1b uses these models simplified by removal of non-significant factors."
 
-We follow this approach to best recapitulate the studies analysis, except that we allow the intercept for the random effect line to vary with microbiota treatment. This is needed in our modelling approach to estimate line specific effects of microbiota. We also include day as a blocking factor, which represents a block of data collection involving a subset of lines. This controls for micro-environmental variance between blocks of phenotyping. 
+We follow this approach to best recapitulate the study's analysis, except that we allow the intercept for the random effect line to vary with microbiota treatment. This is needed in our modelling approach to estimate line specific effects of microbiota. We also include day as a blocking factor, which represents a block of data collection involving a subset of lines. This controls for micro-environmental variance between blocks of phenotyping. 
 
 ```{r}
 # weight
