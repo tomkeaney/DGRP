@@ -709,7 +709,7 @@ glucose.anexic_line_means <- Dobson_line_means(glucose_estimates_axenic, "glucos
 glucose_estimates_gnotobiotic <- tibble(new_data, fitted_glucose) %>% 
   filter(trt == "b")
 
-glucose.gnotobiotic_line_means <- Dobson_line_means(glucose_estimates_gnotobiotic, "glucose.gnotobiotic.m", "Micobiome", "Mean combined glucose content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glucose content.")
+glucose.gnotobiotic_line_means <- Dobson_line_means(glucose_estimates_gnotobiotic, "glucose.gnotobiotic.m", "Microbiome", "Mean combined glucose content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glucose content.")
 
 # Now get the difference between treatments
 
@@ -785,7 +785,7 @@ glycogen.anexic_line_means <- Dobson_line_means(glycogen_estimates_axenic, "glyc
 glycogen_estimates_gnotobiotic <- tibble(new_data, fitted_glycogen) %>% 
   filter(trt == "b")
 
-glycogen.gnotobiotic_line_means <- Dobson_line_means(glycogen_estimates_gnotobiotic, "glycogen.gnotobiotic.m", "Micobiome",  "Mean combined glycogen content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glycogen content.")
+glycogen.gnotobiotic_line_means <- Dobson_line_means(glycogen_estimates_gnotobiotic, "glycogen.gnotobiotic.m", "Microbiome",  "Mean combined glycogen content extracted from 5 adult flies that possessed a microbiome, after controlling for dry weight. All micro-organisms were purged from egg-surfaces via dechorionation and larvae were reared on medium supplemented with Acetobacter pomorum, Acetobacter tropicalis, Lactobacillus brevis, Lactobacillus fructivorans and Lactobacillus plantarum. All are common commensal bacteria that make up a large proportion of the D. melanogaster microbiome. Higher values indicate higher glycogen content.")
 
 # Now get the difference between treatments
 
@@ -1591,7 +1591,7 @@ We fit a slightly different parathion model to that presented in the manuscript.
 
 # Deltamethrin
 
-Duneau_2018_deltamethrin_data <- read_csv("data/input/Duneau_2018_deltamethrin.csv") %>% 
+Duneau_2018_deltamethrin_data <- read_csv("data/input/Duneau_2018/Duneau_2018_deltamethrin.csv") %>% 
    mutate(line = str_remove(DGRP_lines, "line_"),
           Experiment = as.factor(Experiment),
           line = as.factor(line)) %>% 
@@ -1636,7 +1636,7 @@ deltamethrin_line_means <- tibble(new_data, fitted_deltamethrin) %>%
 
 # set up data for right censoring in brms - it is the opposite to what the survival frequentist package uses. We don't use this but it is useful to know if we do choose to fit a time to event model
 
-Duneau_2018_parathion_data <- read_csv("data/input/Duneau_2018_parathion.csv") %>% 
+Duneau_2018_parathion_data <- read_csv("data/input/Duneau_2018/Duneau_2018_parathion.csv") %>% 
    mutate(line = str_remove(DGRP_lines, "line_"),
           Experiment = as.factor(Experiment)) %>% 
   mutate(line = as.factor(line),
@@ -2747,7 +2747,7 @@ The authors treat temperature as a continuous variable. But they only have measu
 
 ```{r}
 
-Zwoinska_male_data <- read_csv("data/input/Zwoinska_males_2020.csv") %>% 
+Zwoinska_male_data <- read_csv("data/input/Zwoinska_2020/Zwoinska_males_2020.csv") %>% 
   rename(line = DGRP) %>% 
   mutate(line = as.factor(line),
          Batch = as.factor(Batch),
@@ -2887,7 +2887,7 @@ backup_approach <- cbind(a, c) %>%
 
 # female fertility
 
-Zwoinska_female_data <- read_csv("data/input/Zwoinska_females_2020.csv") %>% 
+Zwoinska_female_data <- read_csv("data/input/Zwoinska_2020/Zwoinska_females_2020.csv") %>% 
   rename(line = DGRP) %>% 
   mutate(line = as.factor(line),
          Batch = as.factor(Batch),
