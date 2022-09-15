@@ -3249,7 +3249,7 @@ Watanabe_traits <- rbind(climbing_f_line_means,
 ```
 
 
-**Combine all trait means into a single tibble**
+**Combine all modelled trait means into a single tibble**
 
 ```{r combine google sheet data}
 
@@ -3280,46 +3280,7 @@ modelled_trait_means <-
 
 ```
 
-**Load the fitness data from Wong and Holman (_in prep_)**
-
-Finally, we load in the data Wong and Holman (in prep) collected on fitness in the DGRP and combine all of the data into one tibble.
-
-```{r load in fitness data}
-
-# load in line fitness data from the present study
-
-predicted.line.means <- 
-  read.csv("data/derived/predicted_line_means.csv", stringsAsFactors = FALSE) %>%
-  mutate(line = as.numeric(str_remove_all(line, "line_"))) %>% 
-  rename(fitness.early.f = female.fitness.early, fitness.late.f = female.fitness.late,
-         fitness.early.m = male.fitness.early, fitness.late.m = male.fitness.late) %>% 
-  as_tibble()
-
-# build a function to create the line means tibbles
-
-Wong_Holman_line_means <- function(fitness, description){
-  predicted.line.means %>% 
-  select(-block) %>% 
-  gather(Trait, trait_value, fitness.early.f, fitness.late.f, fitness.early.m, fitness.late.m) %>% 
-        filter(Trait == fitness) %>% 
-  mutate(Reference = "Wong and Holman (in prep)",
-         Sex = if_else(str_detect(Trait, ".f"), "Female", "Male"),
-         `Trait guild` = "Life history",
-         `Trait description` = description) %>% 
-  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference)
-}
-
-fitness_young_f_line_means <- Wong_Holman_line_means("fitness.early.f", "Mean absolute number of first instar larvae produced when 2-5 day old focal DGRP females were placed in a vial with competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
-
-fitness_old_f_line_means <- Wong_Holman_line_means("fitness.late.f", "Mean absolute number of first instar larvae produced when 14-17 day old focal DGRP females were placed in a vial with competitor females and standard males. Focal females and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
-
-fitness_young_m_line_means <- Wong_Holman_line_means("fitness.early.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
-
-fitness_old_m_line_means <- Wong_Holman_line_means("fitness.late.m", "Mean proportion of first instar larvae produced when 2-5 day old focal DGRP males were placed in a vial with competitor males and standard females. Focal males and their same-sex competitors were not replaced when they died, such that the fitness assays depend upon mortality as well as offspring production. Higher values indicate higher fitness.")
-
-```
-
-**Save the complete dataset**
+**Combine all data and save**
 
 ```{r save big dataset}
 # Save the all.dgrp.phenos_combined object as a csv file
@@ -3327,12 +3288,8 @@ fitness_old_m_line_means <- Wong_Holman_line_means("fitness.late.m", "Mean propo
 if(!file.exists("data/derived/all.dgrp.phenos_combined.csv")){
   
   all.dgrp.phenos_combined <-
-    rbind(all.dgrp.phenos, 
-          modelled_trait_means, 
-          fitness_young_f_line_means, 
-          fitness_old_f_line_means,
-          fitness_young_m_line_means,
-          fitness_old_m_line_means) %>% 
+    rbind(all.line.mean.phenos, 
+          modelled_trait_means) %>% 
     mutate(Sex = recode(Sex, Both = "Pooled"))
   
   write_csv(all.dgrp.phenos_combined, file = "data/derived/all.dgrp.phenos_combined.csv")
@@ -3431,14 +3388,12 @@ $~$
 
 $~$
 
-Some studies report data that has been previously used, leading to perfect or near perfect correlations. 
+Some studies report data that has been previously used, leading to perfect or near perfect correlations.
 
 ```{r}
 all.dgrp.phenos_combined_subset <-
-  all.dgrp.phenos_combined %>% filter(Trait != "RCH.25C")
-
+  all.dgrp.phenos_combined %>% filter(Trait != "rapid.cold.hardening.25C")
 ```
-
 
 $~$
 
@@ -3488,17 +3443,17 @@ For some traits, a small number of lines have >1 trait value. We fix the dataset
 
 -   Adebambo et al (2020) Frontiers in Genetics, include the line 229 twice. Values are identical so we simply remove the duplication. It is unclear whether this is a scribing error on our side or in the provided data.
 
-**If there are 0 rows in the problems tibble that we create in the below code chunk, it means we've fixed them all**
-
 ```{r}
 # the code below reports lines that have > 1 measurement for any of the traits in our dataset 
 
-(problems <- all.dgrp.phenos_combined_subset %>% 
+# If there are 0 rows in the tibble, it means we've fixed them all**
+
+problems <- all.dgrp.phenos_combined_subset %>% 
   group_by(line, Trait) %>% 
   summarise(n = n()) %>% 
   arrange(-n) %>% 
   filter(n > 1)
-)
+
 ```
 
 $~$

@@ -46,33 +46,23 @@ $~$
 
 $~$
 
-Here we load in the unscaled phenotype data we collated [here](Data_collation.html). 
-
-- We then trim the dataset to only include traits that are measured across \>80 lines. 
+Here we load in the unscaled phenotype data we collated [here](Data_collation.html). Note that we use the trimmed dataset that only includes traits that have been measured across >79 lines. This dataset also does not include data from two studies: Jin _et al_ (2020) and Everett _et al_ (2020). 
 
 - Two traits cause GCTA to call an error: `paraquat.resistance.2021.f` & `starvation.resistance.high.carb.diet.m`. We simply do not estimate heritability for these two traits. The error is _Error: the information matrix is not invertible._
 
-This takes the number of traits from 1214 to 972. 
-
-We then fix the names of traits and DGRP lines to conform with `GCTA` and `Plink` e.g. */* is not an acceptable file name, and line is required in front of the line number e.g. `line21`.
+We then fix the names of the DGRP lines to conform with `GCTA` and `Plink` i.e. line is required in front of the line number e.g. `line21`.
 
 ```{r}
-traits <- read_csv("data/derived/all.dgrp.phenos_unscaled.csv") 
+traits <- read_csv("data/derived/selected.dgrp.phenos_unscaled.csv") 
 
 traits_for_analysis <- 
   traits %>% 
-  group_by(Trait) %>% 
-  summarise(lines_measured = length(unique(line))) %>% 
-  ungroup() %>% 
-  filter(lines_measured > 79) %>%
   filter(Trait != "paraquat.resistance.2021.f" & Trait != "starvation.resistance.high.carb.diet.m") %>% # these traits call a gcta error, we remove them
-  pull(Trait) # find traits with 80+ replicates
-
-# replace any slashes in the trait name, e.g. "1/3-Methylhistidine.high.yeast.f", as this is not ok to use as a file name
-traits_for_analysis <- str_replace_all(traits_for_analysis, "[/]", "_") 
+  distinct(Trait) %>% 
+  pull(Trait)
 
 line_mean_phenotypes <- traits %>%
-  mutate(Trait = str_replace_all(Trait, "[/]", "_")) %>%  # change to match `traits_for_analysis` list
+  #mutate(Trait = str_replace_all(Trait, "[/]", "_")) %>%  # change to match `traits_for_analysis` list
   filter(Trait %in% traits_for_analysis) %>%
   select(line, Trait, trait_value) %>% 
   spread(Trait, trait_value) %>% 
@@ -139,58 +129,46 @@ do_univariate_greml <- function(trait1){
 
 # Now run the model for every trait and create a large tibble using map_dfr
 
-if(!file.exists("data/derived/variance_components.csv")){
+rerun_greml <- FALSE
+
+if(rerun_greml){
+  
   variance_components <-
     map_dfr(traits_for_analysis, do_univariate_greml) %>% 
     filter(Source %in% c("V(G)", "V(e)", "Vp", "V(G)/Vp")) %>% 
     mutate(Variance = as.numeric(Variance)) %>% 
     rename(Parameter = Source) %>% 
     as_tibble()
-  write_csv(variance_components, file = "data/derived/variance_components.csv")
-} else variance_components <- read_csv("data/derived/variance_components.csv")
-
-```
-
-
-
-For now we simply don't run models for these traits, so there are no variance estimates for these traits.
-
-$~$
-
-## Wrangle data and save
-
-
-```{r}
-trait_info <- traits %>%
-  mutate(Trait = str_replace_all(Trait, "[/]", "_")) %>% 
-  select(-trait_value) %>% 
-  distinct(Trait, Sex, `Trait guild`, `Trait description`, Reference)
-
-variance_components <- left_join(variance_components, trait_info)
-
-# wrangle so that each variance component is its own column
-
-variance_components_wide <- 
-  variance_components %>% 
-  pivot_wider(names_from = Parameter,
-              values_from = c(Variance, SE)) %>% 
-  mutate(across(where(is.numeric), round, 2)) %>% 
-  rename(`V(G)` = `Variance_V(G)`,
-         `V(e)` = `Variance_V(e)`,
-         `Vp` = `Variance_Vp`,
-         `V(G)/Vp` = `Variance_V(G)/Vp`)
   
-# Below we remove the suffix that denotes the sex the trait was measured in
+  trait_info <- traits %>%
+    select(-trait_value) %>% 
+    distinct(Trait, Sex, `Trait guild`, `Trait description`, Reference)
+  
+  lines_measured <- 
+    traits %>% 
+    group_by(Trait) %>% 
+    summarise(lines_measured = n())
+  
+  trait_info <- left_join(trait_info, lines_measured)
+  
+  SNP_heritability <- left_join(variance_components, trait_info) %>% 
+    # wrangle so that each variance component is its own column
+    pivot_wider(names_from = Parameter,
+                values_from = c(Variance, SE)) %>% 
+    mutate(across(where(is.numeric), round, 2)) %>% 
+    rename(`V(G)` = `Variance_V(G)`,
+           `V(e)` = `Variance_V(e)`,
+           `Vp` = `Variance_Vp`,
+           `V(G)/Vp` = `Variance_V(G)/Vp`) %>% 
+    # Below we remove the suffix that denotes the sex the trait was measured in
+    mutate(Trait = case_when(
+      str_ends(Trait, ".f") | str_ends(Trait, ".m")  ~ gsub('.{2}$', '', Trait))) %>% 
+    select(Trait, Sex, everything()) %>%  # reorder the columns for the table %>% 
+    arrange(Trait)
+  
+  write_csv(SNP_heritability, file = "data/derived/SNP_heritability_cleaned.csv")
+} else SNP_heritability <- read_csv("data/derived/SNP_heritability_cleaned.csv")
 
-SNP_heritability <-
-  variance_components_wide %>% 
-  mutate(Trait = case_when(
-           str_ends(Trait, ".f") | str_ends(Trait, ".m")  ~ gsub('.{2}$', '', Trait))) %>% 
-  select(Trait, Sex, everything()) %>%  # reorder the columns for the table %>% 
-  arrange(Trait)
-
-
-write_csv(SNP_heritability, file = "data/derived/SNP_heritability_cleaned.csv")
 ```
 
 $~$
@@ -228,12 +206,3 @@ my_data_table <- function(df){
 my_data_table(SNP_heritability)
 ```
 
-$~$
-
-# Use GCTA to estimate genetic correlations between traits
-
-$~$
-
-Here we use the `gcta64` command `--reml-bivar` to estimate the genetic covariance `(C(G)_tr12)`, i.e. the co-variance explained by the known SNPs in the DGRP, and the genetic correlation (`rG`), in addition to the univariate parameters for trait 1 and trait 2 mentioned above. Note that for traits where the genetic variance is estimated to be low, the model cannot reliably estimate genetic covariance or correlations.
-
-**I haven't run this yet because it will take AGES**
