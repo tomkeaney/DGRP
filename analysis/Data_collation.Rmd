@@ -125,7 +125,7 @@ Where the response follows a Gaussian distribution, we standardise the response 
 ### Jumbo-Lucioni et al 2012
 
 ```{r}
-Jumbo_mito_data <- read_csv("data/input/Jumbo_Lucioni_2012.csv") %>% 
+Jumbo_mito_data <- read_csv("data/input/Raw_data_files/Jumbo_Lucioni_2012.csv") %>% 
   mutate(line = as.factor(Line),
          Sex = as.factor(Gender),
          Rep = as.factor(Rep),
@@ -287,7 +287,7 @@ Jumbo_traits <-
 ```{r}
 # Grubbs et al 2013
 
-Grubbs_2013_leg_props <- read_csv("data/input/Grubbs_2013_leg_props.csv") %>% 
+Grubbs_2013_leg_props <- read_csv("data/input/Raw_data_files/Grubbs_2013_leg_props.csv") %>% 
   mutate(Sex = as.factor(Sex),
          Line = as.factor(Line),
          # standardise
@@ -584,7 +584,7 @@ We follow this approach to best recapitulate the study's analysis, except that w
 ```{r}
 # weight
 
-Dobson_NI_microbiome.dryweight <- read_csv("data/input/Dobson_2015/gwasB.filtered.dw.ab.csv") %>% 
+Dobson_NI_microbiome.dryweight <- read_csv("data/input/Raw_data_files/Dobson_2015/gwasB.filtered.dw.ab.csv") %>% 
   mutate(line = as.factor(str_remove(RAL, "RAL_")),
          wolb = as.factor(wolb),
          trt = as.factor(trt),
@@ -672,7 +672,7 @@ gnoto_anexic_diff_weight_line_means <- Dobson_line_means(dry_weight_estimates_di
 
 # Glucose
 
-Dobson_glucose_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.glucose.ab.csv") %>% 
+Dobson_glucose_microbiome <- read_csv("data/input/Raw_data_files/Dobson_2015/gwasB.filtered.glucose.ab.csv") %>% 
   mutate(line = as.factor(str_remove(RAL, "RAL_")),
          wolb = as.factor(wolb),
          trt = as.factor(trt),
@@ -750,7 +750,7 @@ gnoto_anexic_diff_glucose_line_means <- Dobson_line_means(glucose_estimates_diff
 
 # Glycogen
 
-Dobson_glycogen_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.glycogen.ab.csv") %>% 
+Dobson_glycogen_microbiome <- read_csv("data/input/Raw_data_files/Dobson_2015/gwasB.filtered.glycogen.ab.csv") %>% 
   mutate(line = as.factor(str_remove(RAL, "RAL_")),
          wolb = as.factor(wolb),
          trt = as.factor(trt),
@@ -825,7 +825,7 @@ gnoto_anexic_diff_glycogen_line_means <- Dobson_line_means(glycogen_estimates_di
 
 # Protein
 
-Dobson_protein_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.protein.ab.csv") %>% 
+Dobson_protein_microbiome <- read_csv("data/input/Raw_data_files/Dobson_2015/gwasB.filtered.protein.ab.csv") %>% 
   mutate(line = as.factor(str_remove(RAL, "RAL_")),
          wolb = as.factor(wolb),
          trt = as.factor(trt),
@@ -900,7 +900,7 @@ gnoto_anexic_diff_protein_line_means <- Dobson_line_means(protein_estimates_diff
 
 # TAG glycerol
 
-Dobson_TAG_glycerol_microbiome <- read_csv("data/input/Dobson_2015/gwasB.filtered.TAG_glycerol.ab.csv") %>% 
+Dobson_TAG_glycerol_microbiome <- read_csv("data/input/Raw_data_files/Dobson_2015/gwasB.filtered.TAG_glycerol.ab.csv") %>% 
   mutate(line = as.factor(str_remove(RAL, "RAL_")),
          #wolb = as.factor(wolb),
          trt = as.factor(trt),
@@ -995,7 +995,7 @@ Dobson_traits <- rbind(weight.anexic_line_means,
 
 ```{r}
 
-Gaertner_2015_male_mating <- read_csv("data/input/Gaertner_2015_male_mating.csv") %>% 
+Gaertner_2015_male_mating <- read_csv("data/input/Raw_data_files/Gaertner_2015_male_mating.csv") %>% 
   select(Block, Day, Assay, Chamber, Line, Subject, SUM, orient_female, approach, wing, genital_lick, attempt_cop, copulate, sum_court) %>%
   rename(MMP = SUM) %>% 
   mutate(Block = as.factor(Block),
@@ -1168,7 +1168,7 @@ Gaertner_traits <- rbind(orient_to_female_m_line_means,
 
 # Line 34061 doesn't exist on Bloomington or flybase. There is a 34062 though (line 49). Currently removed
 
-Najarro_2015_caff_resistance <- read_csv("data/input/Najarro_et_al_2015_caffeine_resistance.csv") %>% 
+Najarro_2015_caff_resistance <- read_csv("data/input/Raw_data_files/Najarro_et_al_2015_caffeine_resistance.csv") %>% 
   # remove unidentified line
   filter(line != 34061) %>% 
   mutate(line = as.factor(line),
@@ -1222,7 +1222,7 @@ $normalised.learning.score = \frac{learning.score - min(learning.score)}{max(lea
 
 ## Punishment learning
 
-Appel_2016_memory_punishment <- read_csv("data/input/Appel_2016_memory_learning.csv") %>% 
+Appel_2016_memory_punishment <- read_csv("data/input/Raw_data_files/Appel_2016_memory_learning.csv") %>% 
   filter(Test == "Punishment",
          memory_score != "-") %>% 
   mutate(line = as.factor(line),
@@ -1280,7 +1280,7 @@ punishment_memory_m_line_means <- tibble(new_data, fitted_punishment_memory) %>%
 
 ## Relief learning
 
-Appel_2016_memory_relief <- read_csv("data/input/Appel_2016_memory_learning.csv") %>% 
+Appel_2016_memory_relief <- read_csv("data/input/Raw_data_files/Appel_2016_memory_learning.csv") %>% 
   filter(Test == "Relief",
          memory_score != "-") %>% 
    mutate(line = as.factor(line),
@@ -1347,7 +1347,7 @@ Appel_traits <- rbind(punishment_memory_f_line_means,
 
 ```{r}
 
-Munoz_2016_wing_size <- read_csv("data/input/munoz_munoz_2016.csv") %>% 
+Munoz_2016_wing_size <- read_csv("data/input/Raw_data_files/munoz_munoz_2016.csv") %>% 
   mutate(line = as.factor(Strain),
          Repl = (as.factor(Repl)),
          CS = as.double(CS),
@@ -1413,7 +1413,7 @@ Munoz_traits <- rbind(wing_size_f_line_means,
 We have line mean data for larvae, but raw data for adults. Therefore, we only need to model the adult data here.
 
 ```{r}
-Freda_2017_cold_hardiness <- read_csv("data/input/Freda_2017_ThermalHardiness.csv") %>% 
+Freda_2017_cold_hardiness <- read_csv("data/input/Raw_data_files/Freda_2017_ThermalHardiness.csv") %>% 
   mutate(line = as.factor(line),
          Sex = as.factor(Sex))
 
@@ -1472,7 +1472,7 @@ Freda_2017_traits <- rbind(cold_hardiness_f_line_means,
 
 ```{r}
 
-Najarro_2017_boric_acid <- read_csv("data/input/najarro_2017.csv") %>% 
+Najarro_2017_boric_acid <- read_csv("data/input/Raw_data_files/najarro_2017.csv") %>% 
   rename(lifespan = `life-span (hr) on 1.5% boric acid`) %>% 
   mutate(line = as.factor(line),
          st_lifespan = (lifespan - mean(lifespan)) / sd(lifespan))
@@ -1519,7 +1519,7 @@ To model copulation latency Dean _et al_ log transform the data and fit a linear
 To model insemination capacity Dean _et al_ specify a quasipoisson distribution family because they treat the data as underdispersed counts. There is no family like this in `brms`. However, we can treat the data as binomial, with each female treated as a YES/NO for mating success. The posterior predictive check suggests this is a good fit to the data. Our predictions are also a good match with those of Dean et al.
 
 ```{r}
-Dean_2018_data <- read_csv("data/input/Dean_2018.csv") %>% 
+Dean_2018_data <- read_csv("data/input/Raw_data_files/Dean_2018.csv") %>% 
    mutate(line = as.factor(Line),
           Rep = as.factor(Rep),
           Block = as.factor(Block),
@@ -1609,7 +1609,7 @@ We fit a slightly different parathion model to that presented in the manuscript.
 
 # Deltamethrin
 
-Duneau_2018_deltamethrin_data <- read_csv("data/input/Duneau_2018/Duneau_2018_deltamethrin.csv") %>% 
+Duneau_2018_deltamethrin_data <- read_csv("data/input/Raw_data_files/Duneau_2018/Duneau_2018_deltamethrin.csv") %>% 
    mutate(line = str_remove(DGRP_lines, "line_"),
           Experiment = as.factor(Experiment),
           line = as.factor(line)) %>% 
@@ -1654,7 +1654,7 @@ deltamethrin_line_means <- tibble(new_data, fitted_deltamethrin) %>%
 
 # set up data for right censoring in brms - it is the opposite to what the survival frequentist package uses. We don't use this but it is useful to know if we do choose to fit a time to event model
 
-Duneau_2018_parathion_data <- read_csv("data/input/Duneau_2018/Duneau_2018_parathion.csv") %>% 
+Duneau_2018_parathion_data <- read_csv("data/input/Raw_data_files/Duneau_2018/Duneau_2018_parathion.csv") %>% 
    mutate(line = str_remove(DGRP_lines, "line_"),
           Experiment = as.factor(Experiment)) %>% 
   mutate(line = as.factor(line),
@@ -1706,7 +1706,7 @@ Duneau_traits <- rbind(deltamethrin_line_means,
 
 ```{r}
 
-Palmer_2018_KV_data <- read_csv("data/input/Palmer_2018_kallithea.csv") %>% 
+Palmer_2018_KV_data <- read_csv("data/input/Raw_data_files/Palmer_2018_kallithea.csv") %>% 
   group_by(Injection.date) %>%
   mutate(injection_date = as_factor(cur_group_id())) %>% 
   ungroup() %>% 
@@ -1829,7 +1829,7 @@ Palmer_traits <- rbind(kv_LT50_f_line_means,
 Cumulative cold tolerance data was supplied by the authors in line mean form, so we do not model it here.
 
 ```{r}
-Teets_2018_cold_data <- read_csv("data/input/Teets_Hahn_2018_data.csv") %>% 
+Teets_2018_cold_data <- read_csv("data/input/Raw_data_files/Teets_Hahn_2018_data.csv") %>% 
   mutate(line = as.factor(`Line (DGRP)`),
          Temp = as.factor(Temp))
 
@@ -1901,7 +1901,7 @@ Teets_traits <- rbind(neg1_cold_tolerance_line_means,
 
 ```{r}
 
-Everman_2019_starvation_resistance <- read_csv("data/input/Everman_2019_starvation_res.csv") %>% 
+Everman_2019_starvation_resistance <- read_csv("data/input/Raw_data_files/Everman_2019_starvation_res.csv") %>% 
   mutate(line = as.factor(line),
          Sex = as.factor(Sex),
          Lifespan_hrs = as.numeric(Lifespan_hrs),
@@ -1969,17 +1969,17 @@ Everman_traits <- rbind(starvation_resistance_f_line_means,
 ### Freda 2019
 
 ```{r}
-Freda_2019a <- read_csv("data/input/Freda_2019/Cold18.csv") %>% 
+Freda_2019a <- read_csv("data/input/Raw_data_files/Freda_2019/Cold18.csv") %>% 
    mutate(line = as.factor(dgrpline))
 
-Freda_2019b <- read_csv("data/input/Freda_2019/Cold25.csv") %>% 
+Freda_2019b <- read_csv("data/input/Raw_data_files/Freda_2019/Cold25.csv") %>% 
    mutate(line = as.factor(dgrpline)) %>% 
   filter(n > 0)
 
-Freda_2019c <- read_csv("data/input/Freda_2019/Heat18.csv") %>% 
+Freda_2019c <- read_csv("data/input/Raw_data_files/Freda_2019/Heat18.csv") %>% 
    mutate(line = as.factor(dgrpline))
 
-Freda_2019d <- read_csv("data/input/Freda_2019/Heat25.csv") %>% 
+Freda_2019d <- read_csv("data/input/Raw_data_files/Freda_2019/Heat25.csv") %>% 
    mutate(line = as.factor(dgrpline))
 
 # Cold hardiness at 18C for larvae model
@@ -2429,7 +2429,7 @@ This study measures wing shape and area. They then run a multivariate GWA. Here,
 For whatever reason, this is a hard trait to model.
 
 ```{r}
-Pitchers_2019_data <- read_csv("data/input/Pitchers_2019_wing_multivariate.csv") %>% 
+Pitchers_2019_data <- read_csv("data/input/Raw_data_files/Pitchers_2019_wing_multivariate.csv") %>% 
   mutate(line = as.factor(Linenum),
          Lab = as.factor(Lab),
          Perp = as.factor(Perp),
@@ -2578,11 +2578,10 @@ Pitchers_traits <-
 
 ```
 
-
 ### Rohde et al 2019
 
 ```{r}
-Rohde_2019_data <- read_csv("data/input/Rohde_2019.csv") %>% 
+Rohde_2019_data <- read_csv("data/input/Raw_data_files/Rohde_2019.csv") %>% 
   mutate(line = as.factor(DGRP_id),
          arena_id = as.factor(arena_id),
          treatment = as.factor(treatment),
@@ -2686,7 +2685,7 @@ Rohde_traits <- rbind(activity_line_means,
 This is mainly data wrangling. We find the mean from two data points for each line simply by using the `mean()` function.
 
 ```{r}
-Everett_2020_data <- read_csv("data/input/Everett_microbiome_2020.csv") 
+Everett_2020_data <- read_csv("data/input/Raw_data_files/Everett_microbiome_2020.csv") 
 
 microbiome_line_means <- 
   Everett_2020_data %>% 
@@ -2715,7 +2714,7 @@ microbiome_line_means <-
 **Note that I haven't included Wolbachia status in the model yet, which they do in the paper...**
 
 ```{r}
-Chapman_2020_data <- read_csv("data/input/Chapman_2020.csv") %>% 
+Chapman_2020_data <- read_csv("data/input/Raw_data_files/Chapman_2020.csv") %>% 
    mutate(line = as.factor(Line),
           Treatment = as.factor(Treatment),
           Date = as.factor(Date))
@@ -2759,13 +2758,170 @@ E.faecalis_line_means <- tibble(new_data, fitted_E.faecalis) %>%
 
 ```
 
+### Zhou et al 2020
+
+Line means are provided for the non-metabolome traits in the supplementary material. Raw data are provided for the metabolome traits, which we model below. 
+
+There are 453 metabolites. We need a quick and easy way to model these and find line means. To do this, we fit relatively simple gaussian models with Sex as a fixed effect (where this is applicable) and line as a random effect, with a sex-specific intercept.
+
+Five traits show no genetic variation in one of the sexes; that is, each line has the same value. We do not model these, but still need to model the trait for the sex that shows genetic variation. We fit a very similar model, except without the sex fixed effect. 
+
+```{r}
+Zhou_data <- 
+  read_csv("data/input/Raw_data_files/Zhou_2020.csv") %>% 
+  select(-c(`SUB PATHWAY`, `METABOLITE  ID`, PLATFORM, `CHEMICAL ID`,
+            `RETENTION INDEX`, MASS, CAS, PUBCHEM, KEGG, `CLIENT IDENTIFIER`)) %>% 
+  pivot_longer(cols = 3:242, names_to = "ID", values_to = "Trait_value") %>% 
+  separate(ID, into = c("Line", "Sex", "Rep"), sep = "-", remove = TRUE) %>% 
+  mutate(line = as.factor(Line), Sex = as.factor(Sex)) %>% 
+  select(-Line) %>% 
+  # standardise
+  group_by(METABOLITE, Sex) %>% 
+  mutate(st_trait_value = (Trait_value - mean(Trait_value)) / sd(Trait_value)) %>% 
+  ungroup() %>%
+  # some traits have the same value for every line; these can't be standardised because the SD = 0. We remove these traits from the dataset
+  filter(st_trait_value != "NaN")
+  
+
+# this is our model outline - pick your favourite metabolite! We can then update this iteratively with new filtered data to model every trait. We do this because we don't want brms to recompile every time. With the model already compiled we can simply update, which saves a load of time.
+
+data <- Zhou_data %>% filter(METABOLITE == "xanthurenate")
+
+model_outline <- brm(data = data,
+             st_trait_value ~ 1 + Sex + (Sex|line),
+             family = gaussian,
+             prior = c(prior(normal(0, 0.5), class = Intercept),
+                       prior(normal(0, 0.5), class = b),
+                       prior(exponential(1), class = sd)),
+             iter = 6000, warmup = 2000, chains = 4, 
+             cores = 4, seed = 1, control = list(adapt_delta = 0.95, 
+                                                 max_treedepth = 12))
+
+## Now make a function to run a model for each trait and get the posterior line means for each sex 
+
+metabolite_modeller <- function(selected_trait){
+  
+  data <- Zhou_data %>% filter(METABOLITE == selected_trait)
+  
+  model <- update(model_outline, newdata = data) # same model, but with new data each time
+  
+fitted_new_data <-
+  tibble(line = data$line,
+         Sex = data$Sex,
+         Trait = data$METABOLITE,
+         `Trait guild` = "Metabolome",
+         `Trait description` = "Metabolites identified by mass spectrometry with scaled measurement for each sample (100 flies, replicated three times). Data were scaled to account for run-day blocks. Higher values indicate greater quantities.",
+         Reference = "Zhou et al (2020) Genome Research") %>% 
+  distinct(line, Trait, Sex, `Trait guild`, `Trait description`, Reference)
+
+
+fitted_metabolite <- fitted(model,
+       newdata = fitted_new_data) %>% 
+  as_tibble() %>%
+  # now we need to convert back to response scale (note I don't convert Est.Error)
+  mutate(trait_value = Estimate*sd(data$Trait_value) + mean(data$Trait_value),
+         Q2.5 = Q2.5*sd(data$Trait_value) + mean(data$Trait_value),
+         Q97.5 = Q97.5*sd(data$Trait_value) + mean(data$Trait_value))
+
+metabolite_line_estimates <- tibble(fitted_new_data, fitted_metabolite) %>% 
+  select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
+  mutate(Sex = if_else(Sex == "F", "Female", "Male"),
+         Trait = if_else(Sex == "Female", paste(Trait, "f", sep = "."), paste(Trait, "m", sep = ".")))
+  
+}
+
+# create a list of all trait to iterate our function over
+
+Both_sexes <-
+  Zhou_data %>% 
+  distinct(METABOLITE, Sex) %>%
+  group_by(METABOLITE) %>% 
+  summarise(n = n()) %>% 
+  filter(n > 1)
+
+trait_list_both_sexes <- Both_sexes$METABOLITE
+
+## Now make a function to run a model for each trait and get the posterior line means for each sex 
+
+metabolite_modeller_single_sex <- function(selected_trait){
+  
+  data <- Zhou_data %>% filter(METABOLITE == selected_trait)
+  
+  model <- update(model_outline, newdata = data,
+                  st_trait_value ~ 1 + (1|line),
+                  family = gaussian,
+                  prior = c(prior(normal(0, 0.5), class = Intercept),
+                            prior(exponential(1), class = sd))) # same model, but with new data each time
+  
+  fitted_new_data <-
+    tibble(line = data$line,
+           Sex = data$Sex,
+           Trait = data$METABOLITE,
+           `Trait guild` = "Metabolome",
+           `Trait description` = "Metabolites identified by mass spectrometry with scaled measurement for each sample (100 flies, replicated three times). Data were scaled to account for run-day blocks. Higher values indicate greater quantities.",
+           Reference = "Zhou et al (2020) Genome Research") %>% 
+    distinct(line, Trait, Sex, `Trait guild`, `Trait description`, Reference)
+  
+  
+  fitted_metabolite <- fitted(model,
+                              newdata = fitted_new_data) %>% 
+    as_tibble() %>%
+    # now we need to convert back to response scale (note I don't convert Est.Error)
+    mutate(trait_value = Estimate*sd(data$Trait_value) + mean(data$Trait_value),
+           Q2.5 = Q2.5*sd(data$Trait_value) + mean(data$Trait_value),
+           Q97.5 = Q97.5*sd(data$Trait_value) + mean(data$Trait_value))
+  
+  metabolite_line_estimates <- tibble(fitted_new_data, fitted_metabolite) %>% 
+    select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
+    mutate(Sex = if_else(Sex == "F", "Female", "Male"),
+           Trait = if_else(Sex == "Female", paste(Trait, "f", sep = "."), paste(Trait, "m", sep = ".")))
+  
+}
+
+# create trait list to run function over
+
+Single_sex <-
+  Zhou_data %>% 
+  distinct(METABOLITE, Sex) %>%
+  group_by(METABOLITE) %>% 
+  summarise(n = n()) %>% 
+  filter(n == 1)
+
+trait_list_single_sex <- Single_sex$METABOLITE
+
+# Run the models
+
+Run_function <- FALSE # Change this to TRUE to run the models
+
+if(Run_function){
+  
+  models_both_sexes <- map_dfr(trait_list_both_sexes, metabolite_modeller) # map_dfr returns a data frame created by row-binding each output
+  
+  models_single_sex <- map_dfr(trait_list_single_sex, metabolite_modeller_single_sex)
+  
+  Zhou_line_means <-
+    rbind(models_both_sexes,
+          models_single_sex)
+  
+  Zhou_line_means %>% 
+    write_csv("data/derived/Zhou_line_means.csv") %>% 
+    mutate(Trait = str_replace_all(Trait, "[/]", "_"),
+           Trait = str_remove(Trait, "[*]"))  # replace invalid names
+} else {
+  Zhou_line_means <- read_csv("data/derived/Zhou_line_means.csv") %>% 
+    mutate(Trait = str_replace_all(Trait, "[/]", "_"),
+           Trait = str_remove(Trait, "[*]"))  # replace invalid names
+}
+  
+```
+
 ### Zwoinska et al 2020 
 
-The authors treat temperature as a continuous variable. But they only have measures at 3 temperatures, so we choose to consider temperature as an ordered predictor, following Solomon Kurz's [translation](https://bookdown.org/content/4857/monsters-and-mixtures.html#ordered-categorical-predictors) of McElreath (2020). This approach results in an improved model fit.
+The authors treat temperature as a continuous variable. But they only have measures at 3 temperatures, so we choose to consider temperature as an ordered predictor, following Solomon Kurz's [translation](https://bookdown.org/content/4857/monsters-and-mixtures.html#ordered-categorical-predictors) of McElreath (2020) to the `brms` framework. This approach results in an improved model fit.
 
 ```{r}
 
-Zwoinska_male_data <- read_csv("data/input/Zwoinska_2020/Zwoinska_males_2020.csv") %>% 
+Zwoinska_male_data <- read_csv("data/input/Raw_data_files/Zwoinska_2020/Zwoinska_males_2020.csv") %>% 
   rename(line = DGRP) %>% 
   mutate(line = as.factor(line),
          Batch = as.factor(Batch),
@@ -2905,7 +3061,7 @@ backup_approach <- cbind(a, c) %>%
 
 # female fertility
 
-Zwoinska_female_data <- read_csv("data/input/Zwoinska_2020/Zwoinska_females_2020.csv") %>% 
+Zwoinska_female_data <- read_csv("data/input/Raw_data_files/Zwoinska_2020/Zwoinska_females_2020.csv") %>% 
   rename(line = DGRP) %>% 
   mutate(line = as.factor(line),
          Batch = as.factor(Batch),
@@ -3040,7 +3196,7 @@ Zwoinska_traits <- rbind(fertility_25C_m_line_means,
 ### Chowdhury et al 2021
 
 ```{r}
-Chowdhury_2021_aggressive_lunges <- read_csv("data/input/Chowdhury_2021_aggression.csv") %>% 
+Chowdhury_2021_aggressive_lunges <- read_csv("data/input/Raw_data_files/Chowdhury_2021_aggression.csv") %>% 
   mutate(line = as.factor(line))
 
 
@@ -3081,7 +3237,7 @@ aggression_m_line_means <- tibble(new_data, fitted_aggression) %>%
 ### Watanabe and Riddle 2021 
 
 ```{r}
-Watanabe_climbing_data <- read_csv("data/input/Watanabe_Riddle_2021.csv") %>% 
+Watanabe_climbing_data <- read_csv("data/input/Raw_data_files/Watanabe_Riddle_2021.csv") %>% 
   rename(line = Line) %>% 
   mutate(line = str_remove(line, "line_"),
          line = as.factor(line),
@@ -3251,7 +3407,7 @@ Watanabe_traits <- rbind(climbing_f_line_means,
 
 **Combine all modelled trait means into a single tibble**
 
-```{r combine google sheet data}
+```{r combine google sheet data with modelled data}
 
 modelled_trait_means <-
   rbind(Jumbo_traits,
@@ -3273,6 +3429,7 @@ modelled_trait_means <-
         Rohde_traits,
         microbiome_line_means,
         E.faecalis_line_means,
+        Zhou_line_means,
         Zwoinska_traits,
         aggression_m_line_means,
         Watanabe_traits)
@@ -3471,7 +3628,7 @@ write_csv(all.dgrp.phenos_combined_subset, file = "data/derived/all.dgrp.phenos_
 ```
 
 
-All up we have removed 18 traits, taking our total from 1232 to 1214
+All up we have removed 18 traits, taking our total from 2133 to 2115
 
 The full list of traits we document can be viewed here:
 
@@ -3526,12 +3683,12 @@ $~$
 
 ### Trim data for our analysis
 
-For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and the microbiome traits measured in Everett _et al_ (2020).
+For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ (2020) and the microbiome traits measured in Everett _et al_ (2020).
 
 ```{r}
 selected.dgrp.phenos_unscaled <- 
   all.dgrp.phenos_combined_subset %>% 
-  filter(Reference != "Jin et al (2020) PLOS Genetics" & Reference != "Everett et al (2020) Genome Research")
+  filter(Reference != "Jin et al (2020) PLOS Genetics" & Reference != "Zhou et al (2020) Genome Research" & Reference != "Everett et al (2020) Genome Research")
 ```
 
 Correlation estimates are imprecise for traits that have been measured across a small number of lines. Therefore, we further trim the dataset to only include traits that have been phenotyped across \>80 lines.
