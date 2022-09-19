@@ -250,16 +250,16 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Progress</a>
+  <a href="index.html">About</a>
 </li>
 <li>
   <a href="Data_collation.html">Data collation</a>
 </li>
 <li>
-  <a href="Analysis.html">Line quant gen</a>
+  <a href="Trait_correlations.html">Calculating genetic trait correlations</a>
 </li>
 <li>
-  <a href="SNP_heritabilities.html">SNP quant gen</a>
+  <a href="SNP_heritabilities.html">Calculating 'SNP-heritability'</a>
 </li>
 <li>
   <a href="license.html">License</a>
@@ -319,7 +319,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-07-06
+<strong>Last updated:</strong> 2022-09-19
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -366,15 +366,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed9a3e127afa5495cee1013ed6677b96a4e6bf50atargetblankd9a3e12a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/d9a3e127afa5495cee1013ed6677b96a4e6bf50a" target="_blank">d9a3e12</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree86612ae2696c27e674526d1d1f89d18d7abcda74targetblank86612aea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed9a3e127afa5495cee1013ed6677b96a4e6bf50atargetblankd9a3e12a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -384,7 +384,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/86612ae2696c27e674526d1d1f89d18d7abcda74" target="_blank">86612ae</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/d9a3e127afa5495cee1013ed6677b96a4e6bf50a" target="_blank">d9a3e12</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -402,12 +402,16 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/Data_collation_cache/
-    Ignored:    analysis/index_cache/
     Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
+    Ignored:    data/derived/.DS_Store
+    Ignored:    data/input/.DS_Store
 
 Untracked files:
+    Untracked:  Guild_variance_estimates.pdf
+    Untracked:  Trait_variance_analysis.Rmd
+    Untracked:  analysis/Trait_correlations.Rmd
+    Untracked:  broad_sense_heritability.csv
     Untracked:  code/LICENSE
     Untracked:  code/gcta64
     Untracked:  code/plink
@@ -418,15 +422,61 @@ Untracked files:
     Untracked:  data/DGRP_gwas_bfiles/
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
-    Untracked:  data/SNP_heritability_cleaned.csv
-    Untracked:  data/derived/
+    Untracked:  data/derived/Zhou_line_means.csv
+    Untracked:  data/derived/all.dgrp.phenos_combined.csv
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/rg_female.csv
+    Untracked:  data/derived/rg_male.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
     Untracked:  data/gwas_data/
-    Untracked:  data/input/
+    Untracked:  data/input/Raw_data_files/
     Untracked:  fits/
 
 Unstaged changes:
-    Modified:   DGRP.Rproj
+    Deleted:    analysis/Analysis.Rmd
     Modified:   analysis/_site.yml
+    Modified:   data/derived/SNP_heritability_cleaned.csv
+    Modified:   data/derived/all.dgrp.phenos_scaled.csv
+    Modified:   data/derived/rg.csv
+    Modified:   data/derived/selected.dgrp.phenos_scaled.csv
+    Deleted:    data/input/Appel_2016_memory_learning.csv
+    Deleted:    data/input/Chapman_2020.csv
+    Deleted:    data/input/Chowdhury_2021_aggression.csv
+    Deleted:    data/input/Dean_2018.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.TAG_glycerol.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.dw.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.feeding.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glucose.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glycogen.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.protein.ab.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_deltamethrin.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_parathion.csv
+    Deleted:    data/input/Everett_microbiome_2020.csv
+    Deleted:    data/input/Everman_2019_starvation_res.csv
+    Deleted:    data/input/Freda_2017_ThermalHardiness.csv
+    Deleted:    data/input/Freda_2019/Cold18.csv
+    Deleted:    data/input/Freda_2019/Cold25.csv
+    Deleted:    data/input/Freda_2019/Heat18.csv
+    Deleted:    data/input/Freda_2019/Heat25.csv
+    Deleted:    data/input/Gaertner_2015_male_mating.csv
+    Deleted:    data/input/Grubbs_2013_leg_props.csv
+    Deleted:    data/input/He_et_al_2014.csv
+    Deleted:    data/input/Jumbo_Lucioni_2012.csv
+    Deleted:    data/input/Najarro_et_al_2015_caffeine_resistance.csv
+    Deleted:    data/input/Palmer_2018_kallithea.csv
+    Deleted:    data/input/Pitchers_2019_wing_multivariate.csv
+    Deleted:    data/input/Rohde_2019.csv
+    Deleted:    data/input/Saltz_2017_larvae_learning_data.csv
+    Deleted:    data/input/Saltz_2017_pupation_substrate_data.csv
+    Deleted:    data/input/Srivastav_Kelleher_2017_data.csv
+    Deleted:    data/input/Teets_Hahn_2018_data.csv
+    Deleted:    data/input/Watanabe_Riddle_2021.csv
+    Deleted:    data/input/Yanagawa_total_groom_time.csv
+    Deleted:    data/input/Zhou_metabolome_2020.xlsx
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_females_2020.csv
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_males_2020.csv
+    Deleted:    data/input/munoz_munoz_2016.csv
+    Deleted:    data/input/najarro_2017.csv
 
 </code></pre>
 <p>
@@ -472,6 +522,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/f924e99a74781b05a8a36e8b7d8b16a83930da65/docs/license.html" target="_blank">f924e99</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-07-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
