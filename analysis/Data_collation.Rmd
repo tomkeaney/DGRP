@@ -3593,7 +3593,7 @@ my_data_table <- function(df){
           pageSize = 'A4',
           orientation = 'landscape',
           filename = 'Trait_table')),
-      pageLength = 1214
+      pageLength = 2115
     )
   )
 }
