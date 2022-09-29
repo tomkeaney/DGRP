@@ -1,0 +1,75 @@
+---
+title: "How to upload your data"
+output: html_document
+site: workflowr::wflow_site
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE)
+```
+
+# Load in necessary packages
+
+```{r load packages}
+library(Matrix)
+library(tidyverse)
+library(DT) # for interactive tables
+library(broom) # convert results of functions into tables
+library(kableExtra)
+```
+
+# Create the template data sheet
+
+The code below will create the csv sheet that you can submit your data in. It will be saved in the `data/input/Future_line_means` folder as `template.csv`
+
+```{r}
+tibble("line" = "In each row list the DGRP line number e.g. 26", "Trait" = "trait name", "Sex" = "e.g. Female", "trait_value" = "In each row list the trait value for the specified DGRP line", "Trait guild" = "e.g. Life history",  "Trait description" = "Short explanation of your trait", "Reference" = "e.g. Mackay et al (2012) Nature") %>% 
+  write_csv("data/input/Future_line_means/template.csv")
+```
+
+# Filling in the template sheet
+
+`line`: Each DGRP line has been denoted a line number. Include a row for each line that you phenotyped in this column. Please use DGRP line number rather than the Bloomington stock number. 
+
+`Trait`: provide a succinct name for your trait. Separate each word with a `.` If you measured the trait in a specific sex, please also include `.f` or `.m` as the last two characters of the column name. If you measured the trait across both sexes (say if you measured something to do with larvae), then no suffix is required. For example, if you measured lifespan in females, you might name your trait `lifespan.f`, however if you did not discriminate between the sexes you could name your trait `lifespan`.
+
+`Sex`: which sex did you measure the trait in - `Female`, `Male` or `Both`. Both refers to traits that have been measured in both sexes indiscriminately, and the mean calculated from the pooled sex data.
+
+`trait_value`: Fill this column with the line mean values that correspond to the lines listed. 
+
+`Trait guild`: from the below list, select the guild that best represents your trait.
+
+- Activity                
+- Behavioural             
+- CHC                     
+- Drug response           
+- Genomic                  
+- Insecticide response    
+- Life history            
+- Metabolome              
+- Microbiome               
+- Morphological           
+- Pathogen response       
+- Physiological            
+- Sensory                 
+- Stress response         
+- Temperature related   
+
+`Reference`: Include the citation to the published manuscript the data was originally presented in. Use the format: Author (year) Journal. For example, Mackay et al (2012) Nature. If the data has not been published simply state _unpublished_. If the data was presented in a PhD thesis and not subsequently published then you may list "Thesis" as the 'journal' e.g. Keaney (2022) Thesis.
+
+`Trait description`: provide a brief explanation of your trait so that a general audience can understand what you have measured. Include units and provide an indication of what an increase in the value of the trait means e.g. for mortality, higher values indicate lower survival.
+
+**Should I also include more columns like DOI/URL or various meta-data things?**
+
+# Example data
+
+```{r}
+read_csv("data/input/all.line.mean.phenos.csv") %>% 
+  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv")) %>% 
+  filter(Trait == "lifetime.fecundity.25C.f") %>% 
+  kable() %>% 
+  kable_styling()
+```
+
+
+

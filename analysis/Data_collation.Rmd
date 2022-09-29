@@ -23,102 +23,26 @@ library(osfr) # For accessing data on the repository OSF
 
 $~$
 
-## Loading the line mean phenotype data from Google sheets
+## Loading the line mean phenotype data
 
 $~$
 
-A high percentage of the papers about the DGRP provide estimates of the mean phenotype of multiple DGRP lines ("line mean data"). We worked collaboratively to conduct a non-exhaustive search of the literature for phenotypic trait measurements for DGRP lines, and collated all the line mean data using Google Sheets. The R code below downloads the data from Google Sheets, saves it as a .csv file, and loads it into R. 
+A high percentage of the papers that report DGRP data provide estimates of the mean phenotype of multiple DGRP lines ("line mean data"). We worked collaboratively to conduct a non-exhaustive search of the literature for phenotypic trait measurements for DGRP lines, and collated all the line mean data in two csv files; `all.line.mean.phenos.csv` which contains line mean values for each trait and `all.line.mean.phenos_metadata.csv` which contains study meta-data. The R code below combines these files.
 
 ```{r}
-remake_data_from_googlesheets <- FALSE
-
-if(remake_data_from_googlesheets){
-  
-  # load in phenotype data from google sheets
-  
-  # This is a little shaky without an authorisation token: select NO when given Y/N option. There can be an issue with the quota resource limit of google sheets. To remedy this you can create you're own API key, so that you don't have to share quota with the rest of the world's R users for the googlesheets package. However, if the file exists, this code chunk will simply load it.
-  
-  # Specify API key that you have created from the Google cloud platform
-  gs4_auth_configure(api_key = "AIzaSyBdGLfqg7uNKB_abkJN8GzxF9S5Le8KuRI")
-  gs4_deauth()
-  
-  line_mean_url <- "https://docs.google.com/spreadsheets/d/1YjKoSY_p_BZQA6jlhNy7daApuSsLlcojtUD6GmXBYfg/edit#gid=0"
-  line_mean_googlesheet_info <- gs4_get(line_mean_url)$sheets %>% 
-    select(name, index) 
-  number_sheets <- nrow(line_mean_googlesheet_info)
-  
-  line_means_phenos <- lapply(
-    1:number_sheets, 
-    function(i) {
-      print(paste("Reading Google Sheet number ", i, " of ", number_sheets, "...", sep = ""))
-      x <- read_sheet(line_mean_url, sheet = i)
-      Sys.sleep(3)
-      return(x)
-    })
-  
-  reference_table <- do.call(
-    "rbind", 
-    lapply(line_means_phenos, 
-           function(x) tibble(Trait = names(x)[2], 
-                              Reference = x$reference[1], 
-                              Sex = x$Sex[1], 
-                              `Trait guild` = x$Guild[1], 
-                              `Trait description` = x$Explanation[1])))
-  
-  line_means_phenos <- lapply(
-    line_means_phenos, 
-    function(x) x[,1:2])[order(-sapply(line_means_phenos, nrow))]
-  
-  
-  all.dgrp.phenos.1 <- lapply(
-    line_means_phenos, 
-    function(x) {
-      mutate(x, Trait = names(x)[2])}) 
-  
-  new_colnames <- c("line", "trait_value", "Trait") 
-  
-  all.dgrp.phenos.2 <- lapply(all.dgrp.phenos.1, setNames, new_colnames)
-  
-  all.dgrp.phenos <- do.call("rbind", all.dgrp.phenos.2) %>% 
-    arrange(Trait, line) %>% 
-    as.data.frame() %>% 
-    left_join(reference_table, by = "Trait") %>%
-    filter(!is.na(line) & !is.na(trait_value)) %>% 
-    select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
-    as_tibble()
-  
-  if(!dir.exists("data/input")) dir.create("data/input")
-  
-  all.dgrp.phenos %>% 
-    select(line, Trait, Sex, trait_value) %>% 
-    write_csv("data/input/all.line.mean.phenos.csv")
-  
-  all.dgrp.phenos %>% 
-    select(Trait, `Trait guild`, `Trait description`, Reference) %>% 
-    distinct() %>% 
-    write_csv("data/input/all.line.mean.phenos_metadata.csv")
-  
-  
-} else {
-  # if(!file.exists("data/input/all.dgrp.phenos.csv")){
-  #   osf_retrieve_node("https://osf.io/2h5pw/") %>% osf_ls_files() %>%
-  #     filter(name == "all.dgrp.phenos.csv") %>% 
-  #     osf_download(path = "data/input")
-  # }
-  all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
-    left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"))
-}
+all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
+  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"))
 ```
 
 $~$
 
 ## Estimating line means from raw data
 
-Some studies only provide the raw data they collected when measuring DGRP phenotypes. We need line mean data to calculate heritability and genetic correlations between traits. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line. Each analysis is presented in a separate tab below.
+Some studies only provide the raw data they collected when measuring DGRP phenotypes. We need line mean data to calculate genetic correlations between traits and run typical GWA analyses. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line. Each analysis is presented in a separate tab below.
 
 Where the response follows a Gaussian distribution, we standardise the response to have a mean of 0 and a standard deviation of 1. We do this to make prior specification more straightforward.
 
-**The Bayesian models won't run unless you have `stan` and the `brms` package installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, I've made it so you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe. This is the entire current dataset.**
+The Bayesian models won't run unless you have `stan` and the `brms` package installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe.
 
 ## Analysis of raw data {.tabset}
 
@@ -280,7 +204,6 @@ Jumbo_traits <-
         PO_ratio_m_line_means)
       
 ```
-
 
 ### Grubbs et al 2013
 
@@ -3477,13 +3400,13 @@ After checking Bloomington (<https://bdsc.indiana.edu/Home/Search>) and flybase 
 
 -   Watanabe ad Riddle (2021): line 854 - not on flybase
 
--   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for mysterious lines. No obvious typos and the paper states they GWA for 178 lines, which matches the number reported in File S2, which is where I sourced the data.
+-   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for mysterious lines. No obvious typos and the paper states they GWA for 178 lines, which matches the number reported in File S2, which is where we sourced the data.
 
--   Katzenberger et al (2015): line 521 - no obvious typo (data is ordered by increasing trait value). One-off issue.
+-   Katzenberger et al (2015): line 521 - no obvious typo (data is ordered by increasing trait value). One-off issue. Not on flybase.
 
--   Turner, Miller and Cochrane (2013): line 760 - no obvious typo. One off.
+-   Turner, Miller and Cochrane (2013): line 760 - no obvious typo. One off. Not on flybase.
 
--   Montgomery et al (2014): lines 424 and 766 - Errors appear to be mislabeled lines. Table S3 includes RAL lines 424 and 766. Line 766 is out of numeric order in the Table. Most likely to actually be line 776 or 786. No way to tell.
+-   Montgomery et al (2014): lines 424 and 766 - Errors appear to be mislabelled lines. Table S3 includes RAL lines 424 and 766. Line 766 is out of numeric order in the Table. Most likely to actually be line 776 or 786. No way to tell.
 
 -   He et al (2014): Bloomington stock number 28120 - Error appears to be a typo. Line 28120 is included in their raw data, but isn't listed in Table S2 which shows the lines used in the study. One-off issue.
 

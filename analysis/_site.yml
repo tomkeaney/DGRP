@@ -5,10 +5,12 @@ navbar:
   left:
   - text: About
     href: index.html
+  - text: Upload your data
+    href: How_to.html
   - text: Data collation
     href: Data_collation.html
   - text: Calculating genetic trait correlations
-    href: Analysis.html
+    href: Trait_correlations.html
   - text: Calculating 'SNP-heritability'
     href: SNP_heritabilities.html
   - text: License
