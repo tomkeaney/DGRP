@@ -449,6 +449,9 @@ div.tocify {
   <a href="index.html">About</a>
 </li>
 <li>
+  <a href="How_to.html">Upload your data</a>
+</li>
+<li>
   <a href="Data_collation.html">Data collation</a>
 </li>
 <li>
@@ -515,7 +518,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-09-19
+<strong>Last updated:</strong> 2022-09-29
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -646,15 +649,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed9a3e127afa5495cee1013ed6677b96a4e6bf50atargetblankd9a3e12a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree494a5b3b17ed89bb0a912a29ae533d9d3e0f4784targetblank494a5b3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/d9a3e127afa5495cee1013ed6677b96a4e6bf50a" target="_blank">d9a3e12</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784" target="_blank">494a5b3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed9a3e127afa5495cee1013ed6677b96a4e6bf50atargetblankd9a3e12a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree494a5b3b17ed89bb0a912a29ae533d9d3e0f4784targetblank494a5b3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -664,7 +667,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/d9a3e127afa5495cee1013ed6677b96a4e6bf50a" target="_blank">d9a3e12</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784" target="_blank">494a5b3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -686,10 +689,13 @@ Ignored files:
     Ignored:    data/.DS_Store
     Ignored:    data/derived/.DS_Store
     Ignored:    data/input/.DS_Store
+    Ignored:    data/input/Raw_data_files/.DS_Store
+    Ignored:    data/input/Raw_data_files/Zwoinska_2020/.DS_Store
 
 Untracked files:
     Untracked:  Guild_variance_estimates.pdf
     Untracked:  Trait_variance_analysis.Rmd
+    Untracked:  analysis/Google_sheets_private.Rmd
     Untracked:  analysis/Trait_correlations.Rmd
     Untracked:  broad_sense_heritability.csv
     Untracked:  code/LICENSE
@@ -702,19 +708,16 @@ Untracked files:
     Untracked:  data/DGRP_gwas_bfiles/
     Untracked:  data/Literature_table.csv
     Untracked:  data/Reported_heritability.xlsx
-    Untracked:  data/derived/Zhou_line_means.csv
     Untracked:  data/derived/all.dgrp.phenos_combined.csv
     Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
     Untracked:  data/derived/rg_female.csv
     Untracked:  data/derived/rg_male.csv
     Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
     Untracked:  data/gwas_data/
-    Untracked:  data/input/Raw_data_files/
     Untracked:  fits/
 
 Unstaged changes:
     Deleted:    analysis/Analysis.Rmd
-    Modified:   analysis/_site.yml
     Modified:   data/derived/SNP_heritability_cleaned.csv
     Modified:   data/derived/all.dgrp.phenos_scaled.csv
     Modified:   data/derived/rg.csv
@@ -738,6 +741,7 @@ Unstaged changes:
     Deleted:    data/input/Freda_2019/Cold25.csv
     Deleted:    data/input/Freda_2019/Heat18.csv
     Deleted:    data/input/Freda_2019/Heat25.csv
+    Modified:   data/input/Future_line_means/template.csv
     Deleted:    data/input/Gaertner_2015_male_mating.csv
     Deleted:    data/input/Grubbs_2013_leg_props.csv
     Deleted:    data/input/He_et_al_2014.csv
@@ -802,6 +806,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784/analysis/Data_collation.Rmd" target="_blank">494a5b3</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-29
+</td>
+<td>
+adding reproducibility features
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/a5e979c7c2daa7ebace32c121d6cdd958456c448/docs/Data_collation.html" target="_blank">a5e979c</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1144,114 +1182,39 @@ Publish the initial files for myproject
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom) <span class="co"># convert results of functions into tables</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(osfr) <span class="co"># For accessing data on the repository OSF</span></span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
-<div id="loading-the-line-mean-phenotype-data-from-google-sheets"
-class="section level2">
-<h2>Loading the line mean phenotype data from Google sheets</h2>
+<div id="loading-the-line-mean-phenotype-data" class="section level2">
+<h2>Loading the line mean phenotype data</h2>
 <p><span class="math inline">\(~\)</span></p>
-<p>A high percentage of the papers about the DGRP provide estimates of
-the mean phenotype of multiple DGRP lines (“line mean data”). We worked
-collaboratively to conduct a non-exhaustive search of the literature for
-phenotypic trait measurements for DGRP lines, and collated all the line
-mean data using Google Sheets. The R code below downloads the data from
-Google Sheets, saves it as a .csv file, and loads it into R.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>remake_data_from_googlesheets <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(remake_data_from_googlesheets){</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># load in phenotype data from google sheets</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This is a little shaky without an authorisation token: select NO when given Y/N option. There can be an issue with the quota resource limit of google sheets. To remedy this you can create you&#39;re own API key, so that you don&#39;t have to share quota with the rest of the world&#39;s R users for the googlesheets package. However, if the file exists, this code chunk will simply load it.</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Specify API key that you have created from the Google cloud platform</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gs4_auth_configure</span>(<span class="at">api_key =</span> <span class="st">&quot;AIzaSyBdGLfqg7uNKB_abkJN8GzxF9S5Le8KuRI&quot;</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gs4_deauth</span>()</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  line_mean_url <span class="ot">&lt;-</span> <span class="st">&quot;https://docs.google.com/spreadsheets/d/1YjKoSY_p_BZQA6jlhNy7daApuSsLlcojtUD6GmXBYfg/edit#gid=0&quot;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  line_mean_googlesheet_info <span class="ot">&lt;-</span> <span class="fu">gs4_get</span>(line_mean_url)<span class="sc">$</span>sheets <span class="sc">%&gt;%</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(name, index) </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  number_sheets <span class="ot">&lt;-</span> <span class="fu">nrow</span>(line_mean_googlesheet_info)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  line_means_phenos <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span>number_sheets, </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(i) {</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Reading Google Sheet number &quot;</span>, i, <span class="st">&quot; of &quot;</span>, number_sheets, <span class="st">&quot;...&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> <span class="fu">read_sheet</span>(line_mean_url, <span class="at">sheet =</span> i)</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">Sys.sleep</span>(<span class="dv">3</span>)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(x)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  reference_table <span class="ot">&lt;-</span> <span class="fu">do.call</span>(</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;rbind&quot;</span>, </span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(line_means_phenos, </span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>           <span class="cf">function</span>(x) <span class="fu">tibble</span>(<span class="at">Trait =</span> <span class="fu">names</span>(x)[<span class="dv">2</span>], </span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">Reference =</span> x<span class="sc">$</span>reference[<span class="dv">1</span>], </span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                              <span class="at">Sex =</span> x<span class="sc">$</span>Sex[<span class="dv">1</span>], </span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                              <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span> <span class="ot">=</span> x<span class="sc">$</span>Guild[<span class="dv">1</span>], </span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                              <span class="st">`</span><span class="at">Trait description</span><span class="st">`</span> <span class="ot">=</span> x<span class="sc">$</span>Explanation[<span class="dv">1</span>])))</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  line_means_phenos <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    line_means_phenos, </span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(x) x[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])[<span class="fu">order</span>(<span class="sc">-</span><span class="fu">sapply</span>(line_means_phenos, nrow))]</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  all.dgrp.phenos<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    line_means_phenos, </span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(x) {</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(x, <span class="at">Trait =</span> <span class="fu">names</span>(x)[<span class="dv">2</span>])}) </span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  new_colnames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;line&quot;</span>, <span class="st">&quot;trait_value&quot;</span>, <span class="st">&quot;Trait&quot;</span>) </span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  all.dgrp.phenos<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lapply</span>(all.dgrp.phenos<span class="fl">.1</span>, setNames, new_colnames)</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  all.dgrp.phenos <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;rbind&quot;</span>, all.dgrp.phenos<span class="fl">.2</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(Trait, line) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(reference_table, <span class="at">by =</span> <span class="st">&quot;Trait&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(line) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(trait_value)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(line, Trait, Sex, trait_value, <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>, <span class="st">`</span><span class="at">Trait description</span><span class="st">`</span>, Reference) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>()</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">&quot;data/input&quot;</span>)) <span class="fu">dir.create</span>(<span class="st">&quot;data/input&quot;</span>)</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>  all.dgrp.phenos <span class="sc">%&gt;%</span> </span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(line, Trait, Sex, trait_value) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos.csv&quot;</span>)</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>  all.dgrp.phenos <span class="sc">%&gt;%</span> </span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Trait, <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>, <span class="st">`</span><span class="at">Trait description</span><span class="st">`</span>, Reference) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos_metadata.csv&quot;</span>)</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if(!file.exists(&quot;data/input/all.dgrp.phenos.csv&quot;)){</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   osf_retrieve_node(&quot;https://osf.io/2h5pw/&quot;) %&gt;% osf_ls_files() %&gt;%</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     filter(name == &quot;all.dgrp.phenos.csv&quot;) %&gt;% </span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     osf_download(path = &quot;data/input&quot;)</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># }</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>  all.line.mean.phenos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos_metadata.csv&quot;</span>))</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>A high percentage of the papers that report DGRP data provide
+estimates of the mean phenotype of multiple DGRP lines (“line mean
+data”). We worked collaboratively to conduct a non-exhaustive search of
+the literature for phenotypic trait measurements for DGRP lines, and
+collated all the line mean data in two csv files;
+<code>all.line.mean.phenos.csv</code> which contains line mean values
+for each trait and <code>all.line.mean.phenos_metadata.csv</code> which
+contains study meta-data. The R code below combines these files.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>all.line.mean.phenos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos_metadata.csv&quot;</span>))</span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 <div id="estimating-line-means-from-raw-data" class="section level2">
 <h2>Estimating line means from raw data</h2>
 <p>Some studies only provide the raw data they collected when measuring
-DGRP phenotypes. We need line mean data to calculate heritability and
-genetic correlations between traits. To get line means, we fit Bayesian
-mixed effect models and use these to estimate mean trait values for each
-line. Each analysis is presented in a separate tab below.</p>
+DGRP phenotypes. We need line mean data to calculate genetic
+correlations between traits and run typical GWA analyses. To get line
+means, we fit Bayesian mixed effect models and use these to estimate
+mean trait values for each line. Each analysis is presented in a
+separate tab below.</p>
 <p>Where the response follows a Gaussian distribution, we standardise
 the response to have a mean of 0 and a standard deviation of 1. We do
 this to make prior specification more straightforward.</p>
-<p><strong>The Bayesian models won’t run unless you have
-<code>stan</code> and the <code>brms</code> package installed. To
-install <code>stan</code> follow these <a
+<p>The Bayesian models won’t run unless you have <code>stan</code> and
+the <code>brms</code> package installed. To install <code>stan</code>
+follow these <a
 href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">instructions</a>.
-Otherwise, I’ve made it so you can skip to the data cleaning section and
-load in the csv file
-<code>"data/input/all.dgrp.phenos_combined.csv"</code> as a
-tibble/dataframe. This is the entire current dataset.</strong></p>
+Otherwise, you can skip to the data cleaning section and load in the csv
+file <code>"data/input/all.dgrp.phenos_combined.csv"</code> as a
+tibble/dataframe.</p>
 </div>
 <div id="analysis-of-raw-data" class="section level2 tabset">
 <h2 class="tabset">Analysis of raw data</h2>
@@ -4590,13 +4553,14 @@ line from study)</p></li>
 <li><p>Battlay et al (2016): lines 226, 847 and 917 - there is no
 obvious reason for mysterious lines. No obvious typos and the paper
 states they GWA for 178 lines, which matches the number reported in File
-S2, which is where I sourced the data.</p></li>
+S2, which is where we sourced the data.</p></li>
 <li><p>Katzenberger et al (2015): line 521 - no obvious typo (data is
-ordered by increasing trait value). One-off issue.</p></li>
+ordered by increasing trait value). One-off issue. Not on
+flybase.</p></li>
 <li><p>Turner, Miller and Cochrane (2013): line 760 - no obvious typo.
-One off.</p></li>
+One off. Not on flybase.</p></li>
 <li><p>Montgomery et al (2014): lines 424 and 766 - Errors appear to be
-mislabeled lines. Table S3 includes RAL lines 424 and 766. Line 766 is
+mislabelled lines. Table S3 includes RAL lines 424 and 766. Line 766 is
 out of numeric order in the Table. Most likely to actually be line 776
 or 786. No way to tell.</p></li>
 <li><p>He et al (2014): Bloomington stock number 28120 - Error appears

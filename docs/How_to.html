@@ -1,0 +1,6187 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>How to upload your data</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DGRP</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li>
+  <a href="How_to.html">Upload your data</a>
+</li>
+<li>
+  <a href="Data_collation.html">Data collation</a>
+</li>
+<li>
+  <a href="Trait_correlations.html">Calculating genetic trait correlations</a>
+</li>
+<li>
+  <a href="SNP_heritabilities.html">Calculating 'SNP-heritability'</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/tomkeaney/DGRP">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">How to upload your data</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-09-29
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DGRP/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220705code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220705)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220705code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220705)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree494a5b3b17ed89bb0a912a29ae533d9d3e0f4784targetblank494a5b3a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tomkeaney/DGRP/tree/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784" target="_blank">494a5b3</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree494a5b3b17ed89bb0a912a29ae533d9d3e0f4784targetblank494a5b3a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tomkeaney/DGRP/tree/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784" target="_blank">494a5b3</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    code/.DS_Store
+    Ignored:    data/.DS_Store
+    Ignored:    data/derived/.DS_Store
+    Ignored:    data/input/.DS_Store
+    Ignored:    data/input/Raw_data_files/.DS_Store
+    Ignored:    data/input/Raw_data_files/Zwoinska_2020/.DS_Store
+
+Untracked files:
+    Untracked:  Guild_variance_estimates.pdf
+    Untracked:  Trait_variance_analysis.Rmd
+    Untracked:  analysis/Google_sheets_private.Rmd
+    Untracked:  analysis/Trait_correlations.Rmd
+    Untracked:  broad_sense_heritability.csv
+    Untracked:  code/LICENSE
+    Untracked:  code/gcta64
+    Untracked:  code/plink
+    Untracked:  code/prettify
+    Untracked:  code/run_mashr.R
+    Untracked:  code/toy.map
+    Untracked:  code/toy.ped
+    Untracked:  data/DGRP_gwas_bfiles/
+    Untracked:  data/Literature_table.csv
+    Untracked:  data/Reported_heritability.xlsx
+    Untracked:  data/derived/all.dgrp.phenos_combined.csv
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/rg_female.csv
+    Untracked:  data/derived/rg_male.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
+    Untracked:  data/gwas_data/
+    Untracked:  fits/
+
+Unstaged changes:
+    Deleted:    analysis/Analysis.Rmd
+    Modified:   data/derived/SNP_heritability_cleaned.csv
+    Modified:   data/derived/all.dgrp.phenos_scaled.csv
+    Modified:   data/derived/rg.csv
+    Modified:   data/derived/selected.dgrp.phenos_scaled.csv
+    Deleted:    data/input/Appel_2016_memory_learning.csv
+    Deleted:    data/input/Chapman_2020.csv
+    Deleted:    data/input/Chowdhury_2021_aggression.csv
+    Deleted:    data/input/Dean_2018.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.TAG_glycerol.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.dw.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.feeding.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glucose.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glycogen.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.protein.ab.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_deltamethrin.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_parathion.csv
+    Deleted:    data/input/Everett_microbiome_2020.csv
+    Deleted:    data/input/Everman_2019_starvation_res.csv
+    Deleted:    data/input/Freda_2017_ThermalHardiness.csv
+    Deleted:    data/input/Freda_2019/Cold18.csv
+    Deleted:    data/input/Freda_2019/Cold25.csv
+    Deleted:    data/input/Freda_2019/Heat18.csv
+    Deleted:    data/input/Freda_2019/Heat25.csv
+    Deleted:    data/input/Gaertner_2015_male_mating.csv
+    Deleted:    data/input/Grubbs_2013_leg_props.csv
+    Deleted:    data/input/He_et_al_2014.csv
+    Deleted:    data/input/Jumbo_Lucioni_2012.csv
+    Deleted:    data/input/Najarro_et_al_2015_caffeine_resistance.csv
+    Deleted:    data/input/Palmer_2018_kallithea.csv
+    Deleted:    data/input/Pitchers_2019_wing_multivariate.csv
+    Deleted:    data/input/Rohde_2019.csv
+    Deleted:    data/input/Saltz_2017_larvae_learning_data.csv
+    Deleted:    data/input/Saltz_2017_pupation_substrate_data.csv
+    Deleted:    data/input/Srivastav_Kelleher_2017_data.csv
+    Deleted:    data/input/Teets_Hahn_2018_data.csv
+    Deleted:    data/input/Watanabe_Riddle_2021.csv
+    Deleted:    data/input/Yanagawa_total_groom_time.csv
+    Deleted:    data/input/Zhou_metabolome_2020.xlsx
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_females_2020.csv
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_males_2020.csv
+    Deleted:    data/input/munoz_munoz_2016.csv
+    Deleted:    data/input/najarro_2017.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/How_to.Rmd</code>) and HTML
+(<code>docs/How_to.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/494a5b3b17ed89bb0a912a29ae533d9d3e0f4784/analysis/How_to.Rmd" target="_blank">494a5b3</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-29
+</td>
+<td>
+adding reproducibility features
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-in-necessary-packages" class="section level1">
+<h1>Load in necessary packages</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT) <span class="co"># for interactive tables</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom) <span class="co"># convert results of functions into tables</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
+</div>
+<div id="create-the-template-data-sheet" class="section level1">
+<h1>Create the template data sheet</h1>
+<p>The code below will create the csv sheet that you can submit your
+data in. It will be saved in the
+<code>data/input/Future_line_means</code> folder as
+<code>template.csv</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="st">&quot;line&quot;</span> <span class="ot">=</span> <span class="st">&quot;In each row list the DGRP line number e.g. 26&quot;</span>, <span class="st">&quot;Trait&quot;</span> <span class="ot">=</span> <span class="st">&quot;trait name&quot;</span>, <span class="st">&quot;Sex&quot;</span> <span class="ot">=</span> <span class="st">&quot;e.g. Female&quot;</span>, <span class="st">&quot;trait_value&quot;</span> <span class="ot">=</span> <span class="st">&quot;In each row list the trait value for the specified DGRP line&quot;</span>, <span class="st">&quot;Trait guild&quot;</span> <span class="ot">=</span> <span class="st">&quot;e.g. Life history&quot;</span>,  <span class="st">&quot;Trait description&quot;</span> <span class="ot">=</span> <span class="st">&quot;Short explanation of your trait&quot;</span>, <span class="st">&quot;Reference&quot;</span> <span class="ot">=</span> <span class="st">&quot;e.g. Mackay et al (2012) Nature&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(<span class="st">&quot;data/input/Future_line_means/template.csv&quot;</span>)</span></code></pre></div>
+</div>
+<div id="filling-in-the-template-sheet" class="section level1">
+<h1>Filling in the template sheet</h1>
+<p><code>line</code>: Each DGRP line has been denoted a line number.
+Include a row for each line that you phenotyped in this column. Please
+use DGRP line number rather than the Bloomington stock number.</p>
+<p><code>Trait</code>: provide a succinct name for your trait. Separate
+each word with a <code>.</code> If you measured the trait in a specific
+sex, please also include <code>.f</code> or <code>.m</code> as the last
+two characters of the column name. If you measured the trait across both
+sexes (say if you measured something to do with larvae), then no suffix
+is required. For example, if you measured lifespan in females, you might
+name your trait <code>lifespan.f</code>, however if you did not
+discriminate between the sexes you could name your trait
+<code>lifespan</code>.</p>
+<p><code>Sex</code>: which sex did you measure the trait in -
+<code>Female</code>, <code>Male</code> or <code>Both</code>. Both refers
+to traits that have been measured in both sexes indiscriminately, and
+the mean calculated from the pooled sex data.</p>
+<p><code>trait_value</code>: Fill this column with the line mean values
+that correspond to the lines listed.</p>
+<p><code>Trait guild</code>: from the below list, select the guild that
+best represents your trait.</p>
+<ul>
+<li>Activity<br />
+</li>
+<li>Behavioural<br />
+</li>
+<li>CHC<br />
+</li>
+<li>Drug response<br />
+</li>
+<li>Genomic<br />
+</li>
+<li>Insecticide response<br />
+</li>
+<li>Life history<br />
+</li>
+<li>Metabolome<br />
+</li>
+<li>Microbiome<br />
+</li>
+<li>Morphological<br />
+</li>
+<li>Pathogen response<br />
+</li>
+<li>Physiological<br />
+</li>
+<li>Sensory<br />
+</li>
+<li>Stress response<br />
+</li>
+<li>Temperature related</li>
+</ul>
+<p><code>Reference</code>: Include the citation to the published
+manuscript the data was originally presented in. Use the format: Author
+(year) Journal. For example, Mackay et al (2012) Nature. If the data has
+not been published simply state <em>unpublished</em>. If the data was
+presented in a PhD thesis and not subsequently published then you may
+list “Thesis” as the ‘journal’ e.g. Keaney (2022) Thesis.</p>
+<p><code>Trait description</code>: provide a brief explanation of your
+trait so that a general audience can understand what you have measured.
+Include units and provide an indication of what an increase in the value
+of the trait means e.g. for mortality, higher values indicate lower
+survival.</p>
+<p><strong>Should I also include more columns like DOI/URL or various
+meta-data things?</strong></p>
+</div>
+<div id="example-data" class="section level1">
+<h1>Example data</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">read_csv</span>(<span class="st">&quot;data/input/all.line.mean.phenos_metadata.csv&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Trait <span class="sc">==</span> <span class="st">&quot;lifetime.fecundity.25C.f&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>()</span></code></pre></div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+line
+</th>
+<th style="text-align:left;">
+Trait
+</th>
+<th style="text-align:left;">
+Sex
+</th>
+<th style="text-align:right;">
+trait_value
+</th>
+<th style="text-align:left;">
+Trait guild
+</th>
+<th style="text-align:left;">
+Trait description
+</th>
+<th style="text-align:left;">
+Reference
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+50.64
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+21.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+31.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.75
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+35.13
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+20.06
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+62.42
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+34.13
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.07
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.64
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+35.24
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.39
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+68.30
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+27.51
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+10.02
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+47.50
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+34.80
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+45.56
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.44
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+101
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+66.41
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.28
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+86.85
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+129
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+22.24
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+136
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+38.58
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+138
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.83
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.03
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+149
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+40.13
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+153
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+31.51
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+158
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+20.98
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+161
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+20.63
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+176
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.22
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+177
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+24.03
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+181
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.62
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+189
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+13.12
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+195
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+51.21
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+208
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+80.88
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+217
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+41.36
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+223
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.88
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+227
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+22.53
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+228
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.69
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+229
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+13.48
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+233
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+24.11
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+235
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+11.04
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+237
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+79.11
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+239
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+28.26
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+256
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.50
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+272
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+35.24
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+280
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+51.53
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+31.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+301
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+38.84
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+303
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.09
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+304
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+58.16
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+306
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+10.89
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+307
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+8.83
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+309
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+70.87
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+310
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+32.67
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+313
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.96
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+315
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+11.77
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+317
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+21.65
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+318
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+66.02
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+319
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+38.29
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+324
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+51.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+325
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+35.62
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+332
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+20.06
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+335
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.28
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+336
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+27.99
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+338
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+48.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+340
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+42.22
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+350
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.73
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+352
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.93
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+356
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+38.44
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+357
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+12.65
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+358
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+359
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.36
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+360
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+41.87
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+361
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+48.62
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+362
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+46.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+365
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+53.72
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+367
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.44
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+370
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+40.61
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+371
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+17.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+373
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+38.81
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+374
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+62.66
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+375
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+66.80
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+377
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+23.56
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+378
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+53.20
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+379
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.40
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+380
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+69.88
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+381
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+28.46
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+382
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+11.40
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+383
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+17.96
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+385
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+4.23
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+386
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+75.15
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+387
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+54.45
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+391
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+70.75
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+392
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+47.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+393
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+47.26
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+398
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+37.00
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+399
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+9.21
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+409
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.32
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+426
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+40.32
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+427
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+61.25
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+437
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+45.03
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+440
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.96
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+441
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.59
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+443
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+51.25
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+461
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+13.26
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+476
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+13.95
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+486
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+21.61
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+491
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.93
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+492
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+502
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+59.21
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+508
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+27.10
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+509
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.72
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+514
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+53.32
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+517
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+41.46
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+535
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+52.81
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+554
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+56.00
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+555
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+53.30
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+556
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+26.66
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+563
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+71.99
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+584
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+8.24
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+589
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+22.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+591
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.57
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+595
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.02
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+639
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.46
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+642
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.55
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+646
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+10.61
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+703
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+54.67
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+705
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+4.12
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+707
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+18.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+712
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+46.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+714
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+36.95
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+716
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+49.62
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+721
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.04
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+727
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+11.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+730
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+44.71
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+732
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.00
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+737
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+24.46
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+738
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+77.30
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+748
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.83
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+750
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+62.37
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+757
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+6.67
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+761
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+35.21
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+765
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.18
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+771
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+61.12
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+774
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+52.86
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+776
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+37.33
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+783
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+57.40
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+786
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+64.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+787
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+42.23
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+790
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+12.78
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+796
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+37.61
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+799
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+10.87
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+801
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+39.00
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+802
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.74
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+804
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+53.54
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+805
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+29.61
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+808
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+32.69
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+810
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.01
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+812
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+27.78
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+818
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+34.23
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+819
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+32.29
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+820
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.65
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+821
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+78.03
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+822
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+24.77
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+832
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+21.47
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+837
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+23.28
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+843
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+10.94
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+849
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+-0.29
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+850
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+34.96
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+852
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+36.91
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+853
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+45.92
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+855
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.29
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+857
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+32.71
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+861
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+34.71
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+879
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+33.87
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+882
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+30.42
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+884
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+12.00
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+887
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+12.73
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+890
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+32.56
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+892
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.39
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+894
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+14.48
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+897
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+15.95
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+900
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+64.39
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+907
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+28.21
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+908
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+45.72
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+911
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+27.81
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+913
+</td>
+<td style="text-align:left;">
+lifetime.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+96.14
+</td>
+<td style="text-align:left;">
+Life history
+</td>
+<td style="text-align:left;">
+Fecundity was estimated every other week of the female’s lifespan as a
+2-day total of eggs laid, when living with a single standard male, at
+25C. Lifetime fecundity was estimated as the sum of all egg counts
+across the female’s lifespan. Higher values indicate greater fecundity.
+Note that female’s were eliminated form the analysis upon death.
+</td>
+<td style="text-align:left;">
+Durham et al (2014) Nature Communications
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.2.1 (2022-06-23)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur ... 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 broom_0.8.0      DT_0.23          forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.9      purrr_0.3.4      readr_2.1.2     
+ [9] tidyr_1.2.0      tibble_3.1.7     ggplot2_3.3.6    tidyverse_1.3.1 
+[13] Matrix_1.4-1     workflowr_1.7.0 
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.3        sass_0.4.1        bit64_4.0.5       vroom_1.5.7      
+ [5] jsonlite_1.8.0    viridisLite_0.4.0 modelr_0.1.8      bslib_0.3.1      
+ [9] assertthat_0.2.1  getPass_0.2-2     highr_0.9         cellranger_1.1.0 
+[13] yaml_2.3.5        pillar_1.7.0      backports_1.4.1   lattice_0.20-45  
+[17] glue_1.6.2        digest_0.6.29     promises_1.2.0.1  rvest_1.0.2      
+[21] colorspace_2.0-3  htmltools_0.5.2   httpuv_1.6.5      pkgconfig_2.0.3  
+[25] haven_2.5.0       scales_1.2.0      webshot_0.5.3     processx_3.6.1   
+[29] svglite_2.1.0     whisker_0.4       later_1.3.0       tzdb_0.3.0       
+[33] git2r_0.30.1      generics_0.1.2    ellipsis_0.3.2    withr_2.5.0      
+[37] cli_3.3.0         magrittr_2.0.3    crayon_1.5.1      readxl_1.4.0     
+[41] evaluate_0.15     ps_1.7.1          fs_1.5.2          fansi_1.0.3      
+[45] xml2_1.3.3        tools_4.2.1       hms_1.1.1         lifecycle_1.0.1  
+[49] munsell_0.5.0     reprex_2.0.1      callr_3.7.0       compiler_4.2.1   
+[53] jquerylib_0.1.4   systemfonts_1.0.4 rlang_1.0.3       grid_4.2.1       
+[57] rstudioapi_0.13   htmlwidgets_1.5.4 rmarkdown_2.14    gtable_0.3.0     
+[61] DBI_1.1.3         R6_2.5.1          lubridate_1.8.0   knitr_1.39       
+[65] bit_4.0.4         fastmap_1.1.0     utf8_1.2.2        rprojroot_2.0.3  
+[69] stringi_1.7.6     parallel_4.2.1    Rcpp_1.0.8.3      vctrs_0.4.1      
+[73] dbplyr_2.2.1      tidyselect_1.1.2  xfun_0.31        </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
