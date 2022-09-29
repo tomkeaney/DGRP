@@ -1,2 +1,2 @@
-line,trait_value,Reference,Guild,Sex,Explanation
-In each row list the DGRP line number e.g. 26,In each row list the trait value for the specified DGRP line,e.g. Mackay et al (2012) Nature,e.g. Life history,e.g. Female,Short explanation of your trait
+line,Trait,Sex,trait_value,Trait guild,Trait description,Reference
+In each row list the DGRP line number e.g. 26,trait name,e.g. Female,In each row list the trait value for the specified DGRP line,e.g. Life history,Short explanation of your trait,e.g. Mackay et al (2012) Nature
