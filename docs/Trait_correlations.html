@@ -501,7 +501,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-09-29
+<strong>Last updated:</strong> 2022-09-30
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -632,15 +632,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree5fc041997ed3fbd69ee3dc06ebd00359044480d0targetblank5fc0419a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9665c271f125885a31249d283c6d35d81c3f4bc1targetblank9665c27a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/5fc041997ed3fbd69ee3dc06ebd00359044480d0" target="_blank">5fc0419</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/9665c271f125885a31249d283c6d35d81c3f4bc1" target="_blank">9665c27</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree5fc041997ed3fbd69ee3dc06ebd00359044480d0targetblank5fc0419a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9665c271f125885a31249d283c6d35d81c3f4bc1targetblank9665c27a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -650,7 +650,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/5fc041997ed3fbd69ee3dc06ebd00359044480d0" target="_blank">5fc0419</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/9665c271f125885a31249d283c6d35d81c3f4bc1" target="_blank">9665c27</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -753,6 +753,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/tomkeaney/DGRP/blob/9665c271f125885a31249d283c6d35d81c3f4bc1/analysis/Trait_correlations.Rmd" target="_blank">9665c27</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-30
+</td>
+<td>
+adding the heatmap plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/d32ed318c11f0b73cf3f69d88831596c9d0013c3/docs/Trait_correlations.html" target="_blank">d32ed31</a>
+</td>
+<td>
+ausevo
+</td>
+<td>
+2022-09-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/tomkeaney/DGRP/blob/5fc041997ed3fbd69ee3dc06ebd00359044480d0/analysis/Trait_correlations.Rmd" target="_blank">5fc0419</a>
 </td>
 <td>
@@ -778,25 +812,31 @@ adding reproducibility features
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap) <span class="co"># for heatmaps</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom) <span class="co"># convert results of functions into tables</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych) <span class="co"># for getting p values and CIs for correlations</span></span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych) <span class="co"># for getting p values and CIs for correlations</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MetBrewer) <span class="co"># for colours</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 <div id="load-in-the-data" class="section level1">
 <h1>Load in the data</h1>
 <p>For the analysis presented in our manuscript, we remove the
-metabolite traits measured in Jin <em>et al</em> (2020) and the
-microbiome traits measured in Everett <em>et al</em> (2020). We choose
-not to focus on the data from these studies because line means for these
-traits may also be associated with high levels of uncertainty, as they
-have only been measured in three and two flies per line respectively.
-They also make up ~ half of our dataset, which massively reduces our
-power to detect genetic correlations between traits. Calculating
-correlation coefficients with small samples is imprecise, therefore also
-choose to trim our analysis to only include traits that have been
-measured across &gt;79 lines.</p>
+metabolite traits measured in Jin <em>et al</em> (2020) and Zhou <em>et
+al</em> and the microbiome traits measured in Everett <em>et al</em>
+(2020). <strong>We choose not to focus on the data from these studies
+because line means for these traits may also be associated with high
+levels of uncertainty, as they have only been measured in three and two
+flies per line respectively.</strong> They also make up ~ half of our
+dataset, which massively reduces our power to detect genetic
+correlations between traits. Calculating correlation coefficients with
+small samples is imprecise, therefore also choose to trim our analysis
+to only include traits that have been measured across &gt;79 lines.</p>
 <p>The collection and cleaning of these data can be viewed <a
 href="Data_collation.html">here</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>selected.dgrp.phenos_scaled <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/selected.dgrp.phenos_scaled.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>selected.dgrp.phenos_scaled <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/selected.dgrp.phenos_scaled.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>meta_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/selected.dgrp.phenos_unscaled.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Trait, Sex, <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>, <span class="st">`</span><span class="at">Trait description</span><span class="st">`</span>, Reference) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Trait, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><span class="math inline">\(~\)</span></p>
 </div>
 <div id="estimating-r_g" class="section level1">
@@ -868,17 +908,10 @@ correlation matrix.</p>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(rg, <span class="at">file =</span> <span class="st">&quot;data/derived/rg.csv&quot;</span>)</span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> rg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/rg.csv&quot;</span>)</span>
 <span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(str_detect(trait_1, &quot;CT&quot;),</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>              <span class="co">#p.adj &lt; 0.05))</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(str_detect(trait_1, &quot;mass&quot;),</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a> <span class="co">#             p &lt; 0.05))</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(p.adj &lt; 0.05))</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co"># if use = &quot;pairwise.complete.obs&quot; then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, &quot;pairwise.complete.obs&quot; only works with the &quot;pearson&quot; method.</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co"># we could also simply run</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#correlation.matrix &lt;- round(cor(all.dgrp.phenos_scaled, use = &quot;pairwise.complete.obs&quot;, method = &quot;spearman&quot;), 2)</span></span></code></pre></div>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#view(rg %&gt;% filter(p.adj &lt; 0.05))</span></span></code></pre></div>
 </div>
 <div id="estimating-sex-specific-r_g" class="section level1">
 <h1>Estimating sex-specific <span
@@ -991,25 +1024,75 @@ correlation matrix.</p>
 <span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_csv</span>(rg_male, <span class="at">file =</span> <span class="st">&quot;data/derived/rg_male.csv&quot;</span>)</span>
 <span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> rg_male <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/rg_male.csv&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to plot</span></span>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+<div id="plotting-the-strength-of-r_g" class="section level1">
+<h1>Plotting the strength of <span
+class="math inline">\(r_g\)</span></h1>
+<p><span class="math inline">\(~\)</span></p>
+<p>Create correlation matrices, first with all the data, then stratified
+by sex.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we could also simply run</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>paletteLength <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>correlation.matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(selected.dgrp.phenos_scaled <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>line), <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load specific colours</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>correlation.matrix_females <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(females <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>line), <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>myColor <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Purples&quot;</span>)[<span class="dv">7</span>], <span class="st">&quot;white&quot;</span>, <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Oranges&quot;</span>)[<span class="dv">7</span>]))(paletteLength)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>correlation.matrix_males <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">cor</span>(males <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>line), <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>, <span class="at">method =</span> <span class="st">&quot;spearman&quot;</span>), <span class="dv">2</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get custom defined breaks</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>myBreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">min</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="dv">0</span>, <span class="at">length.out=</span><span class="fu">ceiling</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1</span>), </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">seq</span>(<span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T)<span class="sc">/</span>paletteLength, <span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="at">length.out=</span><span class="fu">floor</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>)))</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the heatmap</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># if use = &quot;pairwise.complete.obs&quot; then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, &quot;pairwise.complete.obs&quot; only works with the &quot;pearson&quot; method.</span></span></code></pre></div>
+<p>Build the plots</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare to plot</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(correlation.matrix,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>paletteLength <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load specific colours</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="sc">**</span>Figure <span class="dv">1</span><span class="sc">**</span><span class="er">:</span> Spearman correlation coefficients between <span class="sc">&gt;</span><span class="dv">1100</span> traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into <span class="sc">*</span><span class="dv">6</span><span class="sc">*</span> clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.</span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>myColor_met_brewer <span class="ot">&lt;-</span> <span class="fu">met.brewer</span>(<span class="st">&quot;OKeeffe1&quot;</span>, <span class="at">n =</span> paletteLength, <span class="at">type =</span> <span class="st">&quot;continuous&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get custom defined breaks</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>myBreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">min</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="dv">0</span>, <span class="at">length.out=</span><span class="fu">ceiling</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1</span>), </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>              <span class="fu">seq</span>(<span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T)<span class="sc">/</span>paletteLength, <span class="fu">max</span>(correlation.matrix, <span class="at">na.rm=</span>T), <span class="at">length.out=</span><span class="fu">floor</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>)))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create a trait guild annotation column, need this to be a data.frame rather than a tibble for some reason </span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>Trait_guilds <span class="ot">&lt;-</span> meta_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Trait, <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>my_guilds <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> Trait_guilds[, <span class="dv">1</span>], <span class="at">Guild =</span> Trait_guilds[, <span class="dv">2</span>])</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>my_guild_colours <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Guild =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Activity</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#EF9A9A&quot;</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Behavioural</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#AB47BC&quot;</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">CHC</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#3F51B5&quot;</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Drug response</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#26C6DA&quot;</span>, </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Genomic</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#00796B&quot;</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Insecticide response</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#9CCC65&quot;</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Life history</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#76FF03&quot;</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Metabolome</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#FFEE58&quot;</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Microbiome</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#FFCC80&quot;</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Morphological</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#EF6C00&quot;</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Pathogen response</span><span class="st">`</span> <span class="ot">=</span><span class="st">&quot;#DD2C00&quot;</span>,  </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Physiological</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#6D4C41&quot;</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Sensory</span><span class="st">`</span>  <span class="ot">=</span> <span class="st">&quot;#D7CCC8&quot;</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Stress response</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#EEEEEE&quot;</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">`</span><span class="at">Temperature related</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&quot;#78909C&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the heatmap</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>heatmap_females <span class="ot">&lt;-</span> pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(correlation.matrix_females,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">col =</span> myColor_met_brewer, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">annotation_col =</span> my_guilds,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">fontsize =</span> <span class="dv">6</span>, <span class="at">annotation_colors =</span> my_guild_colours,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">treeheight_row =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="figure/Trait_correlations.Rmd/unnamed-chunk-6-1.png" width="2880" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>heatmap_males <span class="ot">&lt;-</span> pheatmap<span class="sc">::</span><span class="fu">pheatmap</span>(correlation.matrix_males,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">col =</span> myColor_met_brewer, <span class="at">breaks =</span> myBreaks,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">cutree_rows =</span> <span class="dv">6</span>, <span class="at">cutree_cols =</span> <span class="dv">6</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">annotation_col =</span> my_guilds,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fontsize =</span> <span class="dv">6</span>, <span class="at">annotation_colors =</span> my_guild_colours)</span></code></pre></div>
+<p><img src="figure/Trait_correlations.Rmd/unnamed-chunk-6-2.png" width="2880" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1018,7 +1101,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>R version 4.2.1 (2022-06-23)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur ... 10.16
@@ -1034,30 +1117,31 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] psych_2.2.5     broom_0.8.0     pheatmap_1.0.12 forcats_0.5.1  
- [5] stringr_1.4.0   dplyr_1.0.9     purrr_0.3.4     readr_2.1.2    
- [9] tidyr_1.2.0     tibble_3.1.7    ggplot2_3.3.6   tidyverse_1.3.1
-[13] Matrix_1.4-1    workflowr_1.7.0
+ [1] patchwork_1.1.1 MetBrewer_0.2.0 psych_2.2.5     broom_0.8.0    
+ [5] pheatmap_1.0.12 forcats_0.5.1   stringr_1.4.0   dplyr_1.0.9    
+ [9] purrr_0.3.4     readr_2.1.2     tidyr_1.2.0     tibble_3.1.7   
+[13] ggplot2_3.3.6   tidyverse_1.3.1 Matrix_1.4-1    workflowr_1.7.0
 
 loaded via a namespace (and not attached):
  [1] httr_1.4.3         sass_0.4.1         bit64_4.0.5        vroom_1.5.7       
  [5] jsonlite_1.8.0     modelr_0.1.8       bslib_0.3.1        assertthat_0.2.1  
- [9] getPass_0.2-2      cellranger_1.1.0   yaml_2.3.5         pillar_1.7.0      
-[13] backports_1.4.1    lattice_0.20-45    glue_1.6.2         digest_0.6.29     
-[17] RColorBrewer_1.1-3 promises_1.2.0.1   rvest_1.0.2        colorspace_2.0-3  
-[21] htmltools_0.5.2    httpuv_1.6.5       pkgconfig_2.0.3    haven_2.5.0       
-[25] scales_1.2.0       processx_3.6.1     whisker_0.4        later_1.3.0       
-[29] tzdb_0.3.0         git2r_0.30.1       generics_0.1.2     ellipsis_0.3.2    
-[33] withr_2.5.0        cli_3.3.0          mnormt_2.1.0       magrittr_2.0.3    
-[37] crayon_1.5.1       readxl_1.4.0       evaluate_0.15      ps_1.7.1          
-[41] fs_1.5.2           fansi_1.0.3        nlme_3.1-158       xml2_1.3.3        
-[45] tools_4.2.1        hms_1.1.1          lifecycle_1.0.1    munsell_0.5.0     
-[49] reprex_2.0.1       callr_3.7.0        compiler_4.2.1     jquerylib_0.1.4   
-[53] rlang_1.0.3        grid_4.2.1         rstudioapi_0.13    rmarkdown_2.14    
-[57] gtable_0.3.0       DBI_1.1.3          R6_2.5.1           lubridate_1.8.0   
-[61] knitr_1.39         bit_4.0.4          fastmap_1.1.0      utf8_1.2.2        
-[65] rprojroot_2.0.3    stringi_1.7.6      parallel_4.2.1     Rcpp_1.0.8.3      
-[69] vctrs_0.4.1        dbplyr_2.2.1       tidyselect_1.1.2   xfun_0.31         </code></pre>
+ [9] getPass_0.2-2      highr_0.9          cellranger_1.1.0   yaml_2.3.5        
+[13] pillar_1.7.0       backports_1.4.1    lattice_0.20-45    glue_1.6.2        
+[17] digest_0.6.29      RColorBrewer_1.1-3 promises_1.2.0.1   rvest_1.0.2       
+[21] colorspace_2.0-3   htmltools_0.5.2    httpuv_1.6.5       pkgconfig_2.0.3   
+[25] haven_2.5.0        scales_1.2.0       processx_3.6.1     whisker_0.4       
+[29] later_1.3.0        tzdb_0.3.0         git2r_0.30.1       farver_2.1.0      
+[33] generics_0.1.2     ellipsis_0.3.2     withr_2.5.0        cli_3.3.0         
+[37] mnormt_2.1.0       magrittr_2.0.3     crayon_1.5.1       readxl_1.4.0      
+[41] evaluate_0.15      ps_1.7.1           fs_1.5.2           fansi_1.0.3       
+[45] nlme_3.1-158       xml2_1.3.3         tools_4.2.1        hms_1.1.1         
+[49] lifecycle_1.0.1    munsell_0.5.0      reprex_2.0.1       callr_3.7.0       
+[53] compiler_4.2.1     jquerylib_0.1.4    rlang_1.0.3        grid_4.2.1        
+[57] rstudioapi_0.13    rmarkdown_2.14     gtable_0.3.0       DBI_1.1.3         
+[61] R6_2.5.1           lubridate_1.8.0    knitr_1.39         bit_4.0.4         
+[65] fastmap_1.1.0      utf8_1.2.2         rprojroot_2.0.3    stringi_1.7.6     
+[69] parallel_4.2.1     Rcpp_1.0.8.3       vctrs_0.4.1        dbplyr_2.2.1      
+[73] tidyselect_1.1.2   xfun_0.31         </code></pre>
 </div>
 </div>
 
