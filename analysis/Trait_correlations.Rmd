@@ -17,18 +17,24 @@ library(tidyverse)
 library(pheatmap) # for heatmaps
 library(broom) # convert results of functions into tables
 library(psych) # for getting p values and CIs for correlations
+library(MetBrewer) # for colours
+library(patchwork)
 ```
 
 $~$
 
 # Load in the data
 
-For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and the microbiome traits measured in Everett _et al_ (2020). We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively. They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore also choose to trim our analysis to only include traits that have been measured across \>79 lines.
+For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ and the microbiome traits measured in Everett _et al_ (2020). **We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively.** They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore also choose to trim our analysis to only include traits that have been measured across \>79 lines.
 
 The collection and cleaning of these data can be viewed [here](Data_collation.html).
 
 ```{r}
 selected.dgrp.phenos_scaled <- read_csv("data/derived/selected.dgrp.phenos_scaled.csv")
+
+meta_data <- read_csv("data/derived/selected.dgrp.phenos_unscaled.csv") %>% 
+  select(Trait, Sex, `Trait guild`, `Trait description`, Reference) %>% 
+  distinct(Trait, .keep_all = TRUE)
 ```
 
 $~$
@@ -98,17 +104,10 @@ if(!file.exists("data/derived/rg.csv")){
   write_csv(rg, file = "data/derived/rg.csv")
 } else rg <- read_csv("data/derived/rg.csv")
 
-#view(rg %>% filter(str_detect(trait_1, "CT"),
-              #p.adj < 0.05))
+#view(rg %>% filter(str_detect(trait_1, "mass"),
+ #             p < 0.05))
 
 #view(rg %>% filter(p.adj < 0.05))
- 
-
-# if use = "pairwise.complete.obs" then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, "pairwise.complete.obs" only works with the "pearson" method.
-
-# we could also simply run
-
-#correlation.matrix <- round(cor(all.dgrp.phenos_scaled, use = "pairwise.complete.obs", method = "spearman"), 2)
 
 ```
 
@@ -224,30 +223,87 @@ if(!file.exists("data/derived/rg_male.csv")){
 
 ```
 
+$~$
 
-```{r, eval=FALSE}
+# Plotting the strength of $r_g$
+
+$~$
+
+Create correlation matrices, first with all the data, then stratified by sex.
+
+```{r}
+# we could also simply run
+
+correlation.matrix <- round(cor(selected.dgrp.phenos_scaled %>% select(-line), use = "pairwise.complete.obs", method = "spearman"), 2)
+
+correlation.matrix_females <- round(cor(females %>% select(-line), use = "pairwise.complete.obs", method = "spearman"), 2)
+
+correlation.matrix_males <- round(cor(males %>% select(-line), use = "pairwise.complete.obs", method = "spearman"), 2)
+
+# if use = "pairwise.complete.obs" then the correlation or covariance between each pair of variables is computed using all complete pairs of observations on those variables. This can result in covariance or correlation matrices which are not positive semi-definite, as well as NA entries if there are no complete pairs for that pair of variables. For cov and var, "pairwise.complete.obs" only works with the "pearson" method.
+```
+
+Build the plots
+
+```{r, eval=TRUE}
 # Prepare to plot
 
 paletteLength <- 50
 
 # Load specific colours
 
-myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[7], "white", brewer.pal(9, "Oranges")[7]))(paletteLength)
+myColor_met_brewer <- met.brewer("OKeeffe1", n = paletteLength, type = "continuous", direction = -1)
 
 # Get custom defined breaks
 
 myBreaks <- c(seq(min(correlation.matrix, na.rm=T), 0, length.out=ceiling(paletteLength/2) + 1), 
               seq(max(correlation.matrix, na.rm=T)/paletteLength, max(correlation.matrix, na.rm=T), length.out=floor(paletteLength/2)))
+
+# create a trait guild annotation column, need this to be a data.frame rather than a tibble for some reason 
+
+Trait_guilds <- meta_data %>%
+  as.data.frame() %>% 
+  select(Trait, `Trait guild`)
+
+my_guilds <- data.frame(row.names = Trait_guilds[, 1], Guild = Trait_guilds[, 2])
+
+my_guild_colours <- list(Guild = c(`Activity` = "#EF9A9A",
+                                   `Behavioural` = "#AB47BC",
+                                   `CHC` = "#3F51B5",
+                                   `Drug response` = "#26C6DA", 
+                                   `Genomic` = "#00796B",
+                                   `Insecticide response` = "#9CCC65",
+                                   `Life history` = "#76FF03",
+                                   `Metabolome` = "#FFEE58",
+                                   `Microbiome` = "#FFCC80",
+                                   `Morphological` = "#EF6C00",
+                                   `Pathogen response` ="#DD2C00",  
+                                   `Physiological` = "#6D4C41",
+                                   `Sensory`  = "#D7CCC8",
+                                   `Stress response` = "#EEEEEE",
+                                   `Temperature related` = "#78909C"))
+                             
 ```
 
 
-```{r, fig.height=50, fig.width=50, eval=FALSE}
+```{r, fig.height=25, fig.width=30, eval=TRUE}
 
 # Make the heatmap
 
-pheatmap::pheatmap(correlation.matrix,
-                   col = myColor, breaks = myBreaks,
-                   cutree_rows = 6, cutree_cols = 6)
+heatmap_females <- pheatmap::pheatmap(correlation.matrix_females,
+                            col = myColor_met_brewer, breaks = myBreaks,
+                            cutree_rows = 6, cutree_cols = 6,
+                            annotation_col = my_guilds,
+                            fontsize = 6, annotation_colors = my_guild_colours,
+                            treeheight_row = 0)
 
-**Figure 1**: Spearman correlation coefficients between >1100 traits measured across the DGRP. The tree shows hierarchical clustering of line means, where traits are split into *6* clusters, with grouping of the most similar traits. Note that the trees on the x and y axis are identical.
+
+heatmap_males <- pheatmap::pheatmap(correlation.matrix_males,
+                          col = myColor_met_brewer, breaks = myBreaks,
+                          cutree_rows = 6, cutree_cols = 6,
+                          annotation_col = my_guilds,
+                          fontsize = 6, annotation_colors = my_guild_colours)
+
 ```
+
+
