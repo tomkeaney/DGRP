@@ -36,6 +36,15 @@ line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_
   left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait")
 ```
 
+We also here save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
+
+```{r}
+tibble(Reference = unique(meta_data$Reference)) %>% 
+  write_csv("data/input/references_in_original_database.csv")
+```
+
+
+
 ### Loading any data that were added after the initial creation of the database
 
 To future-proof this data resource and the associated Shiny app, we have created a directory called `data/input/Future_line_means` where new datasets can be added. To use this facility, one should make a copy of the file `template.csv` within that directory, rename the copied file to indicate the author/year/trait (e.g. "Smith_2025_wing_morphology.csv"), and then populate it with data following the instructions in the "Upload your data" tab.

@@ -1,0 +1,256 @@
+---
+title: "Running GWAS on the DGRP phenotypes"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, results='hide'
+)
+```
+
+
+```{r}
+library(tidyverse)
+library(bigsnpr) # to install:   devtools::install_github("privefl/bigsnpr")
+library(glue)
+plink <- file.path(getwd(), "code/plink") # I use plink v1.9
+options(readr.show_col_types = FALSE)
+
+
+# Define a helper function to pass commands to the terminal
+# Note that we set `intern = TRUE`, and pass the result of `system()` to `cat()`,
+# ensuring that the Terminal output will be printed in this knitr report.
+run_command <- function(shell_command, wd = getwd(), path = ""){
+  cat(system(glue("cd ", wd, path, "\n", shell_command), intern = TRUE), sep = '\n')
+}
+```
+
+
+## Load trait data to be used in GWAS
+
+Here we load the phenotype data to be used for the GWAS analyses below. This step depends upon the file `data/derived/all.dgrp.phenos_scaled.csv`, and so updating that file with newly-received data will cause the GWAS to be re-run. 
+
+The other dependencies for this script are the files `gwas_data/input/dgrp2.[XX]` where `XX` is `bed`, `bim` and `fam` (obtained from the [Mackay lab website](http://dgrp2.gnets.ncsu.edu/))), or (if you'd like to skip several hours of imputing missing genotypes using Beagle) the files `gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.[XX]`.
+
+```{r}
+meta_data <- read_csv("data/derived/meta_data_for_all_traits.csv")
+
+# Get a list of phenotypic traits that were measured in at least 80 DGRP lines
+traits_for_gwas <- meta_data %>% 
+  filter(`# lines measured` >= 80) %>% 
+  pull(Trait)
+
+# Get the line mean phenotypes for all those traits
+line_mean_phenotypes <- read_csv("data/derived/all.dgrp.phenos_scaled.csv") %>% 
+  select(line, Trait, trait_value) %>% 
+  filter(Trait %in% traits_for_gwas) %>% 
+  mutate(line = paste("line", line, sep = ""))
+```
+
+
+
+## Perform SNP quality control and imputation
+
+Before running GWAS analyses, we first cleaned up the DGRP's .bed/.bim/.fam files (available from the [Mackay lab website](http://dgrp2.gnets.ncsu.edu/)) as follows:
+
+1. Remove any SNPs for which genotypes are missing for >10% of the DGRP lines. We then use the software [Beagle](https://faculty.washington.edu/browning/beagle/beagle.html) to impute the remaining missing genotypes.
+2. Remove SNPs with a minor allele frequency of less than 5%.
+
+Note that in the PLINK-formatted genotype files, lines fixed for the major allele are coded as 2, and lines fixed for the minor allele as 0. This means that in the association tests we calculate below, _negative_ effect sizes mean that the minor allele is associated with lower trait values, while _positive_ effect sizes means that the minor allele is associated with higher trait values. 
+
+```{r QC_and_imputation, results='hide'}
+perform_SNP_QC_and_imputation <- function(phenotypes){
+  
+  beagle <- bigsnpr::download_beagle()
+  
+  # Use Plink to clean and subset the DGRP's SNP data as follows:
+  # Only keep SNPs for which at least 90% of DGRP lines were successfully genotyped (--geno 0.1)
+  # Only keep SNPs with a minor allele frequency of 0.05 or higher (--maf 0.05)
+  # Finally, write the processed BIM/BED/FAM files to the data/derived directory
+  run_command(glue("{plink} --bfile dgrp2",
+                   " --geno 0.1 --maf 0.05 --allow-no-sex", 
+                   " --make-bed --out ../derived/dgrp2_QC_all_lines"), path = "/gwas_data/input/")
+  
+  # Use the shell command 'sed' to remove underscores from the DGRP line names in the .fam file (e.g. 'line_120' becomes 'line120')
+  # Otherwise, these underscores cause trouble when we need to convert from PLINK to vcf format (vcf format uses underscore as a separator)
+  for(i in 1:2) run_command("sed -i '' 's/_//' dgrp2_QC_all_lines.fam", path = "/gwas_data/derived/")
+  
+  # Now impute the missing genotypes using Beagle
+  # This part uses the data for the full DGRP panel of >200 lines, to infer missing genotypes as accurately as possible. 
+  # This step uses a lot of memory (I set to 28MB max, and it used 26.5GB), but maybe it can also run on a less powerful computer?
+  # The bigsnpr package provides a helpful wrapper for Beagle called snp_beagleImpute(): it translates to a VCF file and back again using PLINK
+  snp_beagleImpute(beagle, plink, 
+                   bedfile.in = "gwas_data/derived/dgrp2_QC_all_lines.bed", 
+                   bedfile.out = "gwas_data/derived/dgrp2_QC_all_lines_imputed.bed",
+                   ncores = 7, 
+                   memory.max = 20)
+  
+  # assign a sex of 'female' to all the DGRP lines (Beagle removes the sex, and it seems PLINK needs individuals to have a sex)
+  run_command("sed -i '' 's/	0	0	0/	0	0	2/' dgrp2_QC_all_lines_imputed.fam", path = "/gwas_data/derived/")
+  
+  # Re-write the .bed file, to make sure the MAF and genotyping thresholds are correctly assigned post-Beagle
+  run_command(glue("{plink} --bfile dgrp2_QC_all_lines_imputed",
+                   " --geno 0.1 --maf 0.05", 
+                   " --make-bed --out dgrp2_QC_all_lines_imputed_correct"), path = "/gwas_data/derived/")
+
+  # Use PLINK to get the allele IDs and calculate the MAFs across the whole DGRP, for all SNPs that survived QC
+  # The file created is called data/derived/plink.frq
+  run_command("{plink} --bfile dgrp2_QC_all_lines_imputed_correct --freq", path = "/gwas_data/derived")
+
+  # Clean up:
+  unlink(c("gwas_data/derived/plink.log",
+           "gwas_data/derived/dgrp2_QC_all_lines_imputed.bed",
+           "gwas_data/derived/dgrp2_QC_all_lines_imputed.bim",
+           "gwas_data/derived/dgrp2_QC_all_lines_imputed.fam",
+           "gwas_data/derived/dgrp2_QC_all_lines_imputed.log",
+           "gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.log"))
+}
+
+# If the imputation is not already done, create the following 3 files of imputed genotype data: 
+# dgrp2_QC_all_lines_imputed_correct.bed/bim/fam
+if(!file.exists("gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bed")) {
+  perform_SNP_QC_and_imputation(phenotypes = predicted_line_means)
+}
+
+
+# These are 205 genotyped DGRP lines. Double-check for incorrect line names in the phenotype data, and remove any
+genotyped_lines <- read.table("gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.fam")[,1]
+line_mean_phenotypes <- line_mean_phenotypes %>% 
+  filter(line %in% genotyped_lines)
+```
+
+
+## Create a reduced list of LD-pruned SNPs with PLINK
+
+To keep the computation time and memory usage manageable, we do not save the effect sizes for every variant (SNPs and indels) that passed the MAF and missingness quality control step above (i.e. 1,646,652 variants), but rather we save the effect sizes for a subset of variants that were approximately in linkage disequilibrium. We identified this LD-pruned set of variants using the PLINK arguments `--indep-pairwise 100 10 0.2`, i.e. pruning within 100kB sliding windows, sliding 10 variants along with each step, and allowing a maximum pairwise $r^2$ threshold of 0.2 between loci. With these parameters, 1,420,071 variants were removed, leaving 226,581 for downstream analysis. Subsequent inspection of the Manhattan plots suggests that this method removes most (but not all) nearby variants that are in complete or high LD.
+
+```{r}
+# indep-pairwise arguments are: 
+# 100kB window size, 
+# variant count to shift the window by 10 variants at the end of each step, 
+# pairwise r^2 threshold of 0.2
+run_command(glue("{plink} --bfile dgrp2_QC_all_lines_imputed_correct",
+                 " --indep-pairwise 100 10 0.2"), path = "/gwas_data/derived/")
+
+unlink("gwas_data/derived/plink.prune.out")
+```
+
+
+
+## Run all the GWAS
+Note: because PLINK defines the minor allele as the alt allele (so, lines fixed for the minor allele are scored as genotype: 2, and those with the major allele as genotype: 0), a _positive_ effect size in these association tests means the _minor_ allele is associated with a _higher_ value of the trait in question.
+
+```{r}
+gwas_one_trait <- function(focal_phenotype){
+  
+  # First make 'focal_data', a 2-column data frame with the line and the focal phenotype value
+  focal_data <- line_mean_phenotypes %>% 
+    filter(Trait == focal_phenotype) %>% 
+    spread(Trait, trait_value) 
+    
+  names(focal_data)[2] <- "focal_pheno"
+  
+  # Double check there are no missing values (shouldn't be any)
+  focal_data <- focal_data %>% 
+    filter(!is.na(line) & !is.na(focal_pheno))
+  
+  # Make a list of the lines in our sample and save as a text file for passing to PLINK
+  lines_to_keep <- gsub("_", "", focal_data$line) %>% cbind(.,.)
+  write.table(lines_to_keep, 
+              row.names = FALSE, 
+              col.names = FALSE, 
+              file = "gwas_data/derived/lines_to_keep.txt", 
+              quote = FALSE)
+  
+  # Now cull the PLINK files to just the lines that we measured, and re-apply the 
+  # MAF cut-off of 0.05 for the new smaller sample of DGRP lines
+  # note that this uses all the variants, not just LD-pruned set (via the -bfile argument)
+  run_command(glue("{plink} --bfile dgrp2_QC_all_lines_imputed_correct",  
+                   " --keep-allele-order", 
+                   " --keep lines_to_keep.txt --geno 0.1 --maf 0.05", 
+                   " --make-bed --out dgrp2_QC_focal_lines"), 
+              path = "/gwas_data/derived/")
+  
+  # Define a function to add our phenotype data to a .fam file, which is 
+  # needed for GWAS analysis and to make sure PLINK includes these samples
+  # The 'phenotypes' data frame needs to have a column called 'line'
+  add_phenotypes_to_fam <- function(filepath, focal_data){
+    read_delim(filepath, col_names = FALSE, delim = " ") %>% 
+      select(X1, X2, X3, X4, X5) %>% # Get all the non-phenotype columns
+      left_join(focal_data, 
+                by = c("X1" = "line")) %>%
+      write.table(file = "gwas_data/derived/dgrp2_QC_focal_lines_NEW.fam", 
+                  col.names = FALSE, row.names = FALSE, 
+                  quote = FALSE, sep = " ")
+    unlink("gwas_data/derived/dgrp2_QC_focal_lines.fam")
+    file.rename("gwas_data/derived/dgrp2_QC_focal_lines_NEW.fam", 
+                "gwas_data/derived/dgrp2_QC_focal_lines.fam")
+  }
+  
+  add_phenotypes_to_fam("gwas_data/derived/dgrp2_QC_focal_lines.fam", focal_data)
+ 
+  # # Write a file with the line and phenotype data called phenotype.txt, for gcta64
+  # pheno_data <- focal_data %>% 
+  #   mutate(line_copy = line) %>% 
+  #   select(line, line_copy, focal_pheno) %>% as.matrix() 
+  # pheno_data %>% 
+  #   write.table(row.names = FALSE, col.names = FALSE, 
+  #               file = "gwas_data/derived/phenotype.txt", quote = FALSE)
+
+  # Run mixed-model GWAS (in practice, the relatedness between almost all pairs of lines 
+  # is sufficiently low that PLINK always instead chooses to run a linear model)
+  print(focal_phenotype)
+  run_command("{plink} --bfile dgrp2_QC_focal_lines  --assoc --maf 0.05 --out gwas_results/new", 
+              path = "/gwas_data/derived")
+  
+  gwas_results <- read.table("gwas_data/derived/gwas_results/new.qassoc", 
+                             header = TRUE) %>% 
+    select(SNP, BETA, SE, P)
+  
+  # If the trait has a "/" in the name it cannot work as a file name. Change the "/" to "_"
+  # focal_phenotype <- str_replace_all(focal_phenotype, "[/]", "_")
+
+  # Save a file containing all SNPs with P < 1e-5:
+  gwas_results %>% 
+    filter(P < 1e-05) %>% 
+    write_tsv(glue("gwas_data/derived/gwas_results/{focal_phenotype}_significant_SNPs.tsv.gz"))
+
+  # Rename and compress the GWAS summary stats file 
+  # The filter step means that only variants in the LD-pruned subset get saved to disk.
+  gwas_results %>% 
+    filter(SNP %in% (pull(read_tsv("gwas_data/derived/plink.prune.in", col_names = "SNP"), SNP))) %>% 
+    write_tsv(glue("gwas_data/derived/gwas_results/{focal_phenotype}.tsv.gz"))
+  unlink("gwas_data/derived/gwas_results/new.qassoc")
+  
+  # Rename the plink log file
+  file.rename("gwas_data/derived/gwas_results/new.log",
+              glue("gwas_data/derived/gwas_results/{focal_phenotype}_log.txt"))
+}
+
+# List the files in the gwas_results directory where association test results get stored:
+files <- list.files("gwas_data/derived/gwas_results", 
+                    pattern = "tsv.gz", 
+                    full.names = TRUE)
+
+# Make a list of the phenotypic traits that have already been done:
+already_run_traits <- str_split(files, "/") %>% 
+  map_chr(~ .x[4]) %>% 
+  str_remove_all(".tsv.gz")
+
+# List the phenotypic traits that have not yet been GWAS'ed
+traits_to_run_for_gwas <- traits_for_gwas[
+  !(traits_for_gwas %in% already_run_traits)]
+
+# run all the remaining gwas, one-by-one
+lapply(traits_to_run_for_gwas, gwas_one_trait)
+
+# Delete files no longer needed
+unlink(list.files("gwas_data/derived", 
+                  pattern = "focal_lines", full.names = T))
+unlink(c("gwas_data/derived/lines_to_keep.txt"))
+unlink(c("gwas_data/derived/gwas_results/new.qassoc", "gwas_data/derived/gwas_results/new.log"))
+```
+
