@@ -497,7 +497,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-10-13
+<strong>Last updated:</strong> 2022-10-14
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -628,15 +628,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree21408d4c914485d67dac9cc170dfc5a394d8bf00targetblank21408d4a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed30c37be05a8c2a3284776790acf9c4326af9134targetblankd30c37ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/21408d4c914485d67dac9cc170dfc5a394d8bf00" target="_blank">21408d4</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/d30c37be05a8c2a3284776790acf9c4326af9134" target="_blank">d30c37b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree21408d4c914485d67dac9cc170dfc5a394d8bf00targetblank21408d4a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed30c37be05a8c2a3284776790acf9c4326af9134targetblankd30c37ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -646,7 +646,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/21408d4c914485d67dac9cc170dfc5a394d8bf00" target="_blank">21408d4</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/d30c37be05a8c2a3284776790acf9c4326af9134" target="_blank">d30c37b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -673,14 +673,21 @@ Untracked files:
     Untracked:  analysis/luke_weighted_beta_ideas.R
     Untracked:  analysis/run_GWAS.Rmd
     Untracked:  code/plink
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
     Untracked:  data/derived/dgrp_phenos_calculated_from_raw_data.csv
+    Untracked:  data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv
+    Untracked:  data/derived/meta_data_for_all_traits.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
     Untracked:  data/imputed_data.RData
     Untracked:  data/trait_information.csv
     Untracked:  gwas_data/
     Untracked:  raw_data.csv
 
 Unstaged changes:
-    Modified:   analysis/Data_collation.Rmd
+    Modified:   analysis/Trait_correlations.Rmd
+    Modified:   data/derived/Zhou_line_means.csv
+    Modified:   data/derived/all.dgrp.phenos_scaled.csv
+    Deleted:    data/derived/selected.dgrp.phenos_scaled.csv
 
 </code></pre>
 <p>
@@ -727,6 +734,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/d30c37be05a8c2a3284776790acf9c4326af9134/analysis/get_line_means_from_raw_data.Rmd" target="_blank">d30c37b</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-10-14
+</td>
+<td>
+Rerun metabolite models
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/dced8b73ef9faf963cef34a543728a96feb72e97/docs/get_line_means_from_raw_data.html" target="_blank">dced8b7</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-10-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3418,7 +3459,7 @@ similar model, except without the sex fixed effect.</p>
 <span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(st_trait_value <span class="sc">!=</span> <span class="st">&quot;NaN&quot;</span>)</span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># this is our model outline - pick your favourite metabolite! We can then update this iteratively with new filtered data to model every trait. We do this because we don&#39;t want brms to recompile every time. With the model already compiled we can simply update, which saves a load of time.</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># this is our model outline, based on one random metabolite. We can then update this model with new data (for another metabolite) to model every trait, which is advantageous because it prevents brms needing to recompile every time. With the model already compiled we can simply update the data, which saves a lot of time.</span></span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> Zhou_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(METABOLITE <span class="sc">==</span> <span class="st">&quot;xanthurenate&quot;</span>)</span>
 <span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
@@ -3546,7 +3587,7 @@ make: *** [foo.o] Error 1</code></pre>
 <span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the models</span></span>
 <span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>Run_function <span class="ot">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># Change this to TRUE to run the models</span></span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>Run_function <span class="ot">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># Change this to TRUE to re-run the models</span></span>
 <span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(Run_function){</span>
 <span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -4081,7 +4122,15 @@ class="section level2">
 <span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>        aggression_m_line_means,</span>
 <span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        Watanabe_traits)</span>
 <span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(estimated_line_means, <span class="st">&quot;data/derived/dgrp_phenos_calculated_from_raw_data.csv&quot;</span>)</span></code></pre></div>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>meta_data <span class="ot">&lt;-</span> estimated_line_means <span class="sc">%&gt;%</span> </span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Trait, Sex, <span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>, <span class="st">`</span><span class="at">Trait description</span><span class="st">`</span>, Reference) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>trait_data <span class="ot">&lt;-</span> estimated_line_means <span class="sc">%&gt;%</span> </span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Sex, <span class="sc">-</span><span class="st">`</span><span class="at">Trait guild</span><span class="st">`</span>, <span class="sc">-</span><span class="st">`</span><span class="at">Trait description</span><span class="st">`</span>, <span class="sc">-</span>Reference) </span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(trait_data, <span class="st">&quot;data/derived/dgrp_phenos_calculated_from_raw_data.csv&quot;</span>)</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(meta_data, <span class="st">&quot;data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv&quot;</span>)</span></code></pre></div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
