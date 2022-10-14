@@ -76,7 +76,7 @@ After checking the [Bloomington Drosophila Stock Centre](https://bdsc.indiana.ed
 
 -   Houston (2019): line 285 - not on Flybase
 
--   Watanabe ad Riddle (2021): line 854 - not on Flybase
+-   Watanabe and Riddle (2021): line 854 - not on Flybase
 
 -   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for these mysterious lines. There are no obvious typos and the paper states they GWA for 178 lines, which matches the number reported in File S2, which is where we sourced the data.
 
@@ -168,13 +168,13 @@ all.dgrp.phenos_combined_subset <- all.dgrp.phenos_combined_subset %>%
 
 For some traits, a small number of lines had >1 trait value. We fixed these datasets in the original spreadsheet before it entered R, but document our fixes here for transparency.
 
--   Unckless, Rottschaefer and Lazzaro (2015) _G3_, include line 287 twice in their provided data. Values are identical, so we simply removed the duplication.
+-   Unckless, Rottschaefer and Lazzaro (2015, _G3_) include line 287 twice in their provided data. The trait values were identical, so we simply removed the duplication. 
 
--   Chow, Wolfner and Clark (2013) _PNAS_, include line 287 twice in their data (coincidence?). They measure two traits: a hazard ratio for tunicamycin-induced survival and a LT50 value. Line 287 has two different hazard ratios, but the same LT50 value. We therefore remove line 287 completely from the hazard ratio dataset, but only remove the duplicate in the LT50 dataset.
+-   Chow, Wolfner and Clark (2013, _PNAS_) include line 287 twice in their data (coincidence?). They measured two traits: a hazard ratio for tunicamycin-induced survival and an LT50 value. Line 287 has two different hazard ratios, but the same LT50 value. We therefore removed line 287 completely from the hazard ratio dataset, but only removed the duplicate in the LT50 dataset.
 
--   Hotson and Schneider (2015) _G3_, include line 712 twice in their provided data, for the trait `L.monocytogenes.load.m`. The duplicates provide different values. We are unable to tell which is the true value, so we remove line 712 from the dataset.
+-   Hotson and Schneider (2015, _G3_) include line 712 twice in their provided data, for the trait `L.monocytogenes.load.m`. The duplicates provide different values. Due to this ambiguity, we removed line 712 from the dataset.
 
--   Adebambo et al (2020) _Frontiers in Genetics_, include the line 229 twice. Values are identical so we simply remove the duplication. 
+-   Adebambo et al (2020, _Frontiers in Genetics_) include the line 229 twice. The trait values were identical, so we simply removed the duplication. 
 
 ```{r}
 # the code below reports lines that have > 1 measurement for any of the traits in our dataset 
