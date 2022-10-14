@@ -515,7 +515,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-10-13
+<strong>Last updated:</strong> 2022-10-14
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -646,15 +646,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9c9c3db7062f7db861c9eb4ad1f91f86209d77fftargetblank9c9c3dba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed88b55ff9aa65216185770b222467a857415a7fftargetblankd88b55fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/9c9c3db7062f7db861c9eb4ad1f91f86209d77ff" target="_blank">9c9c3db</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/d88b55ff9aa65216185770b222467a857415a7ff" target="_blank">d88b55f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree9c9c3db7062f7db861c9eb4ad1f91f86209d77fftargetblank9c9c3dba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed88b55ff9aa65216185770b222467a857415a7fftargetblankd88b55fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -664,7 +664,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/9c9c3db7062f7db861c9eb4ad1f91f86209d77ff" target="_blank">9c9c3db</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/d88b55ff9aa65216185770b222467a857415a7ff" target="_blank">d88b55f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -703,8 +703,9 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/Trait_correlations.Rmd
-    Modified:   analysis/get_line_means_from_raw_data.Rmd
+    Modified:   data/derived/Zhou_line_means.csv
     Modified:   data/derived/all.dgrp.phenos_scaled.csv
+    Deleted:    data/derived/selected.dgrp.phenos_scaled.csv
 
 </code></pre>
 <p>
@@ -750,6 +751,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/d88b55ff9aa65216185770b222467a857415a7ff/analysis/Data_collation.Rmd" target="_blank">d88b55f</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-10-14
+</td>
+<td>
+Small changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/3089a02f0b3c0af9c8b0ac71c26f43d9c81b5249/docs/Data_collation.html" target="_blank">3089a02</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-10-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1264,7 +1299,7 @@ on flybase.</p></li>
 <li><p>Chowdhury et al (2019): line 471 - not on Flybase (only aberrant
 line from study)</p></li>
 <li><p>Houston (2019): line 285 - not on Flybase</p></li>
-<li><p>Watanabe ad Riddle (2021): line 854 - not on Flybase</p></li>
+<li><p>Watanabe and Riddle (2021): line 854 - not on Flybase</p></li>
 <li><p>Battlay et al (2016): lines 226, 847 and 917 - there is no
 obvious reason for these mysterious lines. There are no obvious typos
 and the paper states they GWA for 178 lines, which matches the number
@@ -1369,23 +1404,23 @@ class="section level3">
 fixed these datasets in the original spreadsheet before it entered R,
 but document our fixes here for transparency.</p>
 <ul>
-<li><p>Unckless, Rottschaefer and Lazzaro (2015) <em>G3</em>, include
-line 287 twice in their provided data. Values are identical, so we
-simply removed the duplication.</p></li>
-<li><p>Chow, Wolfner and Clark (2013) <em>PNAS</em>, include line 287
-twice in their data (coincidence?). They measure two traits: a hazard
-ratio for tunicamycin-induced survival and a LT50 value. Line 287 has
+<li><p>Unckless, Rottschaefer and Lazzaro (2015, <em>G3</em>) include
+line 287 twice in their provided data. The trait values were identical,
+so we simply removed the duplication.</p></li>
+<li><p>Chow, Wolfner and Clark (2013, <em>PNAS</em>) include line 287
+twice in their data (coincidence?). They measured two traits: a hazard
+ratio for tunicamycin-induced survival and an LT50 value. Line 287 has
 two different hazard ratios, but the same LT50 value. We therefore
-remove line 287 completely from the hazard ratio dataset, but only
-remove the duplicate in the LT50 dataset.</p></li>
-<li><p>Hotson and Schneider (2015) <em>G3</em>, include line 712 twice
+removed line 287 completely from the hazard ratio dataset, but only
+removed the duplicate in the LT50 dataset.</p></li>
+<li><p>Hotson and Schneider (2015, <em>G3</em>) include line 712 twice
 in their provided data, for the trait
 <code>L.monocytogenes.load.m</code>. The duplicates provide different
-values. We are unable to tell which is the true value, so we remove line
-712 from the dataset.</p></li>
-<li><p>Adebambo et al (2020) <em>Frontiers in Genetics</em>, include the
-line 229 twice. Values are identical so we simply remove the
-duplication.</p></li>
+values. Due to this ambiguity, we removed line 712 from the
+dataset.</p></li>
+<li><p>Adebambo et al (2020, <em>Frontiers in Genetics</em>) include the
+line 229 twice. The trait values were identical, so we simply removed
+the duplication.</p></li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the code below reports lines that have &gt; 1 measurement for any of the traits in our dataset </span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
