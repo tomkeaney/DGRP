@@ -2691,7 +2691,7 @@ Zhou_data <-
   filter(st_trait_value != "NaN")
   
 
-# this is our model outline - pick your favourite metabolite! We can then update this iteratively with new filtered data to model every trait. We do this because we don't want brms to recompile every time. With the model already compiled we can simply update, which saves a load of time.
+# this is our model outline, based on one random metabolite. We can then update this model with new data (for another metabolite) to model every trait, which is advantageous because it prevents brms needing to recompile every time. With the model already compiled we can simply update the data, which saves a lot of time.
 
 data <- Zhou_data %>% filter(METABOLITE == "xanthurenate")
 
@@ -2799,7 +2799,7 @@ trait_list_single_sex <- Single_sex$METABOLITE
 
 # Run the models
 
-Run_function <- FALSE # Change this to TRUE to run the models
+Run_function <- FALSE # Change this to TRUE to re-run the models
 
 if(Run_function){
   
@@ -3339,5 +3339,13 @@ estimated_line_means <-
         aggression_m_line_means,
         Watanabe_traits)
 
-write_csv(estimated_line_means, "data/derived/dgrp_phenos_calculated_from_raw_data.csv")
+meta_data <- estimated_line_means %>% 
+  select(Trait, Sex, `Trait guild`, `Trait description`, Reference) %>% 
+  distinct()
+
+trait_data <- estimated_line_means %>% 
+  select(-Sex, -`Trait guild`, -`Trait description`, -Reference) 
+
+write_csv(trait_data, "data/derived/dgrp_phenos_calculated_from_raw_data.csv")
+write_csv(meta_data, "data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv")
 ```
