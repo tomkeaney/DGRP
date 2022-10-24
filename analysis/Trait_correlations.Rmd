@@ -23,19 +23,26 @@ library(patchwork)
 
 $~$
 
-# Load in the data
+# Load and filter the data
 
-For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ and the microbiome traits measured in Everett _et al_ (2020). **We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively.** They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore also choose to trim our analysis to only include traits that have been measured across \>79 lines.
+For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ and the microbiome traits measured in Everett _et al_ (2020). **We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively.** They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore also choose to trim our analysis to only include traits that have been measured across 80 or more lines.
 
 The collection and cleaning of these data can be viewed [here](Data_collation.html).
 
 ```{r}
-selected.dgrp.phenos_scaled <- read_csv("data/derived/selected.dgrp.phenos_scaled.csv")
+meta_data <- read_csv("data/derived/meta_data_for_all_traits.csv")
 
-meta_data <- read_csv("data/derived/selected.dgrp.phenos_unscaled.csv") %>% 
-  select(Trait, Sex, `Trait guild`, `Trait description`, Reference) %>% 
-  distinct(Trait, .keep_all = TRUE)
+selected.dgrp.phenos_scaled <- read_csv("data/derived/all.dgrp.phenos_scaled.csv") %>% 
+  filter(Reference %in% read_csv("data/input/references_in_original_database.csv")$Reference) %>% # restrict to only papers in the original database
+  left_join(meta_data, by = c("Trait", "Reference")) %>% 
+  filter(Reference != "Jin et al (2020) PLOS Genetics" &    # Exclude these metabolite and microbiome studies
+           Reference != "Zhou et al (2020) Genome Research" & 
+           Reference != "Everett et al (2020) Genome Research" & 
+           `# lines measured` >= 80) %>%     # Filter by number of lines measured
+  select(line, Trait, trait_value) %>% 
+  spread(Trait, trait_value)
 ```
+
 
 $~$
 
@@ -45,7 +52,7 @@ $~$
 
 $r_g$ is the genetic correlation between a trait X and a trait Y.
 
-We create a large trait correlation matrix using the `corr.test` function from the `psych` package. We calculate spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default pearson method. The `corr.test` function also allows us to calculate confidence intervals and provides p-values adjusted for multiple testing for each bivariate correlation. 
+We create a large trait correlation matrix using the `corr.test` function from the `psych` package. We calculate Spearman correlation coefficients ($rho$) to estimate $r_g$, as these are more robust to non-normality than the default Pearson method. The `corr.test` function also allows us to calculate confidence intervals and provides p-values adjusted for multiple testing for each bivariate correlation. 
 
 Note that we perform ~260,000 bivariate correlations here, so the code takes a while to run. It runs substantially faster if `ci = FALSE` in `corr.test`
 
@@ -57,10 +64,11 @@ We only show each correlation once i.e. this is not a mirrored correlation matri
 
 # Create a correlation matrix for all traits 
 
-
 if(!file.exists("data/derived/rg.csv")){
   
-  spearman_results <- corr.test(selected.dgrp.phenos_scaled %>% select(-line), adjust = "holm", method = "spearman", ci = TRUE)
+  spearman_results <- corr.test(selected.dgrp.phenos_scaled %>% 
+                                  select(-line), 
+                                adjust = "holm", method = "spearman", ci = TRUE)
   
   # Wrangling the data into a useable tibble
   
