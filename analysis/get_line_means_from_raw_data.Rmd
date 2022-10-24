@@ -25,7 +25,7 @@ my_scale <- function(x) as.numeric(scale(x))
 
 Some studies/authors provided the raw data that was collected when measuring DGRP phenotypes (e.g. measurements of individual flies), although we need line mean data to calculate genetic correlations between traits and run typical GWAS analyses. To get line means, we fit Bayesian mixed effect models and use these to estimate mean trait values for each line, using the model formula that made most sense to us given the study's experimental design (see annotations in the code below). Our analyses of each paper's data are presented in a separate tab below.
 
-Where the response follows a Gaussian distribution, we standardise the response to have a mean of 0 and a standard deviation of 1, in order to make prior specification more straightforward; in these cases, the estimated line means are given in standard units.
+Where the response follows a Gaussian distribution, we standardise the response to have a mean of 0 and a standard deviation of 1, in order to make prior specification more straightforward. In these cases, the estimated line means are converted back to the response scale. Line means given in standard units are also provided in **XX.csv**.
 
 The Bayesian models won't run unless you have `stan` and the `brms` package installed. To install `stan` follow these [instructions](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). Otherwise, you can skip to the data cleaning section and load in the csv file `"data/input/all.dgrp.phenos_combined.csv"` as a tibble/dataframe.
 
@@ -2749,7 +2749,7 @@ Both_sexes <-
 
 trait_list_both_sexes <- Both_sexes$METABOLITE
 
-## Now make a function to run a model for each trait and get the posterior line means for each sex 
+## Now make a function to run a model for each trait and get the posterior line means for traits only measured in a single sex
 
 metabolite_modeller_single_sex <- function(selected_trait){
   
@@ -2917,7 +2917,7 @@ fertility_m_temp_effect_line_means <- as_draws_df(fertility_male_model_ordered) 
   select(line, Trait, Sex, trait_value, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(trait_value)
 
-# Slopes are hard to interpret, so we also provide this data in a different format. Below we calculate the change in fertility between 25C and 29C for each line. Greater values indicate a greater loss in fertility. Note this approach produces a very similar line ordering to the bove approach
+# Slopes are hard to interpret, so we also provide this data in a different format. Below we calculate the change in fertility between 25C and 29C for each line. Greater values indicate a greater loss in fertility. Note this approach produces a very similar line ordering to the above approach
 
 new_data <-
   new_data %>% 
