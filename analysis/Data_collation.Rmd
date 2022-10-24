@@ -2753,7 +2753,7 @@ metabolite_line_estimates <- tibble(fitted_new_data, fitted_metabolite) %>%
   
 }
 
-# create a list of all trait to iterate our function over
+# create a list of all traits to iterate our function over
 
 Both_sexes <-
   Zhou_data %>% 
@@ -2764,7 +2764,7 @@ Both_sexes <-
 
 trait_list_both_sexes <- Both_sexes$METABOLITE
 
-## Now make a function to run a model for each trait and get the posterior line means for each sex 
+## Now make a function to run a model for each trait and get the posterior line means for traits only measured in a single sex
 
 metabolite_modeller_single_sex <- function(selected_trait){
   
