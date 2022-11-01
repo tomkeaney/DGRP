@@ -36,13 +36,12 @@ line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_
   left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait")
 ```
 
-We also here save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
+We also provide and save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
 
 ```{r}
 tibble(Reference = unique(meta_data$Reference)) %>% 
   write_csv("data/input/references_in_original_database.csv")
 ```
-
 
 
 ### Loading any data that were added after the initial creation of the database
@@ -209,7 +208,7 @@ Here, we save the {r n_traits_after_cleaning} traits as a .csv file called `data
 
 To help interpret the contents of this file, we also save a metadata file called `data/derived/meta_data_for_all_traits.csv`, which gives information about each trait. This file is also shown in the HTML Table below. The columns are interpreted as follows:
 
-- `Trait`: The name of the trait. This matches the traits listed in `data/derived/all.dgrp.phenos_unscaled.csv`, and can be used to combine the two spreadsheets (e.g. one could use a left join, as in: `dplyr::left_join(all.dgrp.phenos_unscaled, meta_data_for_all_traits)`)
+- `Trait`: The name of the trait. This matches the traits listed in `data/derived/all.dgrp.phenos_unscaled.csv`, and can be used to combine the two spreadsheets (e.g. by using a left join, as in: `dplyr::left_join(all.dgrp.phenos_unscaled, meta_data_for_all_traits)`)
 
 - `# lines measured`: Number of DGRP lines for estimates of the line mean trait value was available.
 
@@ -280,7 +279,7 @@ my_data_table(complete_metadata)
 
 ## Save the cleaned dataset, with traits measured in standard units
 
-Some of our traits have already been scaled to have a mean of zero and standard deviation of 1, either by us (when using models to estimate the line means from the raw data) or by the study authors who provided the line mean data. For consistency, and to aid comparison of variances between traits, we also create and save a version of the complete dataset where all traits have been standardised (by subtracting the mean from each value and dividing by the standard deviation, via R's `scale()` function).
+Some of our traits have already been scaled to have a mean of zero and standard deviation of 1. For consistency, and to aid comparison of variances between traits, we also create and save a version of the complete dataset where all traits have been standardised (by subtracting the mean from each value and dividing by the standard deviation, via R's `scale()` function).
 
 
 ```{r}
