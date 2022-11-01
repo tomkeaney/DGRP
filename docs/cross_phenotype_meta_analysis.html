@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Cross phenotype meta analysis</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.5.0/jquery-3.5.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.13/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/dt-ext-scroller-1.10.20/css/scroller.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-scroller-1.10.20/js/dataTables.scroller.min.js"></script>
+<script src="site_libs/pdfmake-1.10.20/pdfmake.js"></script>
+<script src="site_libs/pdfmake-1.10.20/vfs_fonts.js"></script>
+<link href="site_libs/dt-ext-buttons-1.10.20/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.10.20/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.flash.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.10.20/js/buttons.print.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DGRP</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li>
+  <a href="How_to.html">Upload your data</a>
+</li>
+<li>
+  <a href="Data_collation.html">Data collation</a>
+</li>
+<li>
+  <a href="Trait_correlations.html">Calculating genetic trait correlations</a>
+</li>
+<li>
+  <a href="SNP_heritabilities.html">Calculating 'SNP-heritability'</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/tomkeaney/DGRP">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Cross phenotype meta analysis</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-11-01
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>DGRP/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220705code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220705)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220705code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220705)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreecf92cc8cc33874f235ed7dbcd105a16f06e1e700targetblankcf92cc8a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/tomkeaney/DGRP/tree/cf92cc8cc33874f235ed7dbcd105a16f06e1e700" target="_blank">cf92cc8</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreecf92cc8cc33874f235ed7dbcd105a16f06e1e700targetblankcf92cc8a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/tomkeaney/DGRP/tree/cf92cc8cc33874f235ed7dbcd105a16f06e1e700" target="_blank">cf92cc8</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rproj.user/
+    Ignored:    data/.DS_Store
+    Ignored:    data/derived/.DS_Store
+    Ignored:    data/input/.DS_Store
+    Ignored:    fits/
+
+Untracked files:
+    Untracked:  analysis/exporting GWAS stats for the app.R
+    Untracked:  analysis/luke_cluster_ideas.R
+    Untracked:  analysis/luke_weighted_beta_ideas.R
+    Untracked:  data/derived/cmpa_snp_ld_matrix.rds
+    Untracked:  data/imputed_data.RData
+    Untracked:  gwas_data/
+    Untracked:  test.pdf
+    Untracked:  test2.pdf
+
+Unstaged changes:
+    Modified:   analysis/Trait_correlations.Rmd
+    Modified:   analysis/run_GWAS.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/cross_phenotype_meta_analysis.Rmd</code>) and HTML
+(<code>docs/cross_phenotype_meta_analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/cf92cc8cc33874f235ed7dbcd105a16f06e1e700/analysis/cross_phenotype_meta_analysis.Rmd" target="_blank">cf92cc8</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+<td>
+wflow_publish("analysis/cross_phenotype_meta_analysis.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-packages" class="section level2">
+<h2>Load packages</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a function to build HTML searchable tables</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>my_data_table <span class="ot">&lt;-</span> <span class="cf">function</span>(df){</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">datatable</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    df, <span class="at">rownames=</span><span class="cn">FALSE</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">autoHideNavigation =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">extensions =</span> <span class="fu">c</span>(<span class="st">&quot;Scroller&quot;</span>,  <span class="st">&quot;Buttons&quot;</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">autoWidth =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">dom =</span> <span class="st">&#39;Bfrtip&#39;</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">deferRender=</span><span class="cn">TRUE</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">scrollX=</span><span class="cn">TRUE</span>, <span class="at">scrollY=</span><span class="dv">1000</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">scrollCollapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">buttons =</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(<span class="st">&#39;pageLength&#39;</span>, <span class="st">&#39;colvis&#39;</span>, <span class="st">&#39;csv&#39;</span>, <span class="fu">list</span>(</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">extend =</span> <span class="st">&#39;pdf&#39;</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">pageSize =</span> <span class="st">&#39;A4&#39;</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">orientation =</span> <span class="st">&#39;landscape&#39;</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">filename =</span> <span class="st">&#39;Trait_table&#39;</span>)),</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">pageLength =</span> <span class="dv">79</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="load-necessary-datasets" class="section level2">
+<h2>Load necessary datasets</h2>
+<p>Here we load a database of DGRP variant and gene annotations
+(prepared in the script XXXX from data from annotation hub and the
+Mackay lab website), as well as the GWAS summary statistics for a subset
+of all the phenotypic traits that were measured.</p>
+<p>Because GWAS summary statistics for different phenotypes collected in
+the same study are usually not independent (e.g. because the phenotypes
+were measured on the same individual flies, or in the same experimental
+blocks or environmental conditions), we chose to thin the dataset by
+randomly selecting a single phenotypic trait per study. This means that
+each set of GWAS summary statistics corresponds to one independent
+measure of a DGRP phenotype, and so any similarity in how a given allele
+affects two different phenotypes is likely to reflect genetic processes
+such as pleiotropy, as opposed to spurious effects related to
+environmental similarities between the two measurements. We also only
+include GWAS summary statistics for GWAS computed using at least 80 DGRP
+lines. This thinning process left 80 traits for analysis.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>) <span class="co"># Set the seed, so the random choice of phenotypes is reproducible</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>independent_traits <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at"># lines measured</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="dv">80</span>) <span class="sc">%&gt;%</span> <span class="co"># Only analyse traits that measured at least 80 lines</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Reference) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="co"># Randomly sample one phenotype per study</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Trait) <span class="sc">%&gt;%</span> <span class="fu">sort</span>()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of GWAS summary statistics files, and the trait names found in those files&#39; names</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Just get the files with LD-prunced list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results&quot;</span>, <span class="at">full.names =</span> T)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">grepl</span>(<span class="st">&quot;tsv&quot;</span>, all_gwas_files) <span class="sc">&amp;</span> </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                                   <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;_significant_SNPs&quot;</span>, all_gwas_files)]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>gwas_trait_names <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(all_gwas_files, </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                                                  <span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>), <span class="st">&quot;[.]tsv[.]gz&quot;</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Here is the list of GWAS files/traits to be analysed (i.e. those in &quot;independent_traits&quot;)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>focal_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">which</span>(gwas_trait_names <span class="sc">%in%</span> independent_traits)]</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the SNP names out of the first GWAS file, and count the SNPs</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>all_snps <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(focal_gwas_files[<span class="dv">1</span>]) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(SNP)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>n_snps <span class="ot">&lt;-</span> <span class="fu">length</span>(all_snps) <span class="co"># 224159</span></span></code></pre></div>
+</div>
+<div
+id="calculate-cross-phenotype-meta-analysis-cpma-statistic-for-each-snp"
+class="section level2">
+<h2>Calculate cross-phenotype meta-analysis (CPMA) statistic for each
+SNP</h2>
+<p>This analysis uses the CPMA method proposed by [Cotsapas et al. 2011
+PLoS Genetics, e1002254] (<a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3154137/"
+class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3154137/</a>),
+which takes as its input the <span
+class="math inline">\(p\)</span>-values from a set of <span
+class="math inline">\(n\)</span> independent association tests for <span
+class="math inline">\(n\)</span> different phenotypes (here, <span
+class="math inline">\(n =\)</span> 80).</p>
+<p>Cotsapas et al. noted that for a SNP which has no effect on any of
+the <span class="math inline">\(n\)</span> traits, the <span
+class="math inline">\(p\)</span>-values from the <span
+class="math inline">\(n\)</span> association tests are expected to be
+uniformly distributed, which means that the <span
+class="math inline">\(-ln(x)\)</span> transformed <span
+class="math inline">\(p\)</span>-values are expected to be exponentially
+distributed with rate parameter <span class="math inline">\(\lambda =
+1\)</span>. In contrast, if the focal SNP is associated with one or more
+of the <span class="math inline">\(n\)</span> traits, the <span
+class="math inline">\(-log(x)\)</span> transformed <span
+class="math inline">\(p\)</span>-values are no longer expected to follow
+an exponential distribution with <span class="math inline">\(\lambda =
+1\)</span>. Cotsapas et al. propose testing between the null expectation
+(<span class="math inline">\(\lambda = 1\)</span>) and the observed
+value of <span class="math inline">\(\lambda\)</span>, termed <span
+class="math inline">\(\hat{\lambda}\)</span> (which can be found via the
+maximum likelihood estimator, <span class="math inline">\(\hat{\lambda}
+= \frac{n}{sum(x)}\)</span>) using a likelihood ratio test as
+follows:</p>
+<p><span class="math display">\[CPMA = -2
+\frac{P(p_1,p_2,...,p_n)|\lambda=1)}{P(p_1,p_2,...,p_n)|\lambda=\hat{\lambda})}\]</span>
+The CPMA test statistic is expected to be <span
+class="math inline">\(\chi^2\)</span> distributed (via <a
+href="https://en.wikipedia.org/wiki/Wilks%27_theorem">Wilk’s
+theorem</a>) with 1 degree of freedom, allowing calculation of a <span
+class="math inline">\(p\)</span>-value for the null hypothesis that none
+of the <span class="math inline">\(n\)</span> traits are associated with
+the focal SNP. If the CPMA test statistic is high enough that one should
+reject the null hypothesis, this implies that the focal SNP is
+associated with one or more of <span class="math inline">\(n\)</span>
+phenotypes.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>find_likelihood <span class="ot">&lt;-</span> <span class="cf">function</span>(logged_p, lambda) (lambda <span class="sc">^</span> <span class="fu">length</span>(logged_p)) <span class="sc">*</span> (<span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> lambda <span class="sc">*</span> <span class="fu">sum</span>(logged_p)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>find_max_likelihood_lambda <span class="ot">&lt;-</span> <span class="cf">function</span>(logged_p) <span class="fu">length</span>(logged_p) <span class="sc">/</span> <span class="fu">sum</span>(logged_p)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>compute_CPMA <span class="ot">&lt;-</span> <span class="cf">function</span>(p){</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  logged_p <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log</span>(p)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  likelihood_for_lambda_equal_1 <span class="ot">&lt;-</span> <span class="fu">find_likelihood</span>(logged_p, <span class="dv">1</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  likelihood_for_lambda_equal_ML_lambda <span class="ot">&lt;-</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">find_likelihood</span>(logged_p, <span class="fu">find_max_likelihood_lambda</span>(logged_p))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This is -2 log the likelihood ratio (usually written as -2\log(\Lambda)), which asymptotically approaches the chi-squared distribution under the null hypothesis</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># There is one degree of freedom since only 1 parameter is estimated from the data (the ML lambda)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">log</span>(likelihood_for_lambda_equal_1 <span class="sc">/</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>             likelihood_for_lambda_equal_ML_lambda)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># This function finds the weighted mean effect size and the CPMA statistic for every variant in the i&#39;th chunk of variants</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># The weighted mean effect size is the means effect size of the focal SNP on all the traits (called BETA in Plink&#39;s output),</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># weighted by 1 over the standard error of the the effect size estimates.</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>do_snp_chunk <span class="ot">&lt;-</span> <span class="cf">function</span>(i){</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  focal_snps <span class="ot">&lt;-</span> chunked_snps[[i]]</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  all_betas <span class="ot">&lt;-</span> <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(focal_gwas_files),</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                      <span class="sc">~</span> <span class="fu">read_tsv</span>(focal_gwas_files[.x],</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">&quot;c&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">filter</span>(SNP <span class="sc">%in%</span> focal_snps) <span class="sc">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mutate</span>(<span class="at">trait =</span> .x))</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  all_betas <span class="sc">%&gt;%</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">Weighted_mean_effect_size =</span> <span class="fu">weighted.mean</span>(<span class="fu">abs</span>(BETA), <span class="at">w =</span> <span class="dv">1</span> <span class="sc">/</span> SE),</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>              <span class="at">CPMA_statistic =</span> <span class="fu">compute_CPMA</span>(P)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">CPMA_pval =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(CPMA_statistic, <span class="at">df =</span> <span class="dv">1</span>))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>chunked_snps <span class="ot">&lt;-</span> <span class="fu">split</span>(all_snps, <span class="fu">ceiling</span>(<span class="fu">seq_along</span>(all_snps) <span class="sc">/</span> <span class="dv">50000</span>))</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>cpma_snp_scores <span class="ot">&lt;-</span> <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(chunked_snps), </span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                          <span class="sc">~</span> <span class="fu">do_snp_chunk</span>(.x)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(SNP <span class="sc">%in%</span> <span class="sc">!!</span>all_snps) <span class="sc">%&gt;%</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(SNP, MAF) <span class="sc">%&gt;%</span> <span class="fu">collect</span>(), <span class="at">by =</span> <span class="st">&quot;SNP&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(CPMA_pval) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p_adjusted =</span> <span class="fu">p.adjust</span>(CPMA_pval))</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(chunked_snps)</span></code></pre></div>
+<div id="inspect-the-variants-with-significant-cpma-scores-p-10-5"
+class="section level3">
+<h3>Inspect the variants with significant CPMA scores (<span
+class="math inline">\(p &lt; 10^{-5}\)</span>)</h3>
+<div
+id="identifying-a-clump-of-linked-variants-with-significant-cpma-scores"
+class="section level4">
+<h4>Identifying a clump of linked variants with significant CPMA
+scores</h4>
+<p>Our initial analysis on the LD-pruned list of variants found 67
+variants with CPMA scores with <span class="math inline">\(p &lt;
+10^{-5}\)</span>, as shown in the list below. However, some of these
+variants appear to be located relatively close together on chromosome
+arm 3R (note that the number in the variant name is its genomic
+position, and there are several variants in a row on 3R), suggesting
+that LD pruning via <code>plink</code> did not manage to remove all
+linked variants:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>SNPs_with_significant_CPMA <span class="ot">&lt;-</span> cpma_snp_scores <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(CPMA_pval <span class="sc">&lt;=</span> <span class="fl">1e-5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(SNP) <span class="sc">%&gt;%</span> <span class="fu">sort</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>SNPs_with_significant_CPMA</span></code></pre></div>
+<pre><code> [1] &quot;2L_12176995_DEL&quot; &quot;2L_13759101_SNP&quot; &quot;2L_14042128_SNP&quot; &quot;2L_16440261_SNP&quot;
+ [5] &quot;2L_18003649_SNP&quot; &quot;2L_18869552_SNP&quot; &quot;2L_22339477_SNP&quot; &quot;2L_3374455_SNP&quot; 
+ [9] &quot;2L_5934869_SNP&quot;  &quot;2L_7048429_SNP&quot;  &quot;2L_9702238_SNP&quot;  &quot;2R_10677871_SNP&quot;
+[13] &quot;2R_14220498_SNP&quot; &quot;2R_17845477_SNP&quot; &quot;2R_4664609_SNP&quot;  &quot;2R_9147981_SNP&quot; 
+[17] &quot;2R_9590495_SNP&quot;  &quot;3L_11017597_SNP&quot; &quot;3L_14051137_SNP&quot; &quot;3L_14233872_SNP&quot;
+[21] &quot;3L_1484877_SNP&quot;  &quot;3L_1692222_SNP&quot;  &quot;3L_2921401_SNP&quot;  &quot;3L_3811785_SNP&quot; 
+[25] &quot;3L_5830823_SNP&quot;  &quot;3L_7350895_SNP&quot;  &quot;3L_835171_SNP&quot;   &quot;3L_8633982_SNP&quot; 
+[29] &quot;3L_8878927_SNP&quot;  &quot;3L_9354041_SNP&quot;  &quot;3L_9763094_SNP&quot;  &quot;3R_10914095_SNP&quot;
+[33] &quot;3R_12359830_SNP&quot; &quot;3R_13487331_SNP&quot; &quot;3R_13874342_SNP&quot; &quot;3R_14722498_SNP&quot;
+[37] &quot;3R_15116320_DEL&quot; &quot;3R_16530407_SNP&quot; &quot;3R_16948487_SNP&quot; &quot;3R_17996679_SNP&quot;
+[41] &quot;3R_18001689_SNP&quot; &quot;3R_18253104_SNP&quot; &quot;3R_18380542_SNP&quot; &quot;3R_19077529_SNP&quot;
+[45] &quot;3R_19163193_SNP&quot; &quot;3R_19649404_SNP&quot; &quot;3R_20711549_SNP&quot; &quot;3R_21504436_SNP&quot;
+[49] &quot;3R_22536361_SNP&quot; &quot;3R_23724148_SNP&quot; &quot;3R_23793018_SNP&quot; &quot;3R_24457568_SNP&quot;
+[53] &quot;3R_24528127_INS&quot; &quot;3R_24691388_SNP&quot; &quot;3R_25003935_SNP&quot; &quot;3R_25215084_SNP&quot;
+[57] &quot;3R_25247391_SNP&quot; &quot;3R_25627938_SNP&quot; &quot;3R_26170733_SNP&quot; &quot;3R_26690553_SNP&quot;
+[61] &quot;3R_26700105_SNP&quot; &quot;3R_26745421_SNP&quot; &quot;3R_4850021_SNP&quot;  &quot;X_11839485_SNP&quot; 
+[65] &quot;X_17024053_SNP&quot;  &quot;X_3522638_SNP&quot;   &quot;X_7802674_SNP&quot;  </code></pre>
+<p>To address this issue, we computed pairwise LD between all pairs of
+variants with significant CPMA scores using the code below to run
+<code>plink</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a helper function to pass commands to the terminal</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that we set `intern = TRUE`, and pass the result of `system()` to `cat()`,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ensuring that the Terminal output will be printed in this knitr report.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>run_command <span class="ot">&lt;-</span> <span class="cf">function</span>(shell_command, <span class="at">wd =</span> <span class="fu">getwd</span>(), <span class="at">path =</span> <span class="st">&quot;&quot;</span>){</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">system</span>(<span class="fu">glue</span>(<span class="st">&quot;cd &quot;</span>, wd, path, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, shell_command), <span class="at">intern =</span> <span class="cn">TRUE</span>), <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>get_ld_snp_pair <span class="ot">&lt;-</span> <span class="cf">function</span>(snp1, snp2){</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  plink_output <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(<span class="fu">run_command</span>(<span class="fu">glue</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;{plink} --bfile dgrp2_QC_all_lines_imputed_correct --ld {snp1} {snp2}&quot;</span>), <span class="at">path =</span> <span class="st">&quot;/gwas_data/derived/&quot;</span>)) </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(<span class="fu">str_split</span>(plink_output[<span class="fu">str_detect</span>(plink_output, <span class="st">&quot;R-sq = &quot;</span>)], <span class="st">&quot;D&#39; = &quot;</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>], <span class="st">&quot;R-sq =&quot;</span>), <span class="st">&quot; &quot;</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># I used plink v1.9 for MacOS, available here: https://www.cog-genomics.org/plink/</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Download and save plink into the directory &#39;code&#39; if it&#39;s not already there</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>plink <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">getwd</span>(), <span class="st">&quot;code/plink&quot;</span>) </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Computing pairwise LD takes a little while, so save the results to avoid re-running it</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">&quot;data/derived/cmpa_snp_ld_matrix.rds&quot;</span>)){</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  ld <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">combn</span>(SNPs_with_significant_CPMA, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">SNP1 =</span> V1, <span class="at">SNP2 =</span> V2) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">i =</span><span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">split</span>(.<span class="sc">$</span>i) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map_df</span>(<span class="sc">~</span> {</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      output <span class="ot">&lt;-</span> <span class="fu">mutate</span>(.x, <span class="at">R2 =</span> <span class="fu">get_ld_snp_pair</span>(.x<span class="sc">$</span>SNP1, .x<span class="sc">$</span>SNP2))</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(output); output</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    }) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>i)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  ld_matrix <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(ld, <span class="fu">tibble</span>(<span class="at">SNP1 =</span> ld<span class="sc">$</span>SNP2, <span class="at">SNP2 =</span> ld<span class="sc">$</span>SNP1, <span class="at">R2 =</span> ld<span class="sc">$</span>R2)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="fu">spread</span>(SNP2, R2) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ld_matrix) <span class="ot">&lt;-</span> ld_matrix<span class="sc">$</span>SNP1</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  ld_matrix <span class="ot">&lt;-</span> ld_matrix[,<span class="sc">!</span><span class="fu">names</span>(ld_matrix) <span class="sc">==</span> <span class="st">&quot;SNP1&quot;</span>]</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  ld_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ld_matrix)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(ld_matrix, <span class="st">&quot;data/derived/cmpa_snp_ld_matrix.rds&quot;</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> ld_matrix <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/derived/cmpa_snp_ld_matrix.rds&quot;</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>linked_variants_on_3R <span class="ot">&lt;-</span> <span class="fu">cutree</span>(<span class="fu">hclust</span>(<span class="fu">dist</span>(ld_matrix)), <span class="at">k =</span> <span class="dv">2</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>linked_variants_on_3R <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">names</span>(linked_variants_on_3R)[linked_variants_on_3R<span class="sc">==</span><span class="dv">2</span>])</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>num_linked_variants_on_3R <span class="ot">&lt;-</span> <span class="fu">length</span>(linked_variants_on_3R)</span></code></pre></div>
+<p>The heatmap below shows pairwise linkage disequilbrium (<span
+class="math inline">\(R^2\)</span>) among the 67 variants with CPMA
+scores with <span class="math inline">\(p &lt; 10^{-5}\)</span>, and
+highlights a cluster of 9 variants in linkage disequilibrium on 3R,
+implying a recombination cold-spot on 3R that spans several megabases.
+We believe this region corresponds to the chromosomal inversion
+<em>In(3R)P</em>, because the 3R region contains the gene <em>Glutamate
+dehydrogenase</em>, which lies inside <em>In(3R)P</em> and because this
+inversion is known to be present in the North Carolina population (<a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1448838/">Sezgin et
+al. 2004, <em>Genetics</em></a>).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(ld_matrix, <span class="at">cutree_rows =</span> <span class="dv">2</span>, <span class="at">cutree_cols =</span> <span class="dv">2</span>, <span class="at">cellwidth =</span> <span class="dv">8</span>, <span class="at">cellheight =</span> <span class="dv">8</span>)</span></code></pre></div>
+<p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-7-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p>When we exclude all the variants in the cluster from the previous
+heatmap and plot the remaining pairwise linkage disequilbrium (<span
+class="math inline">\(R^2\)</span>) values in a histogram, we see that
+the great majority of the remaining CPMA-significant variants are in low
+LD with one another (<span class="math inline">\(R^2 = 0-0.05\)</span>),
+and all have <span class="math inline">\(R^2 &lt; 0.2\)</span> (as
+expected given the <code>plink</code> settings that were used to
+identify the low-LD subset of variants). We thus conclude that most or
+all of these variants are tagging weakly-linked or unlinked regions of
+the genome that have pleiotropic effects on multiple traits.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trimmed_ld_scores <span class="ot">&lt;-</span> ld_matrix <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>(<span class="st">&quot;snp1&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gather</span>(snp2, LD, <span class="sc">-</span>snp1) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>LD) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(snp1 <span class="sc">%in%</span> linked_variants_on_3R) <span class="sc">&amp;</span> <span class="sc">!</span>(snp2 <span class="sc">%in%</span> linked_variants_on_3R)) </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">combn</span>(SNPs_with_significant_CPMA[</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span>(SNPs_with_significant_CPMA <span class="sc">%in%</span> linked_variants_on_3R)], <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">snp1=</span>V1, <span class="at">snp2=</span>V2) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(trimmed_ld_scores) <span class="sc">%&gt;%</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(LD)) <span class="sc">+</span> </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">&quot;skyblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey20&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span> (<span class="st">&quot;Pairwise linkage disequilibrium&quot;</span><span class="sc">~</span>R<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Frequency&quot;</span>)</span></code></pre></div>
+<p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<!-- Code that we used to see which genes lay inside the low-LD region on 3R -->
+<!-- ```{r} -->
+<!-- region <- tbl(db, "variants") %>% filter(chr== "3R") %>%  -->
+<!--   collect(n=Inf) %>% mutate(position = as.numeric(position)) %>%  -->
+<!--   filter(position >=15116320 & position <= 26690553)  -->
+<!-- region %>% filter(SNP == "3R_15216241_INS") %>% pull(minor_allele) %>% head(1) %>% nchar() -->
+<!-- region %>% select(-FBID, -site.class, -distance.to.gene) %>% distinct() %>%  -->
+<!--   filter(!str_detect(SNP, "SNP")) %>%  -->
+<!--   print(n=1000) -->
+<!-- region %>% filter(FBID == tbl(db, "genes") %>% filter(gene_name == "Glutamate dehydrogenase") %>% pull(FBID)) %>% print(n=1000) -->
+<!-- region %>% pull(FBID) %>% unique() %>% length() -->
+<!-- fbids <- region$FBID -->
+<!-- tbl(db, "genes") %>% filter(FBID %in% fbids) %>% pull(gene_name) %>% unique() -->
+<!-- # Tubby, Toll, male sterile (3) K81, many 'Tweedle' genes, Octopamine beta1 receptor -->
+<!-- gs <- tbl(db, "genes") %>% filter(FBID %in% fbids) %>% pull(gene_name) %>% unique() -->
+<!-- # "the gene [Glutamate dehydrogenase] is inside the cosmopolitan inversion In(3R)P", https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1448838/ -->
+<!-- ``` -->
+</div>
+<div id="displaying-the-significant-variants" class="section level4">
+<h4>Displaying the significant variants</h4>
+<p>This interactive table shows information about each of the 67
+variants that had a higher CPMA score than expected under the null
+hypothesis that the variant was not associated with any of the 80
+phenotypic traits used to compute our CPMA statistic (with <span
+class="math inline">\(p &lt; 10^{-5}\)</span>). Of these 67 variants
+with <span class="math inline">\(p &lt; 10^{-5}\)</span>, 6 were
+statistically significant after applying Benjamini-Hochberg false
+discovery rate correction.</p>
+<ul>
+<li>The <code>Variant</code> column gives the name of the variant, which
+includes its chromosome and genomic position, and whether it is a SNP,
+insertion or deletion (SNP/INS/DEL respectively). The column also noted
+whether the focal variant is part of the linked cluster on chromosome
+arm 3L.</li>
+<li>The <code>Associated gene</code> and <code>Flybase ID</code> columns
+state which genes (if any) are overlapped by or close to the focal
+variant; if there are multiple genes, their names/IDs are separated by
+semicolons. The annotations come from the ‘variant annotation’ file
+provided on the <a href="http://dgrp2.gnets.ncsu.edu/data.html">Mackay
+lab website</a>.</li>
+<li>The <code>Site class</code> column describes the type of variant
+(e.g. INTRON means the variant is in an intron of the associated gene);
+if there are multiple genes, their names/IDs are separated by
+semicolons. The annotations come from the ‘variant annotation’ file
+provided on the <a href="http://dgrp2.gnets.ncsu.edu/data.html">Mackay
+lab website</a>.</li>
+<li>The <code>Minor allele</code> and <code>Major allele</code> columns
+give the least and most common alleles for the focal variant (based on
+the frequencies across the DGRP), while the
+<code>Minor allele freq.</code> column gives the frequency of the minor
+allele in the DGRP.</li>
+<li>The <code>CPMA p-value (-log10)</code> column gives the <span
+class="math inline">\(p\)</span>-value from the cross-phenotype
+meta-analysis test that was calculated for the focal variant,
+transformed via <span class="math inline">\(-log_{10}(p)\)</span>. The 6
+variants that were significant after false discovery rate correction
+with <span class="math inline">\(q&lt;0.05\)</span> are
+highlighted.</li>
+<li>The final 2 columns list the phenotypic traits with which the minor
+allele was positively associated, or negatively associated, with <span
+class="math inline">\(p&lt;0.01\)</span> in the univariate GWAS that we
+ran (in the script <code>analysis/run_GWAS.Rmd</code>)</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>SNPs_with_significant_CPMA <span class="ot">&lt;-</span> cpma_snp_scores <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(CPMA_pval <span class="sc">&lt;=</span> <span class="fl">1e-5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(SNP)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>SNPs_with_FDR_significant_CPMA <span class="ot">&lt;-</span> cpma_snp_scores <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_adjusted <span class="sc">&lt;=</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(SNP)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>get_SNP_effects_on_each_trait <span class="ot">&lt;-</span> <span class="cf">function</span>(SNP_ids){</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(focal_gwas_files),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>         <span class="sc">~</span> <span class="fu">read_tsv</span>(focal_gwas_files[.x],</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">&quot;c&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span>(SNP <span class="sc">%in%</span> SNP_ids) <span class="sc">%&gt;%</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span>(<span class="at">trait =</span> .x)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">trait_name =</span> independent_traits) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">trait =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()), <span class="at">by =</span> <span class="st">&quot;trait&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(trait_name, SNP, BETA, SE, P) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(P) <span class="sc">%&gt;%</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(SNP <span class="sc">%in%</span> SNP_ids) <span class="sc">%&gt;%</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(SNP, FBID, site.class, MAF, minor_allele, major_allele) <span class="sc">%&gt;%</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>                <span class="fu">collect</span>(), <span class="at">by =</span> <span class="st">&quot;SNP&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(SNP)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>process_info <span class="ot">&lt;-</span> <span class="cf">function</span>(focal_SNPs, <span class="at">P_threshold =</span> <span class="fl">0.01</span>){</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">get_SNP_effects_on_each_trait</span>(focal_SNPs)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(dat, dat<span class="sc">$</span>SNP) <span class="sc">%&gt;%</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map_df</span>(<span class="sc">~</span> {</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      sig_positive_traits <span class="ot">&lt;-</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(P <span class="sc">&lt;</span> P_threshold <span class="sc">&amp;</span> BETA <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(trait_name) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>      sig_negative_traits <span class="ot">&lt;-</span> .x <span class="sc">%&gt;%</span> <span class="fu">filter</span>(P <span class="sc">&lt;</span> P_threshold <span class="sc">&amp;</span> BETA <span class="sc">&lt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(trait_name) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tibble</span>(<span class="at">Variant =</span> .x<span class="sc">$</span>SNP[<span class="dv">1</span>],</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>             <span class="st">`</span><span class="at">Minor allele positively associated (p&lt;0.01) with:</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">paste0</span>(sig_positive_traits, <span class="at">collapse =</span> <span class="st">&quot;; &quot;</span>),</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>             <span class="st">`</span><span class="at">Minor allele negatively associated (p&lt;0.01) with:</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">paste0</span>(sig_negative_traits, <span class="at">collapse =</span> <span class="st">&quot;; &quot;</span>))</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>significant_CPMA_table <span class="ot">&lt;-</span> <span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SNP <span class="sc">%in%</span> SNPs_with_significant_CPMA) <span class="sc">%&gt;%</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">tbl</span>(db, <span class="st">&quot;genes&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(cpma_snp_scores <span class="sc">%&gt;%</span> <span class="fu">select</span>(SNP, CPMA_pval)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gene_name =</span> <span class="fu">paste0</span>(gene_name, <span class="at">collapse =</span> <span class="st">&quot;; &quot;</span>),</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>         <span class="at">FBID =</span> <span class="fu">paste0</span>(FBID, <span class="at">collapse =</span> <span class="st">&quot;; &quot;</span>),</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">site.class =</span> <span class="fu">paste0</span>(site.class, <span class="at">collapse =</span> <span class="st">&quot;; &quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(CPMA_pval) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">CPMA_pval =</span> <span class="fu">round</span>(<span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log10</span>(CPMA_pval), <span class="dv">2</span>),</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">CPMA_pval =</span> <span class="fu">replace</span>(</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>      CPMA_pval, </span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>      SNP <span class="sc">%in%</span> SNPs_with_FDR_significant_CPMA, </span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(CPMA_pval[SNP <span class="sc">%in%</span> SNPs_with_FDR_significant_CPMA],<span class="st">&quot;(FDR significant)&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SNP =</span> <span class="fu">replace</span>(</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>    SNP, </span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>    SNP <span class="sc">%in%</span> linked_variants_on_3R, </span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(SNP[SNP <span class="sc">%in%</span> linked_variants_on_3R], <span class="st">&quot;(in 3R cluster)&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Variant =</span> SNP, </span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Associated gene</span><span class="st">`</span> <span class="ot">=</span> gene_name, </span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Flybase ID</span><span class="st">`</span> <span class="ot">=</span> FBID, </span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Site class</span><span class="st">`</span> <span class="ot">=</span> site.class, </span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Minor allele</span><span class="st">`</span> <span class="ot">=</span> minor_allele, </span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Major allele</span><span class="st">`</span> <span class="ot">=</span> major_allele, </span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Minor allele freq.</span><span class="st">`</span> <span class="ot">=</span> MAF, </span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">CPMA p-value (-log10)</span><span class="st">`</span> <span class="ot">=</span> CPMA_pval,</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>         chr, position) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">process_info</span>(SNPs_with_significant_CPMA)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Variant, <span class="at">.keep_all =</span> T) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Major allele</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">replace</span>(</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Major allele</span><span class="st">`</span>, <span class="fu">nchar</span>(<span class="st">`</span><span class="at">Major allele</span><span class="st">`</span>) <span class="sc">&gt;</span> <span class="dv">8</span>, </span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="fu">nchar</span>(<span class="st">`</span><span class="at">Major allele</span><span class="st">`</span>[<span class="fu">nchar</span>(<span class="st">`</span><span class="at">Major allele</span><span class="st">`</span>) <span class="sc">&gt;</span> <span class="dv">8</span>]),<span class="st">&quot;bp sequence&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)),</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Minor allele freq.</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">format</span>(<span class="fu">round</span>(<span class="st">`</span><span class="at">Minor allele freq.</span><span class="st">`</span>, <span class="dv">2</span>), <span class="at">nsmall =</span> <span class="dv">2</span>)) </span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>significant_CPMA_table <span class="sc">%&gt;%</span> </span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>chr, <span class="sc">-</span>position) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_data_table</span>()</span></code></pre></div>
+<div id="htmlwidget-941e659048e6565275f1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-941e659048e6565275f1">{"x":{"filter":"none","extensions":["Scroller","Buttons"],"autoHideNavigation":true,"data":[["3R_26690553_SNP (in 3R cluster)","3L_9763094_SNP","3R_21504436_SNP (in 3R cluster)","3L_11017597_SNP","3R_26745421_SNP","2L_5934869_SNP","3L_1692222_SNP","3R_23724148_SNP","X_17024053_SNP","3R_13874342_SNP","2L_16440261_SNP","3L_14051137_SNP","3R_15116320_DEL (in 3R cluster)","3R_22536361_SNP","2L_3374455_SNP","X_3522638_SNP","3L_9354041_SNP","3R_24528127_INS (in 3R cluster)","2L_18003649_SNP","3R_20711549_SNP (in 3R cluster)","3R_25247391_SNP","3R_14722498_SNP","2R_4664609_SNP","2R_17845477_SNP","X_11839485_SNP","3R_13487331_SNP","2L_9702238_SNP","2L_14042128_SNP","3L_8633982_SNP","3L_2921401_SNP","X_7802674_SNP","2L_7048429_SNP","3R_18001689_SNP","3R_16948487_SNP","3L_835171_SNP","3L_14233872_SNP","2R_14220498_SNP","3R_23793018_SNP","3L_1484877_SNP","3R_24457568_SNP (in 3R cluster)","3L_8878927_SNP","3R_17996679_SNP","3L_3811785_SNP","2R_10677871_SNP","3R_19649404_SNP","3L_7350895_SNP","2R_9590495_SNP","2L_12176995_DEL","3L_5830823_SNP","3R_18253104_SNP","3R_18380542_SNP","2L_18869552_SNP","2L_13759101_SNP","3R_25003935_SNP","3R_4850021_SNP","3R_10914095_SNP","3R_25215084_SNP","3R_16530407_SNP (in 3R cluster)","3R_12359830_SNP","3R_24691388_SNP","3R_19163193_SNP (in 3R cluster)","2R_9147981_SNP","3R_26700105_SNP","3R_25627938_SNP","2L_22339477_SNP","3R_19077529_SNP (in 3R cluster)","3R_26170733_SNP"],["NA","uncharacterized protein","uncharacterized protein; uncharacterized protein; uncharacterized protein","Fad2","Ptx1","dissatisfaction","uncharacterized protein","uncharacterized protein","uncharacterized protein","heartless","uncharacterized protein","NA","NA","amontillado","uncharacterized protein","Allatostatin A receptor 1","Pyridoxal kinase; uncharacterized protein","huntingtin","long non-coding RNA:CR44605; long non-coding RNA:CR44604","uncharacterized protein","Protein tyrosine phosphatase 99A","NA","NA","NA","cacophony","uncharacterized protein","pelota; uncharacterized protein","nicotinic Acetylcholine Receptor alpha5","Cuticular protein 66D","Shaker cognate b","spidey; defective proboscis extension response 14","milton","Shal K[+] channel interacting protein","NA","uncharacterized protein; uncharacterized protein","NA","NA","beta-Tubulin at 97EF; uncharacterized protein","stem cell tumor","uncharacterized protein","division abnormally delayed","Shal K[+] channel interacting protein","Phosphatidylinositol glycan anchor biosynthesis class B; uncharacterized protein","knot","uncharacterized protein","pastrel","uncharacterized protein","bruno 1; atilla","vein","uncharacterized protein","james bond","tailup","Transmembrane 9 superfamily protein member 4","julius seizure","neuralized; antisense RNA:CR31429","uncharacterized protein","Protein tyrosine phosphatase 99A","Octopamine receptor in mushroom bodies","uncharacterized protein","sponge","pointed","uncharacterized protein","uncharacterized protein","uncharacterized protein; Death related ICE-like caspase; uncharacterized protein","Meiosis regulator and mRNA stability factor 1","Elongin A; Rad60","headcase"],["NA","FBgn0036043","FBgn0039356; FBgn0039355; FBgn0039357","FBgn0029172","FBgn0020912","FBgn0015381","FBgn0035260","FBgn0085382","FBgn0260748","FBgn0010389","FBgn0028523","FBgn0052138","NA","FBgn0023179","FBgn0031528","FBgn0266429","FBgn0085484; FBgn0052039","FBgn0027655","FBgn0265816; FBgn0265815","FBgn0051121","FBgn0004369","NA","NA","NA","FBgn0263111","FBgn0038532","FBgn0011207; FBgn0051710","FBgn0028875","FBgn0052029","FBgn0262593","FBgn0029975; FBgn0029974","FBgn0262872","FBgn0051163","FBgn0023423","FBgn0260755; FBgn0260756","NA","FBgn0010575","FBgn0003890; FBgn0039566","FBgn0020248","FBgn0039590","FBgn0263930","FBgn0051163","FBgn0035464; FBgn0052263","FBgn0001319","FBgn0085384","FBgn0035770","FBgn0000633","FBgn0000114; FBgn0032422","FBgn0003984","FBgn0038967","FBgn0260942","FBgn0003896","FBgn0028541","FBgn0039647","FBgn0002932; FBgn0063298","FBgn0038286","FBgn0004369","FBgn0024944","FBgn0259244","FBgn0264324","FBgn0003118","FBgn0259219","FBgn0039807","FBgn0039697; FBgn0019972; FBgn0039698","FBgn0039972","FBgn0039066; FBgn0039065","FBgn0010113"],["INTERGENIC","INTRON","UTR_5_PRIME; UPSTREAM; DOWNSTREAM","NON_SYNONYMOUS_CODING","INTRON","INTRON","INTRON","INTRON","INTRON","INTRON","INTRON","INTRON","INTERGENIC","INTRON","SYNONYMOUS_CODING","INTRON","SPLICE_SITE_REGION; DOWNSTREAM","INTRON","DOWNSTREAM; DOWNSTREAM","INTRON","INTRON","INTERGENIC","INTERGENIC","INTERGENIC","INTRON","SYNONYMOUS_CODING","INTRON; DOWNSTREAM","UTR_5_PRIME","INTRON","INTRON","UPSTREAM; UPSTREAM","INTRON","INTRON","INTRON","SYNONYMOUS_CODING; UPSTREAM","INTERGENIC","INTRON","SYNONYMOUS_CODING; DOWNSTREAM","INTRON","INTRON","INTRON","INTRON","INTRON; UPSTREAM","INTRON","INTRON","NON_SYNONYMOUS_CODING","INTRON","INTRON; INTRON","INTRON","SYNONYMOUS_CODING","INTRON","INTRON","INTRON","INTRON","INTRON; DOWNSTREAM","INTRON","INTRON","INTRON","INTRON","SYNONYMOUS_CODING","INTRON","INTRON","UTR_3_PRIME","SYNONYMOUS_CODING; DOWNSTREAM; UPSTREAM","INTRON","INTRON; UPSTREAM","INTRON"],["C","C","G","C","G","T","A","G","A","A","A","A","C","T","A","A","G","GGG","G","G","G","G","T","G","T","A","G","T","C","G","A","C","G","G","T","T","G","G","T","G","G","T","T","T","A","C","T","A","A","T","C","T","G","T","A","T","A","T","T","A","A","G","T","A","G","A","A"],["T","A","T","T","T","G","C","C","T","T","G","G","24bp sequence","C","G","G","A","G","T","C","A","C","G","C","C","G","C","A","T","A","T","G","A","T","C","A","C","A","A","A","A","C","G","C","C","T","C","ATA","C","C","T","C","C","A","G","A","T","C","C","G","G","A","C","G","A","G","T"],["0.33","0.15","0.20","0.12","0.44","0.49","0.08","0.45","0.22","0.46","0.19","0.49","0.13","0.34","0.42","0.12","0.24","0.13","0.06","0.15","0.44","0.30","0.14","0.33","0.27","0.41","0.29","0.13","0.27","0.50","0.13","0.48","0.40","0.48","0.06","0.20","0.10","0.30","0.48","0.07","0.45","0.48","0.06","0.42","0.16","0.14","0.11","0.15","0.16","0.12","0.26","0.17","0.10","0.10","0.32","0.26","0.40","0.20","0.47","0.49","0.19","0.37","0.46","0.17","0.15","0.14","0.05"],["7.75 (FDR significant)","7.54 (FDR significant)","7.3 (FDR significant)","7.28 (FDR significant)","7.28 (FDR significant)","6.82 (FDR significant)","6.63","6.54","6.45","6.42","6.34","6.21","6.18","6.16","6.16","6.13","6.09","6.03","5.99","5.98","5.98","5.94","5.87","5.86","5.84","5.83","5.81","5.75","5.72","5.71","5.69","5.64","5.61","5.56","5.54","5.51","5.49","5.46","5.46","5.44","5.43","5.42","5.41","5.4","5.36","5.32","5.32","5.28","5.27","5.26","5.24","5.2","5.2","5.15","5.14","5.13","5.13","5.12","5.12","5.11","5.09","5.07","5.06","5.02","5.02","5.01","5"],[null,"posterior.lobe.shape.PC1.m; kujin.virus.resistance.f; locomotor.frequency.f; mtDNA.copy.number",null,"attempted.copulation.frequency.m; starvation.resistance.2017.m; T1.femur.f; wing.centroid.size.f","","starvation.resistance.2019.m; gut.permeability.f","gut.permeability.f; genome.size","boric.acid.resistance.f; alpha-amanitin.resistance.2; starvation.resistance.larvae; starvation.resistance.2017.m; triglyceride.low.glucose.diet.m; tunicamycin.ER.stress.m","starvation.resistance.larvae; locomotor.frequency.f","sigma.virus.sensitivity.f; ovariole.number.f; P.rettgeri.tolerance.f","week5.fecundity.25C.f; pupation.height; basal.activity.f; lead.locomotor.activity.2016.f","paraquat.resistance.m; climbing.ability.f; weight.anexic.m",null,"M.anisopliae.resistance.f; phototaxis.old.f; pupal.case.length; starvation.resistance.2019.m","micro.environmental.plasticity.lifespan.28C.m; radiation.resistance.m; lifespan.25C.2015.f; olfactory.response.1-hexanol.m; p-xylene.susceptibility","aggression.2015.m","starvation.resistance.2017.m; L.monocytogenes.MTD.m; virgin.egg.retention.f; startle.sensitivity.msb.f",null,"lifespan.high.sugar.diet.f; deltamethrin.resistance.m; caffeine.resistance.f; hydrogen.peroxide.resistance.f",null,"MPH.effect.on.activity.m","MPH.effect.on.activity.m","P.aeruginosa.resistance.2019.f; L.monocytogenes.MTD.m; pupal.case.length; locomotor.frequency.f; T1.femur.f; starvation.resistance.2017.m","P.rettgeri.tolerance.f","chlorantraniliprole.resistance.LC50; hydrogen.peroxide.resistance.f; starvation.resistance.2019.m","pupation.height; day.sleep.bouts.f","unfertilised.eggs.post.mating; kallithea.viral.load.f; gustatory.response.ethanol.f","phototaxis.old.f; posterior.lobe.shape.PC1.m","night.sleep.SD.m; lead.locomotor.activity.2016.f","MPH.effect.on.activity.m; posterior.lobe.shape.PC1.m; climbing.ability.f; P.aeruginosa.resistance.2019.f","gut.permeability.f; night.sleep.SD.m; malathion.mortality.6hr.f","paraquat.resistance.m","food.intake.m","startle.sensitivity.msb.f","cold.shock.old.f; triglyceride.low.glucose.diet.m; basal.activity.f","aggression.2015.m; traumatic.injury.mortality","alpha-amanitin.resistance.2; azinphos.methyl.resistance.LD50; chlorantraniliprole.resistance.LC50; caffeine.resistance.f","starvation.resistance.larvae","chronic.cold.exposure.resistance.m; circadian.period.mesa.m; climbing.ability.f",null,"sprinter.marathoner.f; DDT.resistance.knockdown.f; chill.coma.recovery.variance.m","food.intake.m; lead.locomotor.activity.2016.f","gut.permeability.f; cold.shock.old.f","alpha-amanitin.resistance.2","song.interpulse.interval.m; cold.shock.old.f","drosophila.C.virus.resistance.m; phototaxis.old.f","weight.anexic.m; pupation.height; locomotor.frequency.f; P.aeruginosa.resistance.2019.f","gut.permeability.f; basal.activity.f","","lifespan.high.sugar.diet.f; caffeine.resistance.f; micro.environmental.plasticity.lifespan.28C.m","pupation.height; week5.fecundity.25C.f","tunicamycin.ER.stress.m","azinphos.methyl.resistance.LD50; chlorantraniliprole.resistance.LC50","azinphos.methyl.resistance.LD50; gut.permeability.f; chronic.cold.exposure.resistance.m; virgin.egg.retention.f; starvation.resistance.2019.m; L.monocytogenes.MTD.m","social.aggression.m; genome.size","micro.environmental.plasticity.lifespan.28C.m; caffeine.resistance.f; ovariole.number.f","lead.locomotor.activity.2016.f",null,"DDT.resistance.knockdown.f; ethanol.tolerance.f","CHC.7,11-C28:2 &amp; 2-Me-C27.f; caffeine.resistance.f; lifespan.following.diapause.2019.f; starvation.resistance.2017.m; tunicamycin.ER.stress.m",null,"MPH.effect.on.activity.m; chill.coma.recovery.variance.m; anoxia.tolerance.larval; traumatic.injury.mortality","L.monocytogenes.MTD.m","chlorantraniliprole.resistance.LC50; MPH.effect.on.activity.m","food.intake.m",null,""],[null,"boric.acid.resistance.f; P.rettgeri.tolerance.f; lifespan.following.diapause.2019.f",null,"CHC.7,11-C28:2 &amp; 2-Me-C27.f","alpha-amanitin.resistance.2; M.anisopliae.resistance.f; lifespan.following.diapause.2019.f; Hymenobacter.sp..f; triglyceride.low.glucose.diet.m; wing.centroid.size.f","alpha-amanitin.resistance.2; lead.locomotor.activity.2016.f; p-xylene.susceptibility; MPH.effect.on.activity.m","starvation.resistance.high.carb.diet.m; cold.hardiness.-5C.larvae; hydrogen.peroxide.resistance.f; starvation.resistance.2019.m; olfactory.response.benzaldehyde.2013.m","CHC.7,11-C28:2 &amp; 2-Me-C27.f","fertility.25C.m; starvation.resistance.high.carb.diet.m; weight.anexic.m; olfactory.response.benzaldehyde.2013.m","hydrogen.peroxide.resistance.f; E.faecalis.resistance.m; drosophila.C.virus.resistance.m; starvation.resistance.2019.m","weight.anexic.m; T1.femur.f; L.monocytogenes.MTD.m; caffeine.resistance.f","glucose.2015.m; P.rettgeri.tolerance.f",null,"sigma.virus.sensitivity.f","hydrogen.peroxide.resistance.f; triglyceride.low.glucose.diet.m; posterior.lobe.shape.PC1.m","starvation.resistance.2017.m","MPH.effect.on.activity.m",null,"",null,"genome.size; fitness.early.life.f; thorax.length.thermal.plasticity.f; starvation.resistance.2017.m","day.sleep.bouts.f; starvation.resistance.high.carb.diet.m; cold.hardiness.-5C.larvae; glucose.2015.m","MPH.effect.on.activity.m","week5.fecundity.25C.f; starvation.resistance.2017.m","thorax.length.thermal.plasticity.f; sigma.virus.sensitivity.f","ovariole.number.f; deltamethrin.resistance.m; weight.anexic.m; fertility.25C.m","ethanol.tolerance.f","boric.acid.resistance.f; chronic.cold.exposure.resistance.m; ethanol.sensitivity.development.time","sprinter.marathoner.f; fertility.25C.m","starvation.resistance.2019.m; boric.acid.resistance.f","ethanol.sensitivity.development.time","L.monocytogenes.MTD.m; song.interpulse.interval.m; starvation.resistance.2019.m","virgin.egg.retention.f; paraquat.resistance.m; E.faecalis.resistance.m; caffeine.resistance.f","p-xylene.susceptibility; starvation.resistance.larvae; attempted.copulation.frequency.m","micro.environmental.plasticity.lifespan.28C.m; CHC.7,11-C28:2 &amp; 2-Me-C27.f","Hymenobacter.sp..f","startle.sensitivity.msb.f; sigma.virus.sensitivity.f","imidacloprid.resistance.25ppm; critical.thermal.min.23C.m; T1.femur.f","chill.coma.recovery.variance.m; genome.size",null,"AMP.low.yeast.f; MeHg.tolerance; dessication.tolerance.m","imidacloprid.resistance.25ppm; paraquat.resistance.m","phototaxis.old.f; startle.sensitivity.msb.f; locomotor.activity.m; E.faecalis.resistance.m","boric.acid.resistance.f; pupal.case.length; tergite6.f; posterior.lobe.shape.PC1.m; caffeine.resistance.f","virgin.egg.retention.f; anoxia.tolerance.larval; startle.sensitivity.msb.f; locomotor.activity.m","","MPH.effect.on.activity.m; genome.size","sprinter.marathoner.f; lifespan.25C.2015.f; micro.environmental.plasticity.lifespan.28C.m","starvation.resistance.2019.m; wing.centroid.size.f; fertility.25C.m","malathion.mortality.6hr.f; ethanol.sensitivity.development.time","micro.environmental.plasticity.lifespan.28C.m; chill.coma.recovery.m","sprinter.marathoner.f; glucose.2015.m","critical.thermal.min.23C.m; imidacloprid.resistance.25ppm","T1.femur.f; gustatory.response.ethanol.f; phototaxis.old.f","weight.anexic.m","social.aggression.m","T1.femur.f; M.anisopliae.resistance.f; day.sleep.bouts.f; genome.size",null,"pupation.height; flight.performance.f; gut.permeability.f","",null,"P.rettgeri.tolerance.f","kujin.virus.resistance.f; posterior.lobe.shape.PC1.m; olfactory.response.benzaldehyde.2013.m","day.sleep.bouts.f; lifespan.high.sugar.diet.f; boric.acid.resistance.f","caffeine.resistance.f; triglyceride.low.glucose.diet.m; starvation.resistance.2017.m; pupal.case.length; hydrogen.peroxide.resistance.f",null,""]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Variant<\/th>\n      <th>Associated gene<\/th>\n      <th>Flybase ID<\/th>\n      <th>Site class<\/th>\n      <th>Minor allele<\/th>\n      <th>Major allele<\/th>\n      <th>Minor allele freq.<\/th>\n      <th>CPMA p-value (-log10)<\/th>\n      <th>Minor allele positively associated (p&lt;0.01) with:<\/th>\n      <th>Minor allele negatively associated (p&lt;0.01) with:<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"autoWidth":true,"dom":"Bfrtip","deferRender":true,"scrollX":true,"scrollY":1000,"scrollCollapse":true,"buttons":["pageLength","colvis","csv",{"extend":"pdf","pageSize":"A4","orientation":"landscape","filename":"Trait_table"}],"pageLength":79,"order":[],"orderClasses":false,"lengthMenu":[10,25,50,79,100]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div
+id="manhattan-plot-showing-genomic-location-of-pleiotropic-variants"
+class="section level3">
+<h3>Manhattan plot showing genomic location of pleiotropic variants</h3>
+<p>The Manhattan plot shows the CPMA p-values for each variant in the
+LD-pruned set of variants that we analysed, transformed via <span
+class="math inline">\(-log_{10}(p)\)</span>. The chromosomes are
+coloured individually. There are significant variants (defined as <span
+class="math inline">\(-log_{10}(p) &gt; 5\)</span>) on all the major
+chromosomes, with the strongest scores being found towards the telomeres
+of both arms of chromosome 3. This plot suggests that highly pleiotropic
+variants are found on chromosomes 2, 3, and the X, and may be less
+common near the centromere.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>manhattan_data <span class="ot">&lt;-</span> cpma_snp_scores <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">position =</span> <span class="fu">str_split</span>(SNP, <span class="st">&quot;_&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">chr =</span> <span class="fu">map_chr</span>(position, <span class="sc">~</span> .x[<span class="dv">1</span>]),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">position =</span> <span class="fu">as.numeric</span>(<span class="fu">map_chr</span>(position, <span class="sc">~</span> .x[<span class="dv">2</span>])),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">CPMA_pval =</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log10</span>(CPMA_pval)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(chr, position, CPMA_pval)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>max_pos <span class="ot">&lt;-</span> manhattan_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(chr) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">max_pos =</span> <span class="fu">max</span>(position), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>max_pos<span class="sc">$</span>max_pos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">cumsum</span>(max_pos<span class="sc">$</span>max_pos[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>manhattan_data <span class="ot">&lt;-</span> manhattan_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(max_pos, <span class="at">by =</span> <span class="st">&quot;chr&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">position =</span> position <span class="sc">+</span> max_pos)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> manhattan_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(position, CPMA_pval, <span class="at">group =</span> chr, <span class="at">fill =</span> chr, <span class="at">stroke =</span> <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">5</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">&quot;grey20&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.9</span>, <span class="at">colour=</span><span class="st">&quot;black&quot;</span>, <span class="at">pch =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Paired&quot;</span>, <span class="at">name =</span> <span class="st">&quot;Chromosome&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;-&quot;</span>, log[<span class="dv">10</span>], <span class="st">&quot; p value for CPMA test&quot;</span>))) <span class="sc">+</span> </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Position in the genome&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>plot</span></code></pre></div>
+<p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="were-any-of-these-cpma-significant-variants-previously-identified-in-univariate-gwas"
+class="section level3">
+<h3>Were any of these CPMA-significant variants previously identified in
+univariate GWAS?</h3>
+<p>One might ask whether any of the 67 CPMA-significant pleiotropic
+variants (with <span class="math inline">\(p &lt; 10^{-5}\)</span>)
+identified here were already identified in univariate GWAS (with <span
+class="math inline">\(p &lt; 10^{-5}\)</span> or better), due to having
+a strong enough association with one or more individual phenotypes. Of
+the 67 CPMA-significant variants, only 5 were significantly associated
+with one of the 80 tested phenotypes with <span class="math inline">\(p
+&lt; 10^{-5}\)</span>, as shown in this table of <code>plink</code>
+univariate association test results filtered for <span
+class="math inline">\(p &lt; 10^{-5}\)</span>. Thus, 62/67 of the
+pleiotropic variants identified in our CPMA analysis were not detected
+in earlier univariate GWAS. This lack of detection implies that the
+pleiotropic variants discovered here are often not strongly associated
+with any one trait, but instead are moderately associated with multiple
+traits. This would make sense, because a variant that was strongly
+associated with many different phenotypes would likely be under strong
+selection, and would thus have a low enough minor allele frequency that
+it could not be detected in studies based on the DGRP (which has limited
+power for variants with MAF&lt;5%).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>snp_effects <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(P <span class="sc">&lt;</span> <span class="fl">1e-5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">P =</span> <span class="fu">round</span>(<span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log10</span>(P), <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>P) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Variant=</span>SNP, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Phenotype showing the significant association</span><span class="st">`</span> <span class="ot">=</span> trait_name,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">-log10(P)</span><span class="st">`</span> <span class="ot">=</span> P) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width=</span>F)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Phenotype showing the significant association
+</th>
+<th style="text-align:left;">
+Variant
+</th>
+<th style="text-align:right;">
+BETA
+</th>
+<th style="text-align:right;">
+SE
+</th>
+<th style="text-align:right;">
+-log10(P)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+drosophila.C.virus.resistance.m
+</td>
+<td style="text-align:left;">
+3L_7350895_SNP
+</td>
+<td style="text-align:right;">
+0.98
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+23.47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHC.7,11-C28:2 &amp; 2-Me-C27.f
+</td>
+<td style="text-align:left;">
+3R_16530407_SNP
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+5.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tunicamycin.ER.stress.m
+</td>
+<td style="text-align:left;">
+2L_18869552_SNP
+</td>
+<td style="text-align:right;">
+0.63
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+5.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+week5.fecundity.25C.f
+</td>
+<td style="text-align:left;">
+2L_16440261_SNP
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+5.06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+micro.environmental.plasticity.lifespan.28C.m
+</td>
+<td style="text-align:left;">
+3L_835171_SNP
+</td>
+<td style="text-align:right;">
+-0.65
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+<td style="text-align:right;">
+5.02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="examining-relationships-among-pleiotropic-variants"
+class="section level2">
+<h2>Examining relationships among pleiotropic variants</h2>
+<div id="heatmap-between-all-pairs-of-significant-pleiotropic-variants"
+class="section level3">
+<h3>Heatmap between all pairs of significant pleiotropic variants</h3>
+<p>The heatmap shows the correlations in association test <span
+class="math inline">\(-log_{10}\)</span> p-values between variants on
+each of the 80 phenotypic traits, for all the weakly-linked variants
+with a significant CPMA test statistics (<span class="math inline">\(p
+&lt; 10^{-5}\)</span>). A positive correlation between two pleiotropic
+variants means that the variants tend to show stronger associations with
+the same traits, while a negative correlation means that the traits that
+are strongly associated with variant 1 tend not to be strongly
+associated with variant 2 (and <em>vice versa</em>).</p>
+<p>All except one variant (namely 3R_15116320_DEL) from the high-LD
+clump on chromosome 3R has been removed, such that linkage
+disequilibrium is low or zero between most of the SNP pairs in this
+figure (see the histogram of pairwise LD values above). The figure
+illustrates that there are many pairs of variants that have similar
+associations with multiple different traits, despite the variants not
+being in linkage disequilibrium. This finding indicates that variants in
+different genomic regions may perturb the same process,
+genetic/physiological pathway, or biological process, and suggests that
+multiple pleiotropic variants with a similar effect on the multivariate
+phenotype underlie the genetic correlations observed in our dataset
+(e.g. in the figures examining correlations between line means for
+different phenotypes).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Effect sizes of all the significant variants on all the phenotypes</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>snp_effects <span class="ot">&lt;-</span> <span class="fu">map_df</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(focal_gwas_files),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>       <span class="sc">~</span> <span class="fu">read_tsv</span>(focal_gwas_files[.x],</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">&quot;c&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(SNP <span class="sc">%in%</span> SNPs_with_significant_CPMA) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">trait =</span> .x)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">trait_name =</span> independent_traits) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">trait =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()), <span class="at">by =</span> <span class="st">&quot;trait&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(trait_name, SNP, BETA, SE, P)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>matrix_version <span class="ot">&lt;-</span> snp_effects <span class="sc">%&gt;%</span> </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(SNP <span class="sc">%in%</span> linked_variants_on_3R[<span class="sc">-</span><span class="dv">1</span>])) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(trait_name, SNP, P) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">P =</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> <span class="fu">log10</span>(P)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(SNP, P) </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>rr <span class="ot">&lt;-</span> matrix_version <span class="sc">%&gt;%</span> <span class="fu">pull</span>(<span class="dv">1</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>matrix_version <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(matrix_version[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(matrix_version) <span class="ot">&lt;-</span> rr</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>cor_mat <span class="ot">&lt;-</span> <span class="fu">cor</span>(matrix_version, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>paletteLength <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>myColor <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Purples&quot;</span>)[<span class="dv">6</span>], <span class="st">&quot;white&quot;</span>, <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Oranges&quot;</span>)[<span class="dv">7</span>]))(paletteLength)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>myBreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="fu">min</span>(cor_mat, <span class="at">na.rm=</span>T), <span class="dv">0</span>, <span class="at">length.out=</span><span class="fu">ceiling</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="dv">1</span>), </span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>              <span class="fu">seq</span>(<span class="fu">max</span>(cor_mat[cor_mat<span class="sc">!=</span><span class="dv">1</span>], <span class="at">na.rm=</span>T)<span class="sc">/</span>paletteLength, <span class="fu">max</span>(cor_mat[cor_mat<span class="sc">!=</span><span class="dv">1</span>], <span class="at">na.rm=</span>T), </span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">length.out=</span><span class="fu">floor</span>(paletteLength<span class="sc">/</span><span class="dv">2</span>)))</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(cor_mat, <span class="at">cutree_rows =</span> <span class="dv">2</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">cellwidth =</span> <span class="fl">7.6</span>, <span class="at">cellheight =</span> <span class="fl">7.6</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">cutree_cols =</span> <span class="dv">2</span>, <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks)</span></code></pre></div>
+<p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="pairwise-plots-showing-variant-associations-with-different-phenotypes"
+class="section level3">
+<h3>Pairwise plots showing variant associations with different
+phenotypes</h3>
+<p>In the following plots, each point represents one phenotypic trait,
+and each point’s position shows the p-values from separate univariate
+association tests for the pair of variants specified on the x- and
+y-axis labels. For clarity, only phenotypic traits with <span
+class="math inline">\(p &lt; 0.01\)</span> in a univariate association
+test for one/both variants are labelled. The pairs of variants shown in
+panels A and B are the pairs showing the strongest <em>positive</em>
+correlations in p-values across traits, among all the completed unlinked
+CPMA-significant variant pairs (defined here as those with linkage
+disequilibrium R &lt; 0.01). The variant pairs shown in panels C and D
+are those with the strongest <em>negative</em> correlations in p-values
+across traits, again among unlinked CPMA-significant variant pairs.</p>
+<p>The plots illustrate the similarities and differences in how these
+pairs of CPMA-significant pleiotropic variants are associated with
+different traits. Note that there are some traits that are strongly
+associated with both pleiotropic variants (in panels A and B), and some
+traits that are strongly associated with one variant but not with the
+other (in all panels, but especially in C and D). Thus, some pleiotropic
+variants associate with many of the same traits as other (unlinked)
+pleiotropic variants, but there are also pleiotropic variants that
+associate with discrete sets of traits.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>reverselog_trans <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">base =</span> <span class="fu">exp</span>(<span class="dv">1</span>)) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    trans <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="sc">-</span><span class="fu">log</span>(x, base)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    inv <span class="ot">&lt;-</span> <span class="cf">function</span>(x) base<span class="sc">^</span>(<span class="sc">-</span>x)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">trans_new</span>(<span class="fu">paste0</span>(<span class="st">&quot;reverselog-&quot;</span>, <span class="fu">format</span>(base)), trans, inv, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">log_breaks</span>(<span class="at">base =</span> base), </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">domain =</span> <span class="fu">c</span>(<span class="fl">1e-100</span>, <span class="cn">Inf</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>make_repel_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(snp1, snp2, title){</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> snp_effects <span class="sc">%&gt;%</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(trait_name, SNP, P) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(SNP <span class="sc">%in%</span> <span class="fu">c</span>(snp1, snp2)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">spread</span>(SNP, P) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  xlab <span class="ot">&lt;-</span> snp1; ylab <span class="ot">&lt;-</span> snp2</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(x)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;snp1&quot;</span>, <span class="st">&quot;snp2&quot;</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x <span class="sc">%&gt;%</span> </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">trait_name =</span> <span class="fu">replace</span>(trait_name, </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                                snp1 <span class="sc">&gt;</span> <span class="fl">0.01</span> <span class="sc">&amp;</span> snp2 <span class="sc">&gt;</span> <span class="fl">0.01</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;&quot;</span>), </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">title =</span> title)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(x, <span class="fu">aes</span>(snp1, snp2, <span class="at">label =</span> trait_name)) <span class="sc">+</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="fu">reverselog_trans</span>(<span class="dv">10</span>), </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">trans_format</span>(<span class="st">&quot;log10&quot;</span>, <span class="fu">math_format</span>(<span class="dv">10</span><span class="sc">^</span>.x))) <span class="sc">+</span> </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="fu">reverselog_trans</span>(<span class="dv">10</span>), </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">trans_format</span>(<span class="st">&quot;log10&quot;</span>, <span class="fu">math_format</span>(<span class="dv">10</span><span class="sc">^</span>.x))) <span class="sc">+</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">fill =</span> <span class="st">&quot;tomato&quot;</span>, <span class="at">pch =</span> <span class="dv">21</span>) <span class="sc">+</span> </span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text_repel</span>(<span class="at">size =</span> <span class="fl">2.2</span>, <span class="at">point.padding =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&#39;lines&#39;</span>), <span class="at">force =</span> <span class="dv">20</span>, <span class="at">max.iter =</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(xlab) <span class="sc">+</span> <span class="fu">ylab</span>(ylab) <span class="sc">+</span> </span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> title) <span class="sc">+</span> </span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>(), <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">hjust=</span><span class="dv">0</span>)) </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>all_corrs_and_ld <span class="ot">&lt;-</span> cor_mat <span class="sc">%&gt;%</span> </span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&quot;snp1&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(snp2, cor, <span class="sc">-</span>snp1) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span><span class="fu">abs</span>(cor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">chr1 =</span> <span class="fu">str_split</span>(snp1, <span class="st">&quot;_&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">map_chr</span>(<span class="sc">~</span>.x[<span class="dv">1</span>]),</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>         <span class="at">chr2 =</span> <span class="fu">str_split</span>(snp2, <span class="st">&quot;_&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">map_chr</span>(<span class="sc">~</span>.x[<span class="dv">1</span>])) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(snp1 <span class="sc">!=</span> snp2) <span class="sc">%&gt;%</span> <span class="co"># &amp; chr1 != chr2) %&gt;% </span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="fu">n</span>(), <span class="at">by=</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ld_matrix <span class="sc">%&gt;%</span> </span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>              <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rownames_to_column</span>(<span class="st">&quot;snp1&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>              <span class="fu">gather</span>(snp2, LD, <span class="sc">-</span>snp1))</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(all_corrs_and_ld)){</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print(paste(i, nrow(all_corrs_and_ld), sep = &quot;/&quot;))</span></span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.na</span>(all_corrs_and_ld<span class="sc">$</span>LD[i])){</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>    all_corrs_and_ld<span class="sc">$</span>LD[i] <span class="ot">&lt;-</span> <span class="fu">get_ld_snp_pair</span>(all_corrs_and_ld<span class="sc">$</span>snp1[i], all_corrs_and_ld<span class="sc">$</span>snp2[i])</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>top_correlations <span class="ot">&lt;-</span> all_corrs_and_ld <span class="sc">%&gt;%</span> </span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(LD <span class="sc">&lt;</span> <span class="fl">0.01</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cor =</span> <span class="fu">paste</span>(<span class="st">&quot;r =&quot;</span>, <span class="fu">format</span>(<span class="fu">round</span>(cor, <span class="dv">2</span>), <span class="at">nsmall=</span><span class="dv">2</span>), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>bottom_correlations <span class="ot">&lt;-</span> all_corrs_and_ld <span class="sc">%&gt;%</span> </span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(cor) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(LD <span class="sc">&lt;</span> <span class="fl">0.01</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cor =</span> <span class="fu">paste</span>(<span class="st">&quot;r =&quot;</span>, <span class="fu">format</span>(<span class="fu">round</span>(cor, <span class="dv">2</span>), <span class="at">nsmall=</span><span class="dv">2</span>), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(</span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(top_correlations<span class="sc">$</span>snp1[<span class="dv">1</span>], top_correlations<span class="sc">$</span>snp2[<span class="dv">1</span>], <span class="fu">paste</span>(<span class="st">&quot;A.&quot;</span>, top_correlations<span class="sc">$</span>cor[<span class="dv">1</span>])),</span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(top_correlations<span class="sc">$</span>snp1[<span class="dv">2</span>], top_correlations<span class="sc">$</span>snp2[<span class="dv">2</span>], <span class="fu">paste</span>(<span class="st">&quot;B.&quot;</span>, top_correlations<span class="sc">$</span>cor[<span class="dv">2</span>])),</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(bottom_correlations<span class="sc">$</span>snp1[<span class="dv">1</span>], bottom_correlations<span class="sc">$</span>snp2[<span class="dv">1</span>], <span class="fu">paste</span>(<span class="st">&quot;C.&quot;</span>, bottom_correlations<span class="sc">$</span>cor[<span class="dv">1</span>])),</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(bottom_correlations<span class="sc">$</span>snp1[<span class="dv">2</span>], bottom_correlations<span class="sc">$</span>snp2[<span class="dv">2</span>], <span class="fu">paste</span>(<span class="st">&quot;D.&quot;</span>, bottom_correlations<span class="sc">$</span>cor[<span class="dv">2</span>])))</span></code></pre></div>
+<p><img src="figure/cross_phenotype_meta_analysis.Rmd/pairwise_plots-1.png" width="960" style="display: block; margin: auto;" /></p>
+<!-- ```{r} -->
+<!-- # Heatmap showing how the top pleiotropic SNPs affect all the traits -->
+<!-- xx <- spread(snp_effects, SNP, BETA) #  %>% mutate(BETA=abs(BETA)) -->
+<!-- rr <- xx %>% pull(1) -->
+<!-- xx <- as.matrix(xx[, -1]) -->
+<!-- rownames(xx) <- rr -->
+<!-- library(pheatmap) -->
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat == 1] <- NA -->
+<!-- # pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+<!-- # Load specific colours -->
+<!-- library(RColorBrewer) -->
+<!-- paletteLength <- 50 -->
+<!-- myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[6], "white", brewer.pal(9, "Oranges")[7]))(paletteLength) -->
+<!-- myBreaks <- c(seq(min(cor_mat, na.rm=T), 0, length.out = ceiling(paletteLength/2) + 1),  -->
+<!--               seq(max(cor_mat, na.rm=T)/paletteLength, max(cor_mat, na.rm=T), length.out = floor(paletteLength/2))) -->
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4, col = myColor, breaks = myBreaks, -->
+<!--          annotation_colors = my_guild_colours, annotation_col = my_guilds) -->
+<!-- cor_mat[upper.tri(cor_mat)] <- NA -->
+<!-- pairwise_cor <- as.data.frame(cor_mat) %>%  -->
+<!--   rownames_to_column("trait1") %>%  -->
+<!--   gather(trait2, corr, -trait1) %>% as_tibble() %>%  -->
+<!--   filter(!is.na(corr)) %>% arrange(-corr) -->
+<!-- Trait_guilds <- read_csv("data/derived/meta_data_for_all_traits.csv") %>% -->
+<!--   as.data.frame() %>%  -->
+<!--   select(Trait, `Trait guild`) %>%  -->
+<!--   filter(Trait %in% c(pairwise_cor$trait1, pairwise_cor$trait2)) %>%  -->
+<!--   filter(!(`Trait guild` %in% c("Genomic", "CHC", "Physiological"))) -->
+<!-- guild_corrs <- pairwise_cor %>%  -->
+<!--   left_join(Trait_guilds, c("trait1" = "Trait")) %>%  -->
+<!--   rename(guild1 = `Trait guild`) %>%  -->
+<!--   left_join(Trait_guilds, c("trait2" = "Trait")) %>%  -->
+<!--   rename(guild2 = `Trait guild`) %>%  -->
+<!--   filter(!is.na(guild1) & !is.na(guild2)) %>%  -->
+<!--   mutate(row=1:n()) %>%  -->
+<!--   group_by(row) %>%  -->
+<!--   mutate(guild_pair = paste0(sort(c(guild1, guild2)), collapse = " - ")) %>%  -->
+<!--   ungroup() %>% select(guild_pair, corr) %>% distinct() %>%  -->
+<!--   group_by(guild_pair) %>%  -->
+<!--   summarise(n = n(),  -->
+<!--             mean_corr = mean(corr), -->
+<!--             se_corr = sd(corr) / sqrt(length(corr)), -->
+<!--             mean_abs_corr = mean(abs(corr)), -->
+<!--             se_abs_corr = sd(abs(corr)) / sqrt(length(corr))) %>%  -->
+<!--   arrange(-mean_corr) -->
+<!-- guild_corrs %>%  -->
+<!--   filter(n >= 10) %>%  -->
+<!--   arrange(mean_abs_corr + se_corr) %>%   -->
+<!--   mutate(guild_pair = factor(guild_pair, guild_pair)) %>%  -->
+<!--   ggplot(aes(x = guild_pair, y = mean_abs_corr)) +  -->
+<!--   geom_errorbar(aes(ymin = mean_abs_corr - se_corr, ymax = mean_abs_corr + se_corr)) + -->
+<!--   geom_point() + coord_flip() + geom_hline(yintercept = 0, linetype = 2) -->
+<!-- xx <- guild_corrs %>%  -->
+<!--   select(guild1, guild2, mean_abs_corr) %>%  -->
+<!--   spread(guild1, mean_abs_corr) %>%  -->
+<!--   as.data.frame() -->
+<!-- rnames <- xx[,1] -->
+<!-- xx <- as.matrix(xx[,-1]) -->
+<!-- rownames(xx) <- rnames -->
+<!-- pheatmap(xx, cutree_rows = 3, cutree_cols = 3) -->
+<!-- my_guilds <- data.frame(row.names = Trait_guilds[, 1], Guild = Trait_guilds[, 2]) -->
+<!-- my_guild_colours <- list(Guild = c(`Activity` = "#EF9A9A", -->
+<!--                                    `Behavioural` = "#AB47BC", -->
+<!--                                    `CHC` = "#3F51B5", -->
+<!--                                    `Drug response` = "#26C6DA",  -->
+<!--                                    `Genomic` = "#00796B", -->
+<!--                                    `Insecticide response` = "#9CCC65", -->
+<!--                                    `Life history` = "#76FF03", -->
+<!--                                    `Metabolome` = "#FFEE58", -->
+<!--                                    `Microbiome` = "#FFCC80", -->
+<!--                                    `Morphological` = "#EF6C00", -->
+<!--                                    `Pathogen response` ="#DD2C00",   -->
+<!--                                    `Physiological` = "#6D4C41", -->
+<!--                                    `Sensory`  = "#D7CCC8", -->
+<!--                                    `Stress response` = "#EEEEEE", -->
+<!--                                    `Temperature related` = "#78909C")) -->
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat == 1] <- NA -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(chr == "3R" & position > 15116320 & position < 26745421)%>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "2L_9702238_SNP" | Variant == "3L_3266247_SNP") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "3L_835171_SNP" | Variant == "2L_12176995_DEL") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "X_3522638_SNP" | Variant == "3L_9354041_SNP") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- significant_CPMA_by_chromosome <- left_join( -->
+<!--   str_split(SNPs_with_significant_CPMA, "_") %>% map_chr(~ .x[1]) %>% table() %>% enframe() %>% rename(n_significant_snps = value), -->
+<!--   str_split(all_snps, "_") %>% map_chr(~ .x[1]) %>% table() %>% enframe() %>% rename(n_total_snps = value)) %>% -->
+<!--   mutate(percent = 100 * n_significant_snps / n_total_snps) -->
+<!-- chisq.test(significant_CPMA_by_chromosome[,2:3]) -->
+<!-- significant_CPMA_by_SNP_type <- left_join( -->
+<!--   str_split(SNPs_with_significant_CPMA, "_") %>% map_chr(~ .x[3]) %>% table() %>% enframe()%>% rename(n_significant_snps = value), -->
+<!--   str_split(all_snps, "_") %>% map_chr(~ .x[3]) %>% table() %>% enframe()  %>% rename(n_total_snps = value))%>% -->
+<!--   mutate(percent_among_sig = 100 * n_significant_snps / sum(n_significant_snps), -->
+<!--          percent_among_total = 100 * n_total_snps / sum(n_total_snps)) -->
+<!-- left_join(tbl(db, "variants") %>% -->
+<!--             filter(SNP %in% all_snps) %>%  -->
+<!--             pull(site.class) %>% table() %>% enframe() %>% rename(n_significant_snps = value), -->
+<!--           tbl(db, "variants") %>% -->
+<!--             filter(SNP %in% SNPs_with_significant_CPMA) %>%  -->
+<!--             pull(site.class) %>% table() %>% enframe() %>% rename(n_total_snps = value)) %>% -->
+<!--   mutate( -->
+<!--     n_total_snps = replace(n_total_snps, is.na(n_total_snps), 0), -->
+<!--     percent_among_sig = 100 * n_significant_snps / sum(n_significant_snps), -->
+<!--     percent_among_total = 100 * n_total_snps / sum(n_total_snps), -->
+<!--     diff = log2(percent_among_sig / percent_among_total)) %>%  -->
+<!--   arrange(-percent_among_total) %>%  -->
+<!--   print(n=1000) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- # Heatmap showing how the top pleiotropic SNPs affect all the traits -->
+<!-- snp_effects <- map_df(1:length(focal_gwas_files), -->
+<!--        ~ read_tsv(focal_gwas_files[.x], -->
+<!--                   col_types = c("c", "n", "n", "n")) %>% -->
+<!--          filter(SNP %in% SNPs_with_significant_CPMA) %>% -->
+<!--          mutate(trait = .x)) %>% -->
+<!--   left_join(tibble(trait_name = traits) %>% -->
+<!--               mutate(trait = 1:n()), by = "trait") %>% -->
+<!--   select(trait_name, SNP, BETA)  -->
+<!-- filtered_snp_effects <- snp_effects %>%  -->
+<!--   left_join(tbl(db, "variants") %>% filter(SNP %in% SNPs_with_significant_CPMA) %>% collect()) %>%  -->
+<!--   filter(!(chr == "3R" & position > 15116320 & position < 26745421)) %>%   -->
+<!--   select(trait_name, SNP, BETA) %>% distinct() -->
+<!-- xx <- spread(snp_effects, SNP, BETA) -->
+<!-- rr <- xx %>% pull(1) -->
+<!-- xx <- as.matrix(xx[,-1]) -->
+<!-- rownames(xx) <- rr -->
+<!-- library(pheatmap) -->
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat==1] <- NA -->
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+<!-- cor_mat <- cor(xx, use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat==1] <- NA -->
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+<!-- cor_mat %>% as.data.frame() %>%  -->
+<!--   rownames_to_column("snp1") %>% as_tibble() %>%  -->
+<!--   gather(snp2, corr, -snp1) %>% arrange((corr)) -->
+<!-- library(ggrepel) -->
+<!-- xx[, colnames(xx) %in% c("2L_9702238_SNP", "3L_3266247_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`2L_9702238_SNP`, `3L_3266247_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+<!-- xx[, colnames(xx) %in% c("3L_835171_SNP", "2L_12176995_DEL")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`3L_835171_SNP`, `2L_12176995_DEL`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+<!-- xx[, colnames(xx) %in% c("X_3522638_SNP", "3L_9354041_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`X_3522638_SNP`, `3L_9354041_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+<!-- xx[, colnames(xx) %in% c("3R_14722498_SNP", "3L_9354041_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`3R_14722498_SNP`, `3L_9354041_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+<!-- ``` -->
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] scales_1.2.0       ggrepel_0.8.2      gridExtra_2.3      RColorBrewer_1.1-2
+ [5] pheatmap_1.0.12    kableExtra_1.3.4   glue_1.4.2         DT_0.13           
+ [9] RSQLite_2.2.0      DBI_1.1.0          dbplyr_2.1.1       forcats_0.5.1     
+[13] stringr_1.4.0      dplyr_1.0.7        purrr_0.3.4        readr_2.1.2       
+[17] tidyr_1.1.4        tibble_3.1.6       ggplot2_3.3.6      tidyverse_1.3.2   
+[21] workflowr_1.7.0   
+
+loaded via a namespace (and not attached):
+ [1] fs_1.4.1            lubridate_1.8.0     bit64_0.9-7        
+ [4] webshot_0.5.2       httr_1.4.2          rprojroot_1.3-2    
+ [7] tools_4.0.3         backports_1.1.7     utf8_1.1.4         
+[10] R6_2.4.1            colorspace_2.0-3    withr_2.4.3        
+[13] tidyselect_1.1.0    processx_3.5.2      bit_1.1-15.2       
+[16] compiler_4.0.3      git2r_0.27.1        cli_3.1.0          
+[19] rvest_1.0.2         xml2_1.3.3          labeling_0.3       
+[22] callr_3.7.0         systemfonts_0.2.2   digest_0.6.29      
+[25] rmarkdown_2.11      svglite_1.2.3       pkgconfig_2.0.3    
+[28] htmltools_0.5.2     highr_0.8           fastmap_1.1.0      
+[31] htmlwidgets_1.5.4   rlang_1.0.2         readxl_1.3.1       
+[34] rstudioapi_0.13     farver_2.0.3        jquerylib_0.1.1    
+[37] generics_0.0.2      jsonlite_1.8.0      crosstalk_1.1.0.1  
+[40] vroom_1.5.7         googlesheets4_1.0.0 magrittr_2.0.1     
+[43] Rcpp_1.0.4.6        munsell_0.5.0       fansi_0.4.1        
+[46] gdtools_0.2.2       lifecycle_1.0.1     stringi_1.5.3      
+[49] whisker_0.4         yaml_2.3.5          grid_4.0.3         
+[52] blob_1.2.1          parallel_4.0.3      promises_1.1.0     
+[55] crayon_1.4.2        haven_2.5.0         hms_1.1.1          
+[58] knitr_1.39          ps_1.3.3            pillar_1.6.4.9003  
+[61] reprex_2.0.1        evaluate_0.15       getPass_0.2-2      
+[64] modelr_0.1.8        vctrs_0.3.8         tzdb_0.1.2         
+[67] httpuv_1.5.3.1      cellranger_1.1.0    gtable_0.3.0       
+[70] assertthat_0.2.1    xfun_0.31           broom_0.7.11       
+[73] later_1.0.0         googledrive_2.0.0   viridisLite_0.3.0  
+[76] gargle_1.2.0        memoise_1.1.0       ellipsis_0.3.2     </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
