@@ -1,0 +1,786 @@
+---
+title: "Cross phenotype meta analysis"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = FALSE)
+```
+
+
+## Load packages
+
+```{r}
+library(tidyverse)
+library(dbplyr)
+library(DBI)
+library(RSQLite)
+library(DT)
+library(glue)
+library(kableExtra)
+library(pheatmap)
+library(RColorBrewer)
+library(gridExtra)
+library(ggrepel)
+library(scales)
+library(pheatmap)
+
+# Create a function to build HTML searchable tables
+my_data_table <- function(df){
+  datatable(
+    df, rownames=FALSE,
+    autoHideNavigation = TRUE,
+    extensions = c("Scroller",  "Buttons"),
+    options = list(
+      autoWidth = TRUE,
+      dom = 'Bfrtip',
+      deferRender=TRUE,
+      scrollX=TRUE, scrollY=1000,
+      scrollCollapse=TRUE,
+      buttons =
+        list('pageLength', 'colvis', 'csv', list(
+          extend = 'pdf',
+          pageSize = 'A4',
+          orientation = 'landscape',
+          filename = 'Trait_table')),
+      pageLength = 79
+    )
+  )
+}
+```
+
+## Load necessary datasets
+
+```{r echo=F}
+# A hidden code chunk, to count the number of independent phenotypes
+
+set.seed(1)
+independent_traits <- read_csv("data/derived/meta_data_for_all_traits.csv") %>%
+  filter(`# lines measured` >= 120) %>% # Only analyse traits that measured at least 80 lines
+  group_by(Reference) %>%
+  sample_n(1) %>% # Randomly sample one phenotype per study
+  pull(Trait) %>% sort() 
+
+n_independent_traits <- independent_traits %>% length()
+```
+
+Here we load a database of DGRP variant and gene annotations (prepared in the script XXXX from data from annotation hub and the Mackay lab website), as well as the GWAS summary statistics for a subset of all the phenotypic traits that were measured. 
+
+Because GWAS summary statistics for different phenotypes collected in the same study are usually not independent (e.g. because the phenotypes were measured on the same individual flies, or in the same experimental blocks or environmental conditions), we chose to thin the dataset by randomly selecting a single phenotypic trait per study. This means that each set of GWAS summary statistics corresponds to one independent measure of a DGRP phenotype, and so any similarity in how a given allele affects two different phenotypes is likely to reflect genetic processes such as pleiotropy, as opposed to spurious effects related to environmental similarities between the two measurements. We also only include GWAS summary statistics for GWAS computed using at least 80 DGRP lines. This thinning process left `r n_independent_traits` traits for analysis.
+
+```{r}
+db <- DBI::dbConnect(RSQLite::SQLite(),
+                     "~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3")
+
+set.seed(1) # Set the seed, so the random choice of phenotypes is reproducible
+independent_traits <- read_csv("data/derived/meta_data_for_all_traits.csv") %>%
+  filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
+  group_by(Reference) %>%
+  sample_n(1) %>% # Randomly sample one phenotype per study
+  pull(Trait) %>% sort()
+
+# Get the list of GWAS summary statistics files, and the trait names found in those files' names
+# Just get the files with LD-prunced list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)
+all_gwas_files <- list.files("gwas_data/derived/gwas_results", full.names = T)
+all_gwas_files <- all_gwas_files[grepl("tsv", all_gwas_files) & 
+                                   !grepl("_significant_SNPs", all_gwas_files)]
+gwas_trait_names <- str_remove_all(str_remove_all(all_gwas_files, 
+                                                  "gwas_data/derived/gwas_results/"), "[.]tsv[.]gz")
+
+# Here is the list of GWAS files/traits to be analysed (i.e. those in "independent_traits")
+focal_gwas_files <- all_gwas_files[which(gwas_trait_names %in% independent_traits)]
+
+# Get the SNP names out of the first GWAS file, and count the SNPs
+all_snps <- read_tsv(focal_gwas_files[1]) %>% pull(SNP)
+n_snps <- length(all_snps) # 224159
+```
+
+## Calculate cross-phenotype meta-analysis (CPMA) statistic for each SNP
+
+This analysis uses the CPMA method proposed by [Cotsapas et al. 2011 PLoS Genetics, e1002254] (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3154137/), which takes as its input the $p$-values from a set of $n$ independent association tests for $n$ different phenotypes (here, $n =$ `r n_independent_traits`). 
+
+Cotsapas et al. noted that for a SNP which has no effect on any of the $n$ traits, the $p$-values from the $n$ association tests are expected to be uniformly distributed, which means that the $-ln(x)$ transformed $p$-values are expected to be exponentially distributed with rate parameter $\lambda = 1$. In contrast, if the focal SNP is associated with one or more of the $n$ traits, the $-log(x)$ transformed $p$-values are no longer expected to follow an exponential distribution with $\lambda = 1$. Cotsapas et al. propose testing between the null expectation ($\lambda = 1$) and the observed value of $\lambda$, termed $\hat{\lambda}$ (which can be found via the maximum likelihood estimator, $\hat{\lambda} = \frac{n}{sum(x)}$) using a likelihood ratio test as follows:
+
+$$CPMA = -2 \frac{P(p_1,p_2,...,p_n)|\lambda=1)}{P(p_1,p_2,...,p_n)|\lambda=\hat{\lambda})}$$ 
+The CPMA test statistic is expected to be $\chi^2$ distributed (via [Wilk's theorem](https://en.wikipedia.org/wiki/Wilks%27_theorem)) with 1 degree of freedom, allowing calculation of a $p$-value for the null hypothesis that none of the $n$ traits are associated with the focal SNP. If the CPMA test statistic is high enough that one should reject the null hypothesis, this implies that the focal SNP is associated with one or more of $n$ phenotypes.
+
+```{r compute_CPMA}
+find_likelihood <- function(logged_p, lambda) (lambda ^ length(logged_p)) * (exp(-1 * lambda * sum(logged_p)))
+find_max_likelihood_lambda <- function(logged_p) length(logged_p) / sum(logged_p)
+
+compute_CPMA <- function(p){
+
+  logged_p <- -1 * log(p)
+  likelihood_for_lambda_equal_1 <- find_likelihood(logged_p, 1)
+  likelihood_for_lambda_equal_ML_lambda <-
+    find_likelihood(logged_p, find_max_likelihood_lambda(logged_p))
+
+  # This is -2 log the likelihood ratio (usually written as -2\log(\Lambda)), which asymptotically approaches the chi-squared distribution under the null hypothesis
+  # There is one degree of freedom since only 1 parameter is estimated from the data (the ML lambda)
+  -2 * log(likelihood_for_lambda_equal_1 / 
+             likelihood_for_lambda_equal_ML_lambda)
+
+}
+
+# This function finds the weighted mean effect size and the CPMA statistic for every variant in the i'th chunk of variants
+# The weighted mean effect size is the means effect size of the focal SNP on all the traits (called BETA in Plink's output),
+# weighted by 1 over the standard error of the the effect size estimates.
+do_snp_chunk <- function(i){
+  focal_snps <- chunked_snps[[i]]
+  all_betas <- map_df(1:length(focal_gwas_files),
+                      ~ read_tsv(focal_gwas_files[.x],
+                                 col_types = c("c", "n", "n", "n")) %>%
+                        filter(SNP %in% focal_snps) %>%
+                        mutate(trait = .x))
+  all_betas %>%
+    group_by(SNP) %>%
+    summarise(Weighted_mean_effect_size = weighted.mean(abs(BETA), w = 1 / SE),
+              CPMA_statistic = compute_CPMA(P)) %>%
+    mutate(CPMA_pval = 1 - pchisq(CPMA_statistic, df = 1))
+}
+
+chunked_snps <- split(all_snps, ceiling(seq_along(all_snps) / 50000))
+
+cpma_snp_scores <- map_df(1:length(chunked_snps), 
+                          ~ do_snp_chunk(.x)) %>%
+  left_join(tbl(db, "variants") %>%
+              filter(SNP %in% !!all_snps) %>%
+              select(SNP, MAF) %>% collect(), by = "SNP") %>%
+  distinct() %>% 
+  arrange(CPMA_pval) %>% 
+  mutate(p_adjusted = p.adjust(CPMA_pval))
+
+rm(chunked_snps)
+```
+
+
+### Inspect the variants with significant CPMA scores ($p < 10^{-5}$)
+
+#### Identifying a clump of linked variants with significant CPMA scores
+
+```{r echo=FALSE}
+# Another hidden chunk, for counting things
+num_sig_snps <- cpma_snp_scores %>%
+  filter(CPMA_pval <= 1e-5) %>%
+  pull(SNP) %>% length()
+
+num_FDR_sig_snps <- cpma_snp_scores %>%
+  filter(p_adjusted <= 0.05) %>%
+  pull(SNP) %>% length()
+```
+
+Our initial analysis on the LD-pruned list of variants found `r num_sig_snps` variants with CPMA scores with $p < 10^{-5}$, as shown in the list below. However, some of these variants appear to be located relatively close together on chromosome arm 3R (note that the number in the variant name is its genomic position, and there are several variants in a row on 3R), suggesting that LD pruning via `plink` did not manage to remove all linked variants:
+
+```{r}
+SNPs_with_significant_CPMA <- cpma_snp_scores %>%
+  filter(CPMA_pval <= 1e-5) %>%
+  pull(SNP) %>% sort()
+
+SNPs_with_significant_CPMA
+```
+
+To address this issue, we computed pairwise LD between all pairs of variants with significant CPMA scores using the code below to run `plink`:
+
+```{r}
+# Define a helper function to pass commands to the terminal
+# Note that we set `intern = TRUE`, and pass the result of `system()` to `cat()`,
+# ensuring that the Terminal output will be printed in this knitr report.
+run_command <- function(shell_command, wd = getwd(), path = ""){
+  cat(system(glue("cd ", wd, path, "\n", shell_command), intern = TRUE), sep = '\n')
+}
+
+get_ld_snp_pair <- function(snp1, snp2){
+  plink_output <- capture.output(run_command(glue(
+    "{plink} --bfile dgrp2_QC_all_lines_imputed_correct --ld {snp1} {snp2}"), path = "/gwas_data/derived/")) 
+  as.numeric(str_remove_all(str_remove_all(str_split(plink_output[str_detect(plink_output, "R-sq = ")], "D' = ")[[1]][1], "R-sq ="), " "))
+}
+
+# I used plink v1.9 for MacOS, available here: https://www.cog-genomics.org/plink/
+# Download and save plink into the directory 'code' if it's not already there
+plink <- file.path(getwd(), "code/plink") 
+
+# Computing pairwise LD takes a little while, so save the results to avoid re-running it
+if(!file.exists("data/derived/cmpa_snp_ld_matrix.rds")){
+
+  ld <- t(combn(SNPs_with_significant_CPMA, 2)) %>% 
+    as.data.frame() %>% as_tibble() %>% 
+    rename(SNP1 = V1, SNP2 = V2) %>% mutate(i =1:n()) %>% 
+    split(.$i) %>% 
+    map_df(~ {
+      output <- mutate(.x, R2 = get_ld_snp_pair(.x$SNP1, .x$SNP2))
+      print(output); output
+    }) %>% select(-i)
+  
+  ld_matrix <- bind_rows(ld, tibble(SNP1 = ld$SNP2, SNP2 = ld$SNP1, R2 = ld$R2)) %>% 
+    distinct() %>% spread(SNP2, R2) %>% as.data.frame()
+  rownames(ld_matrix) <- ld_matrix$SNP1
+  ld_matrix <- ld_matrix[,!names(ld_matrix) == "SNP1"]
+  ld_matrix <- as.matrix(ld_matrix)
+  saveRDS(ld_matrix, "data/derived/cmpa_snp_ld_matrix.rds")
+} else ld_matrix <- readRDS("data/derived/cmpa_snp_ld_matrix.rds")
+
+linked_variants_on_3R <- cutree(hclust(dist(ld_matrix)), k = 2)
+linked_variants_on_3R <- sort(names(linked_variants_on_3R)[linked_variants_on_3R==2])
+num_linked_variants_on_3R <- length(linked_variants_on_3R)
+```
+
+The heatmap below shows pairwise linkage disequilbrium ($R^2$) among the `r num_sig_snps` variants with CPMA scores with $p < 10^{-5}$, and highlights a cluster of `r num_linked_variants_on_3R` variants in linkage disequilibrium on 3R, implying a recombination cold-spot on 3R that spans several megabases. We believe this region corresponds to the chromosomal inversion _In(3R)P_, because the 3R region contains the gene _Glutamate dehydrogenase_, which lies inside _In(3R)P_ and because this inversion is known to be present in the North Carolina population ([Sezgin et al. 2004, _Genetics_](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1448838/)). 
+
+```{r fig.height=14, fig.width=14}
+pheatmap(ld_matrix, cutree_rows = 2, cutree_cols = 2, cellwidth = 8, cellheight = 8)
+```
+
+When we exclude all the variants in the cluster from the previous heatmap and plot the remaining pairwise linkage disequilbrium ($R^2$) values in a histogram, we see that the great majority of the remaining CPMA-significant variants are in low LD with one another ($R^2 = 0-0.05$), and all have $R^2 < 0.2$ (as expected given the `plink` settings that were used to identify the low-LD subset of variants). We thus conclude that most or all of these variants are tagging weakly-linked or unlinked regions of the genome that have pleiotropic effects on multiple traits. 
+
+```{r}
+trimmed_ld_scores <- ld_matrix %>% 
+    as.data.frame() %>% 
+    rownames_to_column("snp1") %>% 
+    gather(snp2, LD, -snp1) %>% as_tibble() %>% 
+  arrange(-LD) %>% 
+  filter(!(snp1 %in% linked_variants_on_3R) & !(snp2 %in% linked_variants_on_3R)) 
+
+t(combn(SNPs_with_significant_CPMA[
+  !(SNPs_with_significant_CPMA %in% linked_variants_on_3R)], 2)) %>% 
+  as.data.frame() %>% 
+  rename(snp1=V1, snp2=V2) %>% 
+  left_join(trimmed_ld_scores) %>%
+  ggplot(aes(LD)) + 
+  geom_histogram(fill="skyblue", colour = "grey20") + 
+  xlab(expression ("Pairwise linkage disequilibrium"~R^2)) + ylab("Frequency")
+```
+
+<!-- Code that we used to see which genes lay inside the low-LD region on 3R -->
+
+<!-- ```{r} -->
+<!-- region <- tbl(db, "variants") %>% filter(chr== "3R") %>%  -->
+<!--   collect(n=Inf) %>% mutate(position = as.numeric(position)) %>%  -->
+<!--   filter(position >=15116320 & position <= 26690553)  -->
+
+<!-- region %>% filter(SNP == "3R_15216241_INS") %>% pull(minor_allele) %>% head(1) %>% nchar() -->
+
+<!-- region %>% select(-FBID, -site.class, -distance.to.gene) %>% distinct() %>%  -->
+<!--   filter(!str_detect(SNP, "SNP")) %>%  -->
+<!--   print(n=1000) -->
+
+<!-- region %>% filter(FBID == tbl(db, "genes") %>% filter(gene_name == "Glutamate dehydrogenase") %>% pull(FBID)) %>% print(n=1000) -->
+
+<!-- region %>% pull(FBID) %>% unique() %>% length() -->
+<!-- fbids <- region$FBID -->
+<!-- tbl(db, "genes") %>% filter(FBID %in% fbids) %>% pull(gene_name) %>% unique() -->
+<!-- # Tubby, Toll, male sterile (3) K81, many 'Tweedle' genes, Octopamine beta1 receptor -->
+<!-- gs <- tbl(db, "genes") %>% filter(FBID %in% fbids) %>% pull(gene_name) %>% unique() -->
+
+<!-- # "the gene [Glutamate dehydrogenase] is inside the cosmopolitan inversion In(3R)P", https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1448838/ -->
+<!-- ``` -->
+
+
+#### Displaying the significant variants
+
+This interactive table shows information about each of the `r num_sig_snps` variants that had a higher CPMA score than expected under the null hypothesis that the variant was not associated with any of the `r n_independent_traits` phenotypic traits used to compute our CPMA statistic (with $p < 10^{-5}$). Of these `r num_sig_snps` variants with $p < 10^{-5}$, `r num_FDR_sig_snps` were statistically significant after applying Benjamini-Hochberg false discovery rate correction.
+
+- The `Variant` column gives the name of the variant, which includes its chromosome and genomic position, and whether it is a SNP, insertion or deletion (SNP/INS/DEL respectively). The column also noted whether the focal variant is part of the linked cluster on chromosome arm 3L.
+- The `Associated gene` and `Flybase ID` columns state which genes (if any) are overlapped by or close to the focal variant; if there are multiple genes, their names/IDs are separated by semicolons. The annotations come from the 'variant annotation' file provided on the [Mackay lab website](http://dgrp2.gnets.ncsu.edu/data.html).
+- The `Site class` column describes the type of variant (e.g. INTRON means the variant is in an intron of the associated gene); if there are multiple genes, their names/IDs are separated by semicolons. The annotations come from the 'variant annotation' file provided on the [Mackay lab website](http://dgrp2.gnets.ncsu.edu/data.html).
+- The `Minor allele` and `Major allele` columns give the least and most common alleles for the focal variant (based on the frequencies across the DGRP), while the `Minor allele freq.` column gives the frequency of the minor allele in the DGRP.
+- The `CPMA p-value (-log10)` column gives the $p$-value from the cross-phenotype meta-analysis test that was calculated for the focal variant, transformed via $-log_{10}(p)$. The `r num_FDR_sig_snps` variants that were significant after false discovery rate correction with $q<0.05$ are highlighted.
+- The final 2 columns list the phenotypic traits with which the minor allele was positively associated, or negatively associated, with $p<0.01$ in the univariate GWAS that we ran (in the script `analysis/run_GWAS.Rmd`)
+
+```{r}
+SNPs_with_significant_CPMA <- cpma_snp_scores %>%
+  filter(CPMA_pval <= 1e-5) %>%
+  pull(SNP)
+
+SNPs_with_FDR_significant_CPMA <- cpma_snp_scores %>%
+  filter(p_adjusted <= 0.05) %>%
+  pull(SNP)
+
+get_SNP_effects_on_each_trait <- function(SNP_ids){
+
+  map_df(1:length(focal_gwas_files),
+         ~ read_tsv(focal_gwas_files[.x],
+                    col_types = c("c", "n", "n", "n")) %>%
+           filter(SNP %in% SNP_ids) %>%
+           mutate(trait = .x)) %>%
+    left_join(tibble(trait_name = independent_traits) %>% mutate(trait = 1:n()), by = "trait") %>%
+    select(trait_name, SNP, BETA, SE, P) %>% arrange(P) %>%
+    left_join(tbl(db, "variants") %>%
+                filter(SNP %in% SNP_ids) %>%
+                select(SNP, FBID, site.class, MAF, minor_allele, major_allele) %>%
+                collect(), by = "SNP") %>%
+    arrange(SNP)
+}
+
+process_info <- function(focal_SNPs, P_threshold = 0.01){
+  dat <- get_SNP_effects_on_each_trait(focal_SNPs)
+  split(dat, dat$SNP) %>%
+    map_df(~ {
+      sig_positive_traits <- .x %>% filter(P < P_threshold & BETA > 0) %>% pull(trait_name) %>% unique()
+      sig_negative_traits <- .x %>% filter(P < P_threshold & BETA < 0) %>% pull(trait_name) %>% unique()
+      tibble(Variant = .x$SNP[1],
+             `Minor allele positively associated (p<0.01) with:` = paste0(sig_positive_traits, collapse = "; "),
+             `Minor allele negatively associated (p<0.01) with:` = paste0(sig_negative_traits, collapse = "; "))
+    })
+}
+
+significant_CPMA_table <- tbl(db, "variants") %>%
+  filter(SNP %in% SNPs_with_significant_CPMA) %>%
+  left_join(tbl(db, "genes")) %>%
+  collect() %>%
+  left_join(cpma_snp_scores %>% select(SNP, CPMA_pval)) %>%
+  group_by(SNP) %>% 
+  mutate(gene_name = paste0(gene_name, collapse = "; "),
+         FBID = paste0(FBID, collapse = "; "),
+         site.class = paste0(site.class, collapse = "; ")) %>% 
+  ungroup() %>% 
+  arrange(CPMA_pval) %>% 
+  mutate(
+    CPMA_pval = round(-1 * log10(CPMA_pval), 2),
+    CPMA_pval = replace(
+      CPMA_pval, 
+      SNP %in% SNPs_with_FDR_significant_CPMA, 
+      paste(CPMA_pval[SNP %in% SNPs_with_FDR_significant_CPMA],"(FDR significant)"))) %>% 
+  mutate(SNP = replace(
+    SNP, 
+    SNP %in% linked_variants_on_3R, 
+    paste(SNP[SNP %in% linked_variants_on_3R], "(in 3R cluster)"))) %>% 
+  select(Variant = SNP, 
+         `Associated gene` = gene_name, 
+         `Flybase ID` = FBID, 
+         `Site class` = site.class, 
+         `Minor allele` = minor_allele, 
+         `Major allele` = major_allele, 
+         `Minor allele freq.` = MAF, 
+         `CPMA p-value (-log10)` = CPMA_pval,
+         chr, position) %>% 
+  distinct() %>% 
+  left_join(process_info(SNPs_with_significant_CPMA)) %>%
+  distinct(Variant, .keep_all = T) %>% 
+  mutate(`Major allele` = replace(
+    `Major allele`, nchar(`Major allele`) > 8, 
+    paste(nchar(`Major allele`[nchar(`Major allele`) > 8]),"bp sequence", sep="")),
+    `Minor allele freq.` = format(round(`Minor allele freq.`, 2), nsmall = 2)) 
+
+significant_CPMA_table %>% 
+  select(-chr, -position) %>% 
+  my_data_table()
+```
+
+
+### Manhattan plot showing genomic location of pleiotropic variants
+
+The Manhattan plot shows the CPMA p-values for each variant in the LD-pruned set of variants that we analysed, transformed via $-log_{10}(p)$. The chromosomes are coloured individually. There are significant variants (defined as $-log_{10}(p) > 5$) on all the major chromosomes, with the strongest scores being found towards the telomeres of both arms of chromosome 3. This plot suggests that highly pleiotropic variants are found on chromosomes 2, 3, and the X, and may be less common near the centromere.
+
+```{r}
+manhattan_data <- cpma_snp_scores %>%
+  mutate(position = str_split(SNP, "_"),
+         chr = map_chr(position, ~ .x[1]),
+         position = as.numeric(map_chr(position, ~ .x[2])),
+         CPMA_pval = -1 * log10(CPMA_pval)) %>% 
+  select(chr, position, CPMA_pval)
+
+max_pos <- manhattan_data %>%
+  group_by(chr) %>%
+  summarise(max_pos = max(position), .groups = "drop") %>%
+  as.data.frame()
+max_pos$max_pos <- c(0, cumsum(max_pos$max_pos[1:5]))
+
+manhattan_data <- manhattan_data %>%
+  left_join(max_pos, by = "chr") %>%
+  mutate(position = position + max_pos)
+
+plot <- manhattan_data %>%
+  ggplot(aes(position, CPMA_pval, group = chr, fill = chr, stroke = 0.05)) +
+  geom_hline(yintercept = 5, linetype = 2, colour = "grey20") +
+  geom_point(size = 0.9, colour="black", pch = 21) +
+  scale_fill_brewer(palette = "Paired", name = "Chromosome") +
+  ylab(expression(paste("-", log[10], " p value for CPMA test"))) + 
+  xlab("Position in the genome") +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+        legend.position = "top",
+        panel.border = element_blank(),
+        axis.ticks.x = element_blank())
+plot
+```
+
+### Were any of these CPMA-significant variants previously identified in univariate GWAS?
+
+```{r echo=FALSE}
+# Effect sizes of all the significant variants on all the phenotypes
+snp_effects <- map_df(1:length(focal_gwas_files),
+       ~ read_tsv(focal_gwas_files[.x],
+                  col_types = c("c", "n", "n", "n")) %>%
+         filter(SNP %in% SNPs_with_significant_CPMA) %>%
+         mutate(trait = .x)) %>%
+  left_join(tibble(trait_name = independent_traits) %>%
+              mutate(trait = 1:n()), by = "trait") %>%
+  select(trait_name, SNP, BETA, SE, P)
+
+n_sig_univariate <- snp_effects %>% filter(P < 1e-5) %>% nrow()
+
+fraction <- paste(num_sig_snps - n_sig_univariate, num_sig_snps, sep = "/")
+```
+
+
+One might ask whether any of the `r num_sig_snps` CPMA-significant pleiotropic variants (with $p < 10^{-5}$) identified here were already identified in univariate GWAS (with $p < 10^{-5}$ or better), due to having a strong enough association with one or more individual phenotypes. Of the `r num_sig_snps` CPMA-significant variants, only `r n_sig_univariate` were significantly associated with one of the `r n_independent_traits` tested phenotypes with $p < 10^{-5}$, as shown in this table of `plink` univariate association test results filtered for $p < 10^{-5}$. Thus, `r fraction` of the pleiotropic variants identified in our CPMA analysis were not detected in earlier univariate GWAS. This lack of detection implies that the pleiotropic variants discovered here are often not strongly associated with any one trait, but instead are moderately associated with multiple traits. This would make sense, because a variant that was strongly associated with many different phenotypes would likely be under strong selection, and would thus have a low enough minor allele frequency that it could not be detected in studies based on the DGRP (which has limited power for variants with MAF<5%).
+
+```{r}
+snp_effects %>% 
+  filter(P < 1e-5) %>% 
+  mutate(P = round(-1 * log10(P), 2)) %>% 
+  arrange(-P) %>% 
+  rename(Variant=SNP, 
+         `Phenotype showing the significant association` = trait_name,
+         `-log10(P)` = P) %>% 
+  kable(digits = 2) %>% 
+  kable_styling(full_width=F)
+```
+
+
+
+
+## Examining relationships among pleiotropic variants
+
+### Heatmap between all pairs of significant pleiotropic variants
+
+The heatmap shows the correlations in association test $-log_{10}$ p-values between variants on each of the `r n_independent_traits` phenotypic traits, for all the weakly-linked variants with a significant CPMA test statistics ($p < 10^{-5}$). A positive correlation between two pleiotropic variants means that the variants tend to show stronger associations with the same traits, while a negative correlation means that the traits that are strongly associated with variant 1 tend not to be strongly associated with variant 2 (and _vice versa_). 
+
+All except one variant (namely `r linked_variants_on_3R[1]`) from the high-LD clump on chromosome 3R has been removed, such that linkage disequilibrium is low or zero between most of the SNP pairs in this figure (see the histogram of pairwise LD values above). The figure illustrates that there are many pairs of variants that have similar associations with multiple different traits, despite the variants not being in linkage disequilibrium. This finding indicates that variants in different genomic regions may perturb the same process, genetic/physiological pathway, or biological process, and suggests that multiple pleiotropic variants with a similar effect on the multivariate phenotype underlie the genetic correlations observed in our dataset (e.g. in the figures examining correlations between line means for different phenotypes).
+
+```{r fig.width = 12, fig.height=12}
+# Effect sizes of all the significant variants on all the phenotypes
+snp_effects <- map_df(1:length(focal_gwas_files),
+       ~ read_tsv(focal_gwas_files[.x],
+                  col_types = c("c", "n", "n", "n")) %>%
+         filter(SNP %in% SNPs_with_significant_CPMA) %>%
+         mutate(trait = .x)) %>%
+  left_join(tibble(trait_name = independent_traits) %>%
+              mutate(trait = 1:n()), by = "trait") %>%
+  select(trait_name, SNP, BETA, SE, P)
+
+
+matrix_version <- snp_effects %>% 
+  filter(!(SNP %in% linked_variants_on_3R[-1])) %>% 
+  select(trait_name, SNP, P) %>% 
+  mutate(P = -1 * log10(P)) %>% 
+  spread(SNP, P) 
+rr <- matrix_version %>% pull(1)
+matrix_version <- as.matrix(matrix_version[, -1])
+rownames(matrix_version) <- rr
+cor_mat <- cor(matrix_version, use = "pairwise.complete.obs")
+
+paletteLength <- 50
+myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[6], "white", brewer.pal(9, "Oranges")[7]))(paletteLength)
+myBreaks <- c(seq(min(cor_mat, na.rm=T), 0, length.out=ceiling(paletteLength/2) + 1), 
+              seq(max(cor_mat[cor_mat!=1], na.rm=T)/paletteLength, max(cor_mat[cor_mat!=1], na.rm=T), 
+                  length.out=floor(paletteLength/2)))
+
+pheatmap(cor_mat, cutree_rows = 2,
+         cellwidth = 7.6, cellheight = 7.6,
+         cutree_cols = 2, col = myColor, breaks = myBreaks)
+```
+
+### Pairwise plots showing variant associations with different phenotypes
+
+In the following plots, each point represents one phenotypic trait, and each point's position shows the p-values from separate univariate association tests for the pair of variants specified on the x- and y-axis labels. For clarity, only phenotypic traits with $p < 0.01$ in a univariate association test for one/both variants are labelled. The pairs of variants shown in panels A and B are the pairs showing the strongest _positive_ correlations in p-values across traits, among all the completed unlinked CPMA-significant variant pairs (defined here as those with linkage disequilibrium R < 0.01). The variant pairs shown in panels C and D are those with the strongest _negative_ correlations in p-values across traits, again among unlinked CPMA-significant variant pairs.
+
+The plots illustrate the similarities and differences in how these pairs of CPMA-significant pleiotropic variants are associated with different traits. Note that there are some traits that are strongly associated with both pleiotropic variants (in panels A and B), and some traits that are strongly associated with one variant but not with the other (in all panels, but especially in C and D). Thus, some pleiotropic variants associate with many of the same traits as other (unlinked) pleiotropic variants, but there are also pleiotropic variants that associate with discrete sets of traits.  
+
+```{r pairwise_plots, fig.width = 10, fig.height=10}
+reverselog_trans <- function(base = exp(1)) {
+    trans <- function(x) -log(x, base)
+    inv <- function(x) base^(-x)
+    trans_new(paste0("reverselog-", format(base)), trans, inv, 
+              log_breaks(base = base), 
+              domain = c(1e-100, Inf))
+}
+
+make_repel_plot <- function(snp1, snp2, title){
+  x <- snp_effects %>% 
+    select(trait_name, SNP, P) %>% 
+    filter(SNP %in% c(snp1, snp2)) %>% 
+    spread(SNP, P) %>% as.data.frame()
+  xlab <- snp1; ylab <- snp2
+  names(x)[2:3] <- c("snp1", "snp2")
+  
+  x <- x %>% 
+    mutate(trait_name = replace(trait_name, 
+                                snp1 > 0.01 & snp2 > 0.01,
+                                ""), 
+           title = title)
+  
+  ggplot(x, aes(snp1, snp2, label = trait_name)) +
+    scale_x_continuous(trans = reverselog_trans(10), 
+                       labels = trans_format("log10", math_format(10^.x))) + 
+    scale_y_continuous(trans = reverselog_trans(10), 
+                       labels = trans_format("log10", math_format(10^.x))) +
+    geom_point(fill = "tomato", pch = 21) + 
+    geom_text_repel(size = 2.2, point.padding = unit(0.5, 'lines'), force = 20, max.iter = 10^4) + 
+    xlab(xlab) + ylab(ylab) + 
+    facet_wrap(~ title) + 
+    theme_bw() + 
+    theme(strip.background = element_blank(), strip.text = element_text(hjust=0)) 
+}
+
+
+all_corrs_and_ld <- cor_mat %>% 
+  as.data.frame() %>% 
+  rownames_to_column("snp1") %>% 
+  gather(snp2, cor, -snp1) %>% 
+  as_tibble() %>% 
+  arrange(-abs(cor)) %>% 
+  mutate(chr1 = str_split(snp1, "_") %>% map_chr(~.x[1]),
+         chr2 = str_split(snp2, "_") %>% map_chr(~.x[1])) %>% 
+  filter(snp1 != snp2) %>% # & chr1 != chr2) %>% 
+  slice(seq(2, n(), by=2)) %>% 
+  left_join(ld_matrix %>% 
+              as.data.frame() %>% 
+              rownames_to_column("snp1") %>% 
+              gather(snp2, LD, -snp1))
+
+for(i in 1:nrow(all_corrs_and_ld)){
+  # print(paste(i, nrow(all_corrs_and_ld), sep = "/"))
+  if(is.na(all_corrs_and_ld$LD[i])){
+    all_corrs_and_ld$LD[i] <- get_ld_snp_pair(all_corrs_and_ld$snp1[i], all_corrs_and_ld$snp2[i])
+  }
+}
+
+top_correlations <- all_corrs_and_ld %>% 
+  filter(LD < 0.01) %>% mutate(cor = paste("r =", format(round(cor, 2), nsmall=2), sep="")) %>% 
+  head(4)
+
+bottom_correlations <- all_corrs_and_ld %>% 
+  arrange(cor) %>% 
+  filter(LD < 0.01) %>% mutate(cor = paste("r =", format(round(cor, 2), nsmall=2), sep="")) %>% 
+  head(4)
+
+grid.arrange(
+  make_repel_plot(top_correlations$snp1[1], top_correlations$snp2[1], paste("A.", top_correlations$cor[1])),
+  make_repel_plot(top_correlations$snp1[2], top_correlations$snp2[2], paste("B.", top_correlations$cor[2])),
+  make_repel_plot(bottom_correlations$snp1[1], bottom_correlations$snp2[1], paste("C.", bottom_correlations$cor[1])),
+  make_repel_plot(bottom_correlations$snp1[2], bottom_correlations$snp2[2], paste("D.", bottom_correlations$cor[2])))
+
+```
+
+
+
+
+
+
+
+
+<!-- ```{r} -->
+<!-- # Heatmap showing how the top pleiotropic SNPs affect all the traits -->
+
+<!-- xx <- spread(snp_effects, SNP, BETA) #  %>% mutate(BETA=abs(BETA)) -->
+<!-- rr <- xx %>% pull(1) -->
+<!-- xx <- as.matrix(xx[, -1]) -->
+<!-- rownames(xx) <- rr -->
+<!-- library(pheatmap) -->
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat == 1] <- NA -->
+<!-- # pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+
+<!-- # Load specific colours -->
+<!-- library(RColorBrewer) -->
+<!-- paletteLength <- 50 -->
+<!-- myColor <- colorRampPalette(c(brewer.pal(9, "Purples")[6], "white", brewer.pal(9, "Oranges")[7]))(paletteLength) -->
+<!-- myBreaks <- c(seq(min(cor_mat, na.rm=T), 0, length.out = ceiling(paletteLength/2) + 1),  -->
+<!--               seq(max(cor_mat, na.rm=T)/paletteLength, max(cor_mat, na.rm=T), length.out = floor(paletteLength/2))) -->
+
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4, col = myColor, breaks = myBreaks, -->
+<!--          annotation_colors = my_guild_colours, annotation_col = my_guilds) -->
+
+
+<!-- cor_mat[upper.tri(cor_mat)] <- NA -->
+
+<!-- pairwise_cor <- as.data.frame(cor_mat) %>%  -->
+<!--   rownames_to_column("trait1") %>%  -->
+<!--   gather(trait2, corr, -trait1) %>% as_tibble() %>%  -->
+<!--   filter(!is.na(corr)) %>% arrange(-corr) -->
+
+
+
+<!-- Trait_guilds <- read_csv("data/derived/meta_data_for_all_traits.csv") %>% -->
+<!--   as.data.frame() %>%  -->
+<!--   select(Trait, `Trait guild`) %>%  -->
+<!--   filter(Trait %in% c(pairwise_cor$trait1, pairwise_cor$trait2)) %>%  -->
+<!--   filter(!(`Trait guild` %in% c("Genomic", "CHC", "Physiological"))) -->
+
+<!-- guild_corrs <- pairwise_cor %>%  -->
+<!--   left_join(Trait_guilds, c("trait1" = "Trait")) %>%  -->
+<!--   rename(guild1 = `Trait guild`) %>%  -->
+<!--   left_join(Trait_guilds, c("trait2" = "Trait")) %>%  -->
+<!--   rename(guild2 = `Trait guild`) %>%  -->
+<!--   filter(!is.na(guild1) & !is.na(guild2)) %>%  -->
+<!--   mutate(row=1:n()) %>%  -->
+<!--   group_by(row) %>%  -->
+<!--   mutate(guild_pair = paste0(sort(c(guild1, guild2)), collapse = " - ")) %>%  -->
+<!--   ungroup() %>% select(guild_pair, corr) %>% distinct() %>%  -->
+<!--   group_by(guild_pair) %>%  -->
+<!--   summarise(n = n(),  -->
+<!--             mean_corr = mean(corr), -->
+<!--             se_corr = sd(corr) / sqrt(length(corr)), -->
+<!--             mean_abs_corr = mean(abs(corr)), -->
+<!--             se_abs_corr = sd(abs(corr)) / sqrt(length(corr))) %>%  -->
+<!--   arrange(-mean_corr) -->
+
+<!-- guild_corrs %>%  -->
+<!--   filter(n >= 10) %>%  -->
+<!--   arrange(mean_abs_corr + se_corr) %>%   -->
+<!--   mutate(guild_pair = factor(guild_pair, guild_pair)) %>%  -->
+<!--   ggplot(aes(x = guild_pair, y = mean_abs_corr)) +  -->
+<!--   geom_errorbar(aes(ymin = mean_abs_corr - se_corr, ymax = mean_abs_corr + se_corr)) + -->
+<!--   geom_point() + coord_flip() + geom_hline(yintercept = 0, linetype = 2) -->
+
+<!-- xx <- guild_corrs %>%  -->
+<!--   select(guild1, guild2, mean_abs_corr) %>%  -->
+<!--   spread(guild1, mean_abs_corr) %>%  -->
+<!--   as.data.frame() -->
+<!-- rnames <- xx[,1] -->
+<!-- xx <- as.matrix(xx[,-1]) -->
+<!-- rownames(xx) <- rnames -->
+
+<!-- pheatmap(xx, cutree_rows = 3, cutree_cols = 3) -->
+
+<!-- my_guilds <- data.frame(row.names = Trait_guilds[, 1], Guild = Trait_guilds[, 2]) -->
+
+<!-- my_guild_colours <- list(Guild = c(`Activity` = "#EF9A9A", -->
+<!--                                    `Behavioural` = "#AB47BC", -->
+<!--                                    `CHC` = "#3F51B5", -->
+<!--                                    `Drug response` = "#26C6DA",  -->
+<!--                                    `Genomic` = "#00796B", -->
+<!--                                    `Insecticide response` = "#9CCC65", -->
+<!--                                    `Life history` = "#76FF03", -->
+<!--                                    `Metabolome` = "#FFEE58", -->
+<!--                                    `Microbiome` = "#FFCC80", -->
+<!--                                    `Morphological` = "#EF6C00", -->
+<!--                                    `Pathogen response` ="#DD2C00",   -->
+<!--                                    `Physiological` = "#6D4C41", -->
+<!--                                    `Sensory`  = "#D7CCC8", -->
+<!--                                    `Stress response` = "#EEEEEE", -->
+<!--                                    `Temperature related` = "#78909C")) -->
+
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat == 1] <- NA -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(chr == "3R" & position > 15116320 & position < 26745421)%>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "2L_9702238_SNP" | Variant == "3L_3266247_SNP") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "3L_835171_SNP" | Variant == "2L_12176995_DEL") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+
+
+<!-- significant_CPMA_table %>%  -->
+<!--   filter(Variant == "X_3522638_SNP" | Variant == "3L_9354041_SNP") %>%  -->
+<!--   kable() %>% kable_styling(full_width = F)  -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- significant_CPMA_by_chromosome <- left_join( -->
+<!--   str_split(SNPs_with_significant_CPMA, "_") %>% map_chr(~ .x[1]) %>% table() %>% enframe() %>% rename(n_significant_snps = value), -->
+<!--   str_split(all_snps, "_") %>% map_chr(~ .x[1]) %>% table() %>% enframe() %>% rename(n_total_snps = value)) %>% -->
+<!--   mutate(percent = 100 * n_significant_snps / n_total_snps) -->
+
+<!-- chisq.test(significant_CPMA_by_chromosome[,2:3]) -->
+
+<!-- significant_CPMA_by_SNP_type <- left_join( -->
+<!--   str_split(SNPs_with_significant_CPMA, "_") %>% map_chr(~ .x[3]) %>% table() %>% enframe()%>% rename(n_significant_snps = value), -->
+<!--   str_split(all_snps, "_") %>% map_chr(~ .x[3]) %>% table() %>% enframe()  %>% rename(n_total_snps = value))%>% -->
+<!--   mutate(percent_among_sig = 100 * n_significant_snps / sum(n_significant_snps), -->
+<!--          percent_among_total = 100 * n_total_snps / sum(n_total_snps)) -->
+
+
+
+
+<!-- left_join(tbl(db, "variants") %>% -->
+<!--             filter(SNP %in% all_snps) %>%  -->
+<!--             pull(site.class) %>% table() %>% enframe() %>% rename(n_significant_snps = value), -->
+<!--           tbl(db, "variants") %>% -->
+<!--             filter(SNP %in% SNPs_with_significant_CPMA) %>%  -->
+<!--             pull(site.class) %>% table() %>% enframe() %>% rename(n_total_snps = value)) %>% -->
+<!--   mutate( -->
+<!--     n_total_snps = replace(n_total_snps, is.na(n_total_snps), 0), -->
+<!--     percent_among_sig = 100 * n_significant_snps / sum(n_significant_snps), -->
+<!--     percent_among_total = 100 * n_total_snps / sum(n_total_snps), -->
+<!--     diff = log2(percent_among_sig / percent_among_total)) %>%  -->
+<!--   arrange(-percent_among_total) %>%  -->
+<!--   print(n=1000) -->
+
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- # Heatmap showing how the top pleiotropic SNPs affect all the traits -->
+<!-- snp_effects <- map_df(1:length(focal_gwas_files), -->
+<!--        ~ read_tsv(focal_gwas_files[.x], -->
+<!--                   col_types = c("c", "n", "n", "n")) %>% -->
+<!--          filter(SNP %in% SNPs_with_significant_CPMA) %>% -->
+<!--          mutate(trait = .x)) %>% -->
+<!--   left_join(tibble(trait_name = traits) %>% -->
+<!--               mutate(trait = 1:n()), by = "trait") %>% -->
+<!--   select(trait_name, SNP, BETA)  -->
+
+
+<!-- filtered_snp_effects <- snp_effects %>%  -->
+<!--   left_join(tbl(db, "variants") %>% filter(SNP %in% SNPs_with_significant_CPMA) %>% collect()) %>%  -->
+<!--   filter(!(chr == "3R" & position > 15116320 & position < 26745421)) %>%   -->
+<!--   select(trait_name, SNP, BETA) %>% distinct() -->
+
+<!-- xx <- spread(snp_effects, SNP, BETA) -->
+<!-- rr <- xx %>% pull(1) -->
+<!-- xx <- as.matrix(xx[,-1]) -->
+<!-- rownames(xx) <- rr -->
+<!-- library(pheatmap) -->
+<!-- cor_mat <- cor(t(xx), use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat==1] <- NA -->
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+
+<!-- cor_mat <- cor(xx, use = "pairwise.complete.obs") -->
+<!-- cor_mat[cor_mat==1] <- NA -->
+<!-- pheatmap(cor_mat, cutree_rows = 4, cutree_cols = 4) -->
+
+<!-- cor_mat %>% as.data.frame() %>%  -->
+<!--   rownames_to_column("snp1") %>% as_tibble() %>%  -->
+<!--   gather(snp2, corr, -snp1) %>% arrange((corr)) -->
+
+<!-- library(ggrepel) -->
+<!-- xx[, colnames(xx) %in% c("2L_9702238_SNP", "3L_3266247_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`2L_9702238_SNP`, `3L_3266247_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+
+<!-- xx[, colnames(xx) %in% c("3L_835171_SNP", "2L_12176995_DEL")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`3L_835171_SNP`, `2L_12176995_DEL`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+
+<!-- xx[, colnames(xx) %in% c("X_3522638_SNP", "3L_9354041_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`X_3522638_SNP`, `3L_9354041_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+
+<!-- xx[, colnames(xx) %in% c("3R_14722498_SNP", "3L_9354041_SNP")] %>%  -->
+<!--   as.data.frame() %>% rownames_to_column() %>%  -->
+<!--   ggplot(aes(`3R_14722498_SNP`, `3L_9354041_SNP`)) +  -->
+<!--   geom_hline(yintercept = 0, linetype = 2) + geom_vline(xintercept = 0, linetype = 2) +  -->
+<!--   geom_point() + geom_text_repel(aes(label = rowname), size = 2.2) -->
+
+
+<!-- ``` -->
