@@ -39,7 +39,8 @@ line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_
 We also provide and save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
 
 ```{r}
-tibble(Reference = unique(meta_data$Reference)) %>% 
+tibble(Reference = sort(unique(c(read_csv("data/input/all.line.mean.phenos_metadata.csv")$Reference,
+                            read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv")$Reference)))) %>% 
   write_csv("data/input/references_in_original_database.csv")
 ```
 
@@ -234,7 +235,7 @@ table <- all.dgrp.phenos_combined_subset %>%
   
 complete_metadata <- left_join(lines_measured, table) %>% 
   select(-line) %>% 
-  arrange(`Trait guild`, Trait)
+  arrange(`Trait guild`, Trait, Reference)
 
 all.dgrp.phenos_combined_subset %>% 
   select(line, Trait, trait_value, Reference) %>% 
