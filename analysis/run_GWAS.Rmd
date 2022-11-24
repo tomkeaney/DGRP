@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(bigsnpr) # to install:   devtools::install_github("privefl/bigsnpr")
 library(glue)
-plink <- file.path(getwd(), "code/plink") # I use plink v1.9
+plink <- file.path(getwd(), "code/plink") # I used plink v1.9 for MacOS, available here: https://www.cog-genomics.org/plink/
 options(readr.show_col_types = FALSE)
 
 
@@ -26,6 +26,51 @@ options(readr.show_col_types = FALSE)
 run_command <- function(shell_command, wd = getwd(), path = ""){
   cat(system(glue("cd ", wd, path, "\n", shell_command), intern = TRUE), sep = '\n')
 }
+
+save_manhattan_plot <- function(gwas_results, save_path){
+  
+  manhattan_data <- gwas_results %>%
+    mutate(position = str_split(SNP, "_"),
+           chr = map_chr(position, ~ .x[1]),
+           position = as.numeric(map_chr(position, ~ .x[2])),
+           pval = -1 * log10(P)) %>% 
+    select(chr, position, pval)
+  
+  max_pos <- manhattan_data %>%
+    group_by(chr) %>%
+    summarise(
+      max_pos = max(position), 
+      middle_pos = (max_pos - min(position)) / 2,
+      .groups = "drop") %>%
+    as.data.frame()
+  max_pos$max_pos <- c(0, cumsum(max_pos$max_pos[1:5]))
+  max_pos$label_pos <- max_pos$max_pos + max_pos$middle_pos
+  
+  manhattan_data <- manhattan_data %>%
+    left_join(max_pos, by = "chr") %>%
+    mutate(position = position + max_pos)
+  y_max <- max(manhattan_data$pval) * 1.08
+  
+  plot <- manhattan_data %>%
+    ggplot(aes(position, pval, group = chr, fill = chr, stroke = 0.05)) +
+    # geom_hline(yintercept = 5, linetype = 2, colour = "grey20") +
+    geom_point(size = 0.9, colour="grey20", pch = 21) +
+    scale_fill_brewer(palette = "Paired", name = "Chromosome") +
+    scale_x_continuous(breaks = max_pos$label_pos, labels = max_pos$chr) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, y_max)) +
+    ylab(expression(paste("-", log[10], " p value"))) + 
+    xlab("Chromosome and position") +
+    theme_bw() +
+    theme(legend.position = "none",
+          panel.grid.major.x = element_blank(), 
+          panel.grid.minor.x = element_blank(),
+          panel.border = element_blank(),
+          axis.ticks.x = element_blank()) 
+  
+  ggsave(filename = save_path, plot = plot, height = 6, width = 6)
+  rm(plot)
+}
+
 ```
 
 
@@ -125,7 +170,7 @@ line_mean_phenotypes <- line_mean_phenotypes %>%
 
 ## Create a reduced list of LD-pruned SNPs with PLINK
 
-To keep the computation time and memory usage manageable, we do not save the effect sizes for every variant (SNPs and indels) that passed the MAF and missingness quality control step above (i.e. 1,646,652 variants), but rather we save the effect sizes for a subset of variants that were approximately in linkage disequilibrium. We identified this LD-pruned set of variants using the PLINK arguments `--indep-pairwise 100 10 0.2`, i.e. pruning within 100kB sliding windows, sliding 10 variants along with each step, and allowing a maximum pairwise $r^2$ threshold of 0.2 between loci. With these parameters, 1,420,071 variants were removed, leaving 226,581 for downstream analysis. Subsequent inspection of the Manhattan plots suggests that this method removes most (but not all) nearby variants that are in complete or high LD.
+To keep the computation time and memory usage manageable, we do not save the effect sizes for every variant (SNPs and indels) that passed the MAF and missingness quality control step above (i.e. 1,646,652 variants), but rather we save the effect sizes for a subset of variants that were approximately in linkage disequilibrium. We identified this LD-pruned set of variants using the PLINK arguments `--indep-pairwise 100 10 0.2`, i.e. pruning within 100kB sliding windows, sliding 10 variants along with each step, and allowing a maximum pairwise $r^2$ threshold of 0.2 between loci. With these parameters, 1,420,071 variants were removed, leaving 226,581 for downstream analysis. Subsequent inspection of the Manhattan plots suggests that this method removes most (but not all) variants that are in complete or high LD.
 
 ```{r}
 # indep-pairwise arguments are: 
@@ -209,6 +254,10 @@ gwas_one_trait <- function(focal_phenotype){
   gwas_results <- read.table("gwas_data/derived/gwas_results/new.qassoc", 
                              header = TRUE) %>% 
     select(SNP, BETA, SE, P)
+  
+  # Save a Manhattan plot for this trait, using the all variants (not just the LD subset):
+  save_manhattan_plot(gwas_results,
+                      glue("gwas_data/derived/manhattan_plots/{focal_phenotype}.jpeg"))
   
   # If the trait has a "/" in the name it cannot work as a file name. Change the "/" to "_"
   # focal_phenotype <- str_replace_all(focal_phenotype, "[/]", "_")
