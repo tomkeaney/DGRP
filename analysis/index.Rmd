@@ -19,7 +19,9 @@ We document three different steps in our analysis:
 
 3. [Calculating 'SNP-heritability'](SNP_heritabilities.html), which details how we estimated heritability for each trait.
 
-4. [Cross phenotype meta analysis](cross_phenotype_meta_analysis.html), which details our CPMA analysis seraching for pleiotopic variants.
+4. [Running genome-wide association tests](run_gwas.html), which describes how GWA tests were run and shows some summary statistics.
+
+5. [Cross phenotype meta analysis](cross_phenotype_meta_analysis.html), which details our CPMA analysis seraching for pleiotopic variants.
 
 We also [provide a guide](How_to.html) to uploading your own data, so that this resource can remain current.
 
