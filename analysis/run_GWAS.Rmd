@@ -7,7 +7,7 @@ editor_options:
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(
-  message = FALSE, results='hide'
+  message = FALSE, warning = FALSE, results='hide'
 )
 ```
 
@@ -355,8 +355,7 @@ if(length(traits_to_run_for_gwas) > 0){
 
 The table shows various counts about the significant variants, as well as the mean and standard error MAF (minor allele frequency) for all the significant variants as well as the total set of variants that was used in the GWAS (i.e. all those with minor allele frequency >5% and missingness < 10%). Given that the choice of significance threshold is arbitrary, we use two different definitions of statistical significance: $P < 10^{-5}$ (which is used in many studies of the DGRP) and $P < 10^{-8}$ (which is commonly used in human GWAS).
 
-```{r}
-
+```{r results='show'}
 all_sig_snps <- read_tsv("gwas_data/derived/all_traits_significant_SNPs.tsv") %>% 
   left_join(read_csv("data/derived/meta_data_for_all_traits.csv"), by = c("trait" = "Trait"))
 
