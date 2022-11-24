@@ -303,3 +303,40 @@ unlink(c("gwas_data/derived/lines_to_keep.txt"))
 unlink(c("gwas_data/derived/gwas_results/new.qassoc", "gwas_data/derived/gwas_results/new.log"))
 ```
 
+
+```{r}
+if(length(traits_to_run_for_gwas) > 0){
+  
+  library(dbplyr)
+  library(DBI)
+  library(RSQLite)
+  db <- DBI::dbConnect(RSQLite::SQLite(),
+                       "~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3")
+  
+  top_hits_files <- list.files("gwas_data/derived/gwas_results", full.names = TRUE, pattern = "significant_SNPs")
+  
+  add_annotation <- function(filepath){
+    focal <- read_tsv(filepath) %>% 
+      arrange(P)
+    snp_order <- focal$SNP
+    trait <- str_remove_all(filepath, "gwas_data[/]derived[/]gwas_results[/]")
+    trait <- str_remove_all(trait, "_significant_SNPs[.]tsv[.]gz")
+    print(trait)
+    tbl(db, "variants") %>% 
+      filter(SNP %in% !!focal$SNP) %>% 
+      select(-chr, -position) %>% 
+      collect() %>% 
+      left_join(focal, by = "SNP") %>% 
+      mutate(log10_P = -1 * log10(P),
+             SNP = factor(SNP, snp_order)) %>% 
+      arrange(SNP) %>% 
+      rename_all(~ str_replace_all(.x, "[.]", "_")) %>% 
+      mutate(trait = trait, .before = 1)
+    
+  }
+  
+  map_df(top_hits_files, add_annotation) %>% 
+    write_tsv("gwas_data/derived/gwas_results/all_traits_significant_SNPs.tsv")
+}
+```
+
