@@ -49,21 +49,25 @@ my_data_table <- function(df){
     )
   )
 }
+
+# A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines
+get_independent_traits <- function(){
+  set.seed(1) # Set the seed for reproducibility
+  read_csv("data/derived/meta_data_for_all_traits.csv") %>%
+    # restrict to only papers in the original database, i.e. not those added post-publication:
+    filter(Reference %in% read_csv("data/input/references_in_original_database.csv")$Reference) %>% 
+    filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
+    group_by(Reference) %>%
+    sample_n(1) %>% # Randomly sample one phenotype per study
+    pull(Trait) %>% sort() 
+}
 ```
 
 ## Load necessary datasets
 
 ```{r echo=F}
 # A hidden code chunk, to count the number of independent phenotypes
-
-set.seed(1)
-independent_traits <- read_csv("data/derived/meta_data_for_all_traits.csv") %>%
-  filter(`# lines measured` >= 120) %>% # Only analyse traits that measured at least 80 lines
-  group_by(Reference) %>%
-  sample_n(1) %>% # Randomly sample one phenotype per study
-  pull(Trait) %>% sort() 
-
-n_independent_traits <- independent_traits %>% length()
+n_independent_traits <- get_independent_traits() %>% length()
 ```
 
 Here we load a database of DGRP variant and gene annotations (prepared in the script XXXX from data from annotation hub and the Mackay lab website), as well as the GWAS summary statistics for a subset of all the phenotypic traits that were measured. 
@@ -74,15 +78,11 @@ Because GWAS summary statistics for different phenotypes collected in the same s
 db <- DBI::dbConnect(RSQLite::SQLite(),
                      "~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3")
 
-set.seed(1) # Set the seed, so the random choice of phenotypes is reproducible
-independent_traits <- read_csv("data/derived/meta_data_for_all_traits.csv") %>%
-  filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
-  group_by(Reference) %>%
-  sample_n(1) %>% # Randomly sample one phenotype per study
-  pull(Trait) %>% sort()
+# Randomly select one trait per study, from among the traits measured in at least 80 DGRP lines
+independent_traits <- get_independent_traits()
 
 # Get the list of GWAS summary statistics files, and the trait names found in those files' names
-# Just get the files with LD-prunced list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)
+# Just get the files with LD-pruned list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)
 all_gwas_files <- list.files("gwas_data/derived/gwas_results", full.names = T)
 all_gwas_files <- all_gwas_files[grepl("tsv", all_gwas_files) & 
                                    !grepl("_significant_SNPs", all_gwas_files)]
@@ -94,17 +94,19 @@ focal_gwas_files <- all_gwas_files[which(gwas_trait_names %in% independent_trait
 
 # Get the SNP names out of the first GWAS file, and count the SNPs
 all_snps <- read_tsv(focal_gwas_files[1]) %>% pull(SNP)
-n_snps <- length(all_snps) # 224159
+n_snps <- length(all_snps) 
 ```
 
-## Calculate cross-phenotype meta-analysis (CPMA) statistic for each SNP
+## Calculate cross-phenotype meta-analysis (CPMA) statistic for each variant
 
 This analysis uses the CPMA method proposed by [Cotsapas et al. 2011 PLoS Genetics, e1002254] (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3154137/), which takes as its input the $p$-values from a set of $n$ independent association tests for $n$ different phenotypes (here, $n =$ `r n_independent_traits`). 
 
-Cotsapas et al. noted that for a SNP which has no effect on any of the $n$ traits, the $p$-values from the $n$ association tests are expected to be uniformly distributed, which means that the $-ln(x)$ transformed $p$-values are expected to be exponentially distributed with rate parameter $\lambda = 1$. In contrast, if the focal SNP is associated with one or more of the $n$ traits, the $-log(x)$ transformed $p$-values are no longer expected to follow an exponential distribution with $\lambda = 1$. Cotsapas et al. propose testing between the null expectation ($\lambda = 1$) and the observed value of $\lambda$, termed $\hat{\lambda}$ (which can be found via the maximum likelihood estimator, $\hat{\lambda} = \frac{n}{sum(x)}$) using a likelihood ratio test as follows:
+Cotsapas et al. noted that for a variant which has no effect on any of the $n$ traits, the $p$-values from the $n$ association tests are expected to be uniformly distributed, which means that the $-ln(x)$ transformed $p$-values are expected to be exponentially distributed with rate parameter $\lambda = 1$. In contrast, if the focal variant is associated with one or more of the $n$ traits, the $-ln(x)$ transformed $p$-values are no longer expected to follow an exponential distribution with $\lambda = 1$. Cotsapas et al. propose testing between the null expectation ($\lambda = 1$) and the observed value of $\lambda$, termed $\hat{\lambda}$ (which can be found via the maximum likelihood estimator, $\hat{\lambda} = \frac{n}{sum(x)}$) using a likelihood ratio test as follows:
 
 $$CPMA = -2 \frac{P(p_1,p_2,...,p_n)|\lambda=1)}{P(p_1,p_2,...,p_n)|\lambda=\hat{\lambda})}$$ 
-The CPMA test statistic is expected to be $\chi^2$ distributed (via [Wilk's theorem](https://en.wikipedia.org/wiki/Wilks%27_theorem)) with 1 degree of freedom, allowing calculation of a $p$-value for the null hypothesis that none of the $n$ traits are associated with the focal SNP. If the CPMA test statistic is high enough that one should reject the null hypothesis, this implies that the focal SNP is associated with one or more of $n$ phenotypes.
+The CPMA test statistic is expected to be $\chi^2$ distributed (via [Wilk's theorem](https://en.wikipedia.org/wiki/Wilks%27_theorem)) with 1 degree of freedom, allowing calculation of a $p$-value for the null hypothesis that none of the $n$ traits are associated with the focal variant If the CPMA test statistic is high enough that one should reject the null hypothesis, this implies that the focal variant is associated with one or more of $n$ phenotypes.
+
+In the code below, we calculate the CPMA test statistic and p-value for each of the `r n_snps` variants in the LD-pruned subset.
 
 ```{r compute_CPMA}
 find_likelihood <- function(logged_p, lambda) (lambda ^ length(logged_p)) * (exp(-1 * lambda * sum(logged_p)))
@@ -125,7 +127,7 @@ compute_CPMA <- function(p){
 }
 
 # This function finds the weighted mean effect size and the CPMA statistic for every variant in the i'th chunk of variants
-# The weighted mean effect size is the means effect size of the focal SNP on all the traits (called BETA in Plink's output),
+# The weighted mean effect size is the means effect size of the focal variant on all the traits (called BETA in Plink's output),
 # weighted by 1 over the standard error of the the effect size estimates.
 do_snp_chunk <- function(i){
   focal_snps <- chunked_snps[[i]]
