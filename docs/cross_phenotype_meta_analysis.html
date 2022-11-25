@@ -517,7 +517,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-11-01
+<strong>Last updated:</strong> 2022-11-25
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -648,15 +648,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreecf92cc8cc33874f235ed7dbcd105a16f06e1e700targetblankcf92cc8a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree5175c382a8db86202246bc3efb2089ab76ae4354targetblank5175c38a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/cf92cc8cc33874f235ed7dbcd105a16f06e1e700" target="_blank">cf92cc8</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/5175c382a8db86202246bc3efb2089ab76ae4354" target="_blank">5175c38</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreecf92cc8cc33874f235ed7dbcd105a16f06e1e700targetblankcf92cc8a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree5175c382a8db86202246bc3efb2089ab76ae4354targetblank5175c38a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -666,7 +666,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/cf92cc8cc33874f235ed7dbcd105a16f06e1e700" target="_blank">cf92cc8</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/5175c382a8db86202246bc3efb2089ab76ae4354" target="_blank">5175c38</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -687,20 +687,52 @@ Ignored files:
     Ignored:    data/derived/.DS_Store
     Ignored:    data/input/.DS_Store
     Ignored:    fits/
+    Ignored:    gwas_data/.DS_Store
+    Ignored:    gwas_data/derived/.DS_Store
 
 Untracked files:
     Untracked:  analysis/exporting GWAS stats for the app.R
     Untracked:  analysis/luke_cluster_ideas.R
     Untracked:  analysis/luke_weighted_beta_ideas.R
-    Untracked:  data/derived/cmpa_snp_ld_matrix.rds
+    Untracked:  data/derived/correlation_SEs.rds
     Untracked:  data/imputed_data.RData
-    Untracked:  gwas_data/
+    Untracked:  gwas_data/README.md
+    Untracked:  gwas_data/derived/bivariate_greml_results.tsv
+    Untracked:  gwas_data/derived/delete_me.hsq
+    Untracked:  gwas_data/derived/delete_me.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.fam
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.fam
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.rds
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.fam
+    Untracked:  gwas_data/derived/gcta_GRM.grm.N.bin
+    Untracked:  gwas_data/derived/gcta_GRM.grm.bin
+    Untracked:  gwas_data/derived/gcta_GRM.grm.id
+    Untracked:  gwas_data/derived/gcta_GRM.log
+    Untracked:  gwas_data/derived/gwas_results/
+    Untracked:  gwas_data/derived/luke_phenotype.txt
+    Untracked:  gwas_data/derived/manhattan_plots/
+    Untracked:  gwas_data/derived/phenotype.txt
+    Untracked:  gwas_data/derived/phenotype_pair.txt
+    Untracked:  gwas_data/derived/plink.frq
+    Untracked:  gwas_data/derived/plink.log
+    Untracked:  gwas_data/derived/plink.prune.in
+    Untracked:  gwas_data/derived/test_null.log
+    Untracked:  gwas_data/input/
+    Untracked:  iris.csv
     Untracked:  test.pdf
     Untracked:  test2.pdf
+    Untracked:  test3.pdf
 
 Unstaged changes:
     Modified:   analysis/Trait_correlations.Rmd
-    Modified:   analysis/run_GWAS.Rmd
 
 </code></pre>
 <p>
@@ -747,6 +779,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/5175c382a8db86202246bc3efb2089ab76ae4354/analysis/cross_phenotype_meta_analysis.Rmd" target="_blank">5175c38</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-25
+</td>
+<td>
+Tweak text explaining code
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/cross_phenotype_meta_analysis.html" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -808,7 +874,19 @@ wflow_publish("analysis/cross_phenotype_meta_analysis.Rmd")
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">pageLength =</span> <span class="dv">79</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>get_independent_traits <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">1</span>) <span class="co"># Set the seed for reproducibility</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># restrict to only papers in the original database, i.e. not those added post-publication:</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Reference <span class="sc">%in%</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/input/references_in_original_database.csv&quot;</span>)<span class="sc">$</span>Reference) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="st">`</span><span class="at"># lines measured</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="dv">80</span>) <span class="sc">%&gt;%</span> <span class="co"># Only analyse traits that measured at least 80 lines</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Reference) <span class="sc">%&gt;%</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="co"># Randomly sample one phenotype per study</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(Trait) <span class="sc">%&gt;%</span> <span class="fu">sort</span>() </span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="load-necessary-datasets" class="section level2">
 <h2>Load necessary datasets</h2>
@@ -827,37 +905,33 @@ affects two different phenotypes is likely to reflect genetic processes
 such as pleiotropy, as opposed to spurious effects related to
 environmental similarities between the two measurements. We also only
 include GWAS summary statistics for GWAS computed using at least 80 DGRP
-lines. This thinning process left 80 traits for analysis.</p>
+lines. This thinning process left 92 traits for analysis.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(),</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>) <span class="co"># Set the seed, so the random choice of phenotypes is reproducible</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>independent_traits <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at"># lines measured</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="dv">80</span>) <span class="sc">%&gt;%</span> <span class="co"># Only analyse traits that measured at least 80 lines</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Reference) <span class="sc">%&gt;%</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="co"># Randomly sample one phenotype per study</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Trait) <span class="sc">%&gt;%</span> <span class="fu">sort</span>()</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of GWAS summary statistics files, and the trait names found in those files&#39; names</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Just get the files with LD-prunced list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results&quot;</span>, <span class="at">full.names =</span> T)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">grepl</span>(<span class="st">&quot;tsv&quot;</span>, all_gwas_files) <span class="sc">&amp;</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                                   <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;_significant_SNPs&quot;</span>, all_gwas_files)]</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>gwas_trait_names <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(all_gwas_files, </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                                                  <span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>), <span class="st">&quot;[.]tsv[.]gz&quot;</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Here is the list of GWAS files/traits to be analysed (i.e. those in &quot;independent_traits&quot;)</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>focal_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">which</span>(gwas_trait_names <span class="sc">%in%</span> independent_traits)]</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the SNP names out of the first GWAS file, and count the SNPs</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>all_snps <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(focal_gwas_files[<span class="dv">1</span>]) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(SNP)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>n_snps <span class="ot">&lt;-</span> <span class="fu">length</span>(all_snps) <span class="co"># 224159</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Randomly select one trait per study, from among the traits measured in at least 80 DGRP lines</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>independent_traits <span class="ot">&lt;-</span> <span class="fu">get_independent_traits</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of GWAS summary statistics files, and the trait names found in those files&#39; names</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Just get the files with LD-pruned list of SNPs, not the files with the significant SNPs (since these are different SNPs for different traits)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results&quot;</span>, <span class="at">full.names =</span> T)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>all_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">grepl</span>(<span class="st">&quot;tsv&quot;</span>, all_gwas_files) <span class="sc">&amp;</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                   <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;_significant_SNPs&quot;</span>, all_gwas_files)]</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>gwas_trait_names <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(all_gwas_files, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                                  <span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>), <span class="st">&quot;[.]tsv[.]gz&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Here is the list of GWAS files/traits to be analysed (i.e. those in &quot;independent_traits&quot;)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>focal_gwas_files <span class="ot">&lt;-</span> all_gwas_files[<span class="fu">which</span>(gwas_trait_names <span class="sc">%in%</span> independent_traits)]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the SNP names out of the first GWAS file, and count the SNPs</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>all_snps <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(focal_gwas_files[<span class="dv">1</span>]) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(SNP)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>n_snps <span class="ot">&lt;-</span> <span class="fu">length</span>(all_snps) </span></code></pre></div>
 </div>
 <div
-id="calculate-cross-phenotype-meta-analysis-cpma-statistic-for-each-snp"
+id="calculate-cross-phenotype-meta-analysis-cpma-statistic-for-each-variant"
 class="section level2">
 <h2>Calculate cross-phenotype meta-analysis (CPMA) statistic for each
-SNP</h2>
+variant</h2>
 <p>This analysis uses the CPMA method proposed by [Cotsapas et al. 2011
 PLoS Genetics, e1002254] (<a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3154137/"
@@ -866,18 +940,18 @@ which takes as its input the <span
 class="math inline">\(p\)</span>-values from a set of <span
 class="math inline">\(n\)</span> independent association tests for <span
 class="math inline">\(n\)</span> different phenotypes (here, <span
-class="math inline">\(n =\)</span> 80).</p>
-<p>Cotsapas et al. noted that for a SNP which has no effect on any of
-the <span class="math inline">\(n\)</span> traits, the <span
+class="math inline">\(n =\)</span> 92).</p>
+<p>Cotsapas et al. noted that for a variant which has no effect on any
+of the <span class="math inline">\(n\)</span> traits, the <span
 class="math inline">\(p\)</span>-values from the <span
 class="math inline">\(n\)</span> association tests are expected to be
 uniformly distributed, which means that the <span
 class="math inline">\(-ln(x)\)</span> transformed <span
 class="math inline">\(p\)</span>-values are expected to be exponentially
 distributed with rate parameter <span class="math inline">\(\lambda =
-1\)</span>. In contrast, if the focal SNP is associated with one or more
-of the <span class="math inline">\(n\)</span> traits, the <span
-class="math inline">\(-log(x)\)</span> transformed <span
+1\)</span>. In contrast, if the focal variant is associated with one or
+more of the <span class="math inline">\(n\)</span> traits, the <span
+class="math inline">\(-ln(x)\)</span> transformed <span
 class="math inline">\(p\)</span>-values are no longer expected to follow
 an exponential distribution with <span class="math inline">\(\lambda =
 1\)</span>. Cotsapas et al. propose testing between the null expectation
@@ -895,10 +969,12 @@ href="https://en.wikipedia.org/wiki/Wilks%27_theorem">Wilk’s
 theorem</a>) with 1 degree of freedom, allowing calculation of a <span
 class="math inline">\(p\)</span>-value for the null hypothesis that none
 of the <span class="math inline">\(n\)</span> traits are associated with
-the focal SNP. If the CPMA test statistic is high enough that one should
-reject the null hypothesis, this implies that the focal SNP is
-associated with one or more of <span class="math inline">\(n\)</span>
+the focal variant If the CPMA test statistic is high enough that one
+should reject the null hypothesis, this implies that the focal variant
+is associated with one or more of <span class="math inline">\(n\)</span>
 phenotypes.</p>
+<p>In the code below, we calculate the CPMA test statistic and p-value
+for each of the 224159 variants in the LD-pruned subset.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>find_likelihood <span class="ot">&lt;-</span> <span class="cf">function</span>(logged_p, lambda) (lambda <span class="sc">^</span> <span class="fu">length</span>(logged_p)) <span class="sc">*</span> (<span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> lambda <span class="sc">*</span> <span class="fu">sum</span>(logged_p)))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>find_max_likelihood_lambda <span class="ot">&lt;-</span> <span class="cf">function</span>(logged_p) <span class="fu">length</span>(logged_p) <span class="sc">/</span> <span class="fu">sum</span>(logged_p)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -917,7 +993,7 @@ phenotypes.</p>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># This function finds the weighted mean effect size and the CPMA statistic for every variant in the i&#39;th chunk of variants</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># The weighted mean effect size is the means effect size of the focal SNP on all the traits (called BETA in Plink&#39;s output),</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># The weighted mean effect size is the means effect size of the focal variant on all the traits (called BETA in Plink&#39;s output),</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># weighted by 1 over the standard error of the the effect size estimates.</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>do_snp_chunk <span class="ot">&lt;-</span> <span class="cf">function</span>(i){</span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  focal_snps <span class="ot">&lt;-</span> chunked_snps[[i]]</span>
@@ -1040,6 +1116,43 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1448838/">Sezgin et
 al. 2004, <em>Genetics</em></a>).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(ld_matrix, <span class="at">cutree_rows =</span> <span class="dv">2</span>, <span class="at">cutree_cols =</span> <span class="dv">2</span>, <span class="at">cellwidth =</span> <span class="dv">8</span>, <span class="at">cellheight =</span> <span class="dv">8</span>)</span></code></pre></div>
 <p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-7-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>When we exclude all the variants in the cluster from the previous
 heatmap and plot the remaining pairwise linkage disequilbrium (<span
 class="math inline">\(R^2\)</span>) values in a histogram, we see that
@@ -1066,6 +1179,43 @@ the genome that have pleiotropic effects on multiple traits.</p>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">&quot;skyblue&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey20&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span> (<span class="st">&quot;Pairwise linkage disequilibrium&quot;</span><span class="sc">~</span>R<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Frequency&quot;</span>)</span></code></pre></div>
 <p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-8-1.png" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!-- Code that we used to see which genes lay inside the low-LD region on 3R -->
 <!-- ```{r} -->
 <!-- region <- tbl(db, "variants") %>% filter(chr== "3R") %>%  -->
@@ -1088,7 +1238,7 @@ the genome that have pleiotropic effects on multiple traits.</p>
 <h4>Displaying the significant variants</h4>
 <p>This interactive table shows information about each of the 67
 variants that had a higher CPMA score than expected under the null
-hypothesis that the variant was not associated with any of the 80
+hypothesis that the variant was not associated with any of the 92
 phenotypic traits used to compute our CPMA statistic (with <span
 class="math inline">\(p &lt; 10^{-5}\)</span>). Of these 67 variants
 with <span class="math inline">\(p &lt; 10^{-5}\)</span>, 6 were
@@ -1254,6 +1404,43 @@ common near the centromere.</p>
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>())</span>
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>plot</span></code></pre></div>
 <p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="were-any-of-these-cpma-significant-variants-previously-identified-in-univariate-gwas"
@@ -1266,7 +1453,7 @@ identified here were already identified in univariate GWAS (with <span
 class="math inline">\(p &lt; 10^{-5}\)</span> or better), due to having
 a strong enough association with one or more individual phenotypes. Of
 the 67 CPMA-significant variants, only 5 were significantly associated
-with one of the 80 tested phenotypes with <span class="math inline">\(p
+with one of the 92 tested phenotypes with <span class="math inline">\(p
 &lt; 10^{-5}\)</span>, as shown in this table of <code>plink</code>
 univariate association test results filtered for <span
 class="math inline">\(p &lt; 10^{-5}\)</span>. Thus, 62/67 of the
@@ -1406,7 +1593,7 @@ class="section level3">
 <h3>Heatmap between all pairs of significant pleiotropic variants</h3>
 <p>The heatmap shows the correlations in association test <span
 class="math inline">\(-log_{10}\)</span> p-values between variants on
-each of the 80 phenotypic traits, for all the weakly-linked variants
+each of the 92 phenotypic traits, for all the weakly-linked variants
 with a significant CPMA test statistics (<span class="math inline">\(p
 &lt; 10^{-5}\)</span>). A positive correlation between two pleiotropic
 variants means that the variants tend to show stronger associations with
@@ -1457,6 +1644,43 @@ different phenotypes).</p>
 <span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">cellwidth =</span> <span class="fl">7.6</span>, <span class="at">cellheight =</span> <span class="fl">7.6</span>,</span>
 <span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">cutree_cols =</span> <span class="dv">2</span>, <span class="at">col =</span> myColor, <span class="at">breaks =</span> myBreaks)</span></code></pre></div>
 <p><img src="figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/figure/cross_phenotype_meta_analysis.Rmd/unnamed-chunk-13-1.png" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="pairwise-plots-showing-variant-associations-with-different-phenotypes"
@@ -1557,6 +1781,43 @@ associate with discrete sets of traits.</p>
 <span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(bottom_correlations<span class="sc">$</span>snp1[<span class="dv">1</span>], bottom_correlations<span class="sc">$</span>snp2[<span class="dv">1</span>], <span class="fu">paste</span>(<span class="st">&quot;C.&quot;</span>, bottom_correlations<span class="sc">$</span>cor[<span class="dv">1</span>])),</span>
 <span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_repel_plot</span>(bottom_correlations<span class="sc">$</span>snp1[<span class="dv">2</span>], bottom_correlations<span class="sc">$</span>snp2[<span class="dv">2</span>], <span class="fu">paste</span>(<span class="st">&quot;D.&quot;</span>, bottom_correlations<span class="sc">$</span>cor[<span class="dv">2</span>])))</span></code></pre></div>
 <p><img src="figure/cross_phenotype_meta_analysis.Rmd/pairwise_plots-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise_plots-1">
+Past versions of pairwise_plots-1.png
+</button>
+</p>
+<div id="fig-pairwise_plots-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/1cf7daa6e6a23a8fc489683ccd4482a978a0a6fb/docs/figure/cross_phenotype_meta_analysis.Rmd/pairwise_plots-1.png" target="_blank">1cf7daa</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <!-- ```{r} -->
 <!-- # Heatmap showing how the top pleiotropic SNPs affect all the traits -->
 <!-- xx <- spread(snp_effects, SNP, BETA) #  %>% mutate(BETA=abs(BETA)) -->
