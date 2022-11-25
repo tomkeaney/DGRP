@@ -499,7 +499,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-11-24
+<strong>Last updated:</strong> 2022-11-25
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -630,15 +630,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree397bafec698144c3a28f284bf81639f0c77e6ef8targetblank397bafea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeb3a5ebea4d492b0c30762066a635b042a3bfa4a3targetblankb3a5ebea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/397bafec698144c3a28f284bf81639f0c77e6ef8" target="_blank">397bafe</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/b3a5ebea4d492b0c30762066a635b042a3bfa4a3" target="_blank">b3a5ebe</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree397bafec698144c3a28f284bf81639f0c77e6ef8targetblank397bafea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreeb3a5ebea4d492b0c30762066a635b042a3bfa4a3targetblankb3a5ebea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -648,7 +648,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/397bafec698144c3a28f284bf81639f0c77e6ef8" target="_blank">397bafe</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/b3a5ebea4d492b0c30762066a635b042a3bfa4a3" target="_blank">b3a5ebe</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -761,6 +761,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/b3a5ebea4d492b0c30762066a635b042a3bfa4a3/analysis/run_GWAS.Rmd" target="_blank">b3a5ebe</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-25
+</td>
+<td>
+Tweak GWAS summary tables
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/976dd522c94b3026593f0252399cad5bd232c804/docs/run_GWAS.html" target="_blank">976dd52</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-11-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1274,6 +1308,11 @@ accessible on the Github repository.</p>
 <div id="various-summary-statistics-about-the-significant-variants"
 class="section level3">
 <h3>Various summary statistics about the significant variants</h3>
+<div
+id="version-of-the-table-that-is-correct-with-the-originally-published-dataset"
+class="section level4">
+<h4>Version of the table that is correct with the originally-published
+dataset:</h4>
 <p>The table shows various counts about the significant variants, as
 well as the mean and standard error MAF (minor allele frequency) for all
 the significant variants as well as the total set of variants that was
@@ -1284,80 +1323,99 @@ significance: <span class="math inline">\(P &lt; 10^{-5}\)</span> (which
 is used in many studies of the DGRP) and <span class="math inline">\(P
 &lt; 10^{-8}\)</span> (which is commonly used in human GWAS).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>all_sig_snps <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;gwas_data/derived/all_traits_significant_SNPs.tsv&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;trait&quot;</span> <span class="ot">=</span> <span class="st">&quot;Trait&quot;</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(meta_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;trait&quot;</span> <span class="ot">=</span> <span class="st">&quot;Trait&quot;</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>get_independent_traits <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">1</span>) <span class="co"># Set the seed for reproducibility</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># restrict to only papers in the original database, i.e. not those added post-publication:</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Reference <span class="sc">%in%</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/input/references_in_original_database.csv&quot;</span>)<span class="sc">$</span>Reference) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="st">`</span><span class="at"># lines measured</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="dv">80</span>) <span class="sc">%&gt;%</span> <span class="co"># Only analyse traits that measured at least 80 lines</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Reference) <span class="sc">%&gt;%</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sample_n</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="co"># Randomly sample one phenotype per study</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(Trait) <span class="sc">%&gt;%</span> <span class="fu">sort</span>() </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>mean_and_SE <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  mean_x <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">2</span>), <span class="at">nsmall =</span> <span class="dv">2</span>)</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  se_x <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(x)), <span class="dv">3</span>), <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(se_x <span class="sc">==</span> <span class="st">&quot;0.000&quot;</span>) se_x <span class="ot">&lt;-</span> <span class="st">&quot;&lt;0.001&quot;</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(mean_x, <span class="st">&quot; (&quot;</span>, se_x, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>maf_all_snps_tests <span class="ot">&lt;-</span> <span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(MAF <span class="sc">&gt;</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(MAF) <span class="sc">%&gt;%</span> <span class="fu">mean_and_SE</span>()</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>make_tally_table <span class="ot">&lt;-</span> <span class="cf">function</span>(all_sig_snps){</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  prettify <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">format</span>(x, <span class="at">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  num_traits_affected <span class="ot">&lt;-</span> all_sig_snps <span class="sc">%&gt;%</span> </span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(SNP, trait) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) </span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  num_traits_affected_indep <span class="ot">&lt;-</span> all_sig_snps <span class="sc">%&gt;%</span> </span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(trait <span class="sc">%in%</span> <span class="fu">get_independent_traits</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(SNP, trait) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) </span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_2_studies <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected, n) <span class="sc">==</span> <span class="dv">2</span>)</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_3_studies <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected, n) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_2_studies_indep <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected_indep, n) <span class="sc">==</span> <span class="dv">2</span>)</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_3_studies_indep <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected_indep, n) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_2_studies <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">prettify</span>(num_snps_sig_in_2_studies), <span class="st">&quot; (&quot;</span>, num_snps_sig_in_2_studies_indep, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  num_snps_sig_in_3_studies <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">prettify</span>(num_snps_sig_in_3_studies), <span class="st">&quot; (&quot;</span>, num_snps_sig_in_3_studies_indep, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of studies with at least one significant SNP</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(Reference) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>(),</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of phenotypic traits with at least one significant SNP</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(trait) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>(),</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of variants significantly associated with at least one phenotypic trait</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(SNP) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">prettify</span>(),</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of variants significantly associated with two phenotypic traits (which were measured in different studies)</span><span class="st">`</span> <span class="ot">=</span> num_snps_sig_in_2_studies,</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of variants significantly associated with more than two phenotypic traits (which were measured in different studies)</span><span class="st">`</span> <span class="ot">=</span> num_snps_sig_in_3_studies,</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Number of genes close to one of the significant variants</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(FBID)) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(FBID) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">prettify</span>(),</span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">MAF of the significant variants (mean and SE)</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(SNP, MAF) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(MAF) <span class="sc">%&gt;%</span> <span class="fu">mean_and_SE</span>(),</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">MAF of all variants included in the GWAS (mean and SE)</span><span class="st">`</span> <span class="ot">=</span> maf_all_snps_tests) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(Quantity, n)</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  all_sig_snps <span class="sc">%&gt;%</span> </span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_tally_table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">`</span><span class="at">Using p &lt; 10-5</span><span class="st">`</span> <span class="ot">=</span> n),</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  all_sig_snps <span class="sc">%&gt;%</span> </span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(log10_P <span class="sc">&gt;=</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make_tally_table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="st">`</span><span class="at">Using p &lt; 10-8</span><span class="st">`</span> <span class="ot">=</span> n), </span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;Quantity&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>make_full_tally_table <span class="ot">&lt;-</span> <span class="cf">function</span>(all_sig_snps){</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Count number of GWAS that were run</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  gwas_results_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  gwas_results_files <span class="ot">&lt;-</span> gwas_results_files[<span class="sc">!</span><span class="fu">str_detect</span>(gwas_results_files, <span class="st">&quot;_significant_SNPs&quot;</span>)]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  gwas_results_files <span class="ot">&lt;-</span> gwas_results_files[<span class="sc">!</span><span class="fu">str_detect</span>(gwas_results_files, <span class="st">&quot;log[.]txt&quot;</span>)]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  num_gwas_run <span class="ot">&lt;-</span> <span class="fu">length</span>(gwas_results_files)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Count number of unique studies that provided data for GWAS</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  num_unique_studies_used_for_gwas <span class="ot">&lt;-</span> meta_data <span class="sc">%&gt;%</span> </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Trait <span class="sc">%in%</span> <span class="fu">str_remove_all</span>(gwas_results_files, <span class="st">&quot;[.]tsv[.]gz&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(Reference) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  get_independent_traits <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">1</span>) <span class="co"># Set the seed for reproducibility</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_csv</span>(<span class="st">&quot;data/derived/meta_data_for_all_traits.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="st">`</span><span class="at"># lines measured</span><span class="st">`</span> <span class="sc">&gt;=</span> <span class="dv">80</span>) <span class="sc">%&gt;%</span> <span class="co"># Only analyse traits that measured at least 80 lines</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(Reference) <span class="sc">%&gt;%</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sample_n</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="co"># Randomly sample one phenotype per study</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pull</span>(Trait) <span class="sc">%&gt;%</span> <span class="fu">sort</span>() </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  mean_and_SE <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    mean_x <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">mean</span>(x), <span class="dv">2</span>), <span class="at">nsmall =</span> <span class="dv">2</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    se_x <span class="ot">&lt;-</span> <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(x)), <span class="dv">3</span>), <span class="at">nsmall =</span> <span class="dv">3</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(se_x <span class="sc">==</span> <span class="st">&quot;0.000&quot;</span>) se_x <span class="ot">&lt;-</span> <span class="st">&quot;&lt;0.001&quot;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(mean_x, <span class="st">&quot; (&quot;</span>, se_x, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  maf_all_snps_tests <span class="ot">&lt;-</span> <span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(MAF <span class="sc">&gt;</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(MAF) <span class="sc">%&gt;%</span> <span class="fu">mean_and_SE</span>()</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  make_tally_table <span class="ot">&lt;-</span> <span class="cf">function</span>(all_sig_snps){</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    prettify <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">format</span>(x, <span class="at">big.mark=</span><span class="st">&quot;,&quot;</span>)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    num_traits_affected <span class="ot">&lt;-</span> all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">distinct</span>(SNP, trait) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) </span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    num_traits_affected_indep <span class="ot">&lt;-</span> all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(trait <span class="sc">%in%</span> <span class="fu">get_independent_traits</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">distinct</span>(SNP, trait) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(SNP) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) </span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_2_studies <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected, n) <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_3_studies <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected, n) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_2_studies_indep <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected_indep, n) <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_3_studies_indep <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">pull</span>(num_traits_affected_indep, n) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_2_studies <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">prettify</span>(num_snps_sig_in_2_studies), <span class="st">&quot; (&quot;</span>, num_snps_sig_in_2_studies_indep, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    num_snps_sig_in_3_studies <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">prettify</span>(num_snps_sig_in_3_studies), <span class="st">&quot; (&quot;</span>, num_snps_sig_in_3_studies_indep, <span class="st">&quot;)&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of studies that provided data for GWA tests</span><span class="st">`</span> <span class="ot">=</span> num_unique_studies_used_for_gwas,</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of traits analysed using GWA tests</span><span class="st">`</span> <span class="ot">=</span> num_gwas_run,</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of studies with at least one significant SNP</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(Reference) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>(),</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of phenotypic traits with at least one significant SNP</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(trait) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>(),</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of variants significantly associated with at least one phenotypic trait</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(SNP) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">prettify</span>(),</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of variants significantly associated with two phenotypic traits (which were measured in different studies)</span><span class="st">`</span> <span class="ot">=</span> num_snps_sig_in_2_studies,</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of variants significantly associated with more than two phenotypic traits (which were measured in different studies)</span><span class="st">`</span> <span class="ot">=</span> num_snps_sig_in_3_studies,</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Number of genes close to one of the significant variants</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(FBID)) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(FBID) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>() <span class="sc">%&gt;%</span> <span class="fu">prettify</span>(),</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">MAF of the significant variants (mean and SE)</span><span class="st">`</span> <span class="ot">=</span> all_sig_snps <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(SNP, MAF) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(MAF) <span class="sc">%&gt;%</span> <span class="fu">mean_and_SE</span>(),</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">MAF of all variants included in the GWAS (mean and SE)</span><span class="st">`</span> <span class="ot">=</span> maf_all_snps_tests) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>      <span class="fu">gather</span>(Quantity, n)</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>      <span class="fu">make_tally_table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="st">`</span><span class="at">Using p &lt; 10-5</span><span class="st">`</span> <span class="ot">=</span> n),</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(log10_P <span class="sc">&gt;=</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>      <span class="fu">make_tally_table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="st">`</span><span class="at">Using p &lt; 10-8</span><span class="st">`</span> <span class="ot">=</span> n), </span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&quot;Quantity&quot;</span>) </span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  <span class="co"># restrict to only papers in the original database, i.e. not those added post-publication:</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Reference <span class="sc">%in%</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/input/references_in_original_database.csv&quot;</span>)<span class="sc">$</span>Reference) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_full_tally_table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -1373,6 +1431,28 @@ Using p &lt; 10-8
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align:left;">
+Number of studies that provided data for GWA tests
+</td>
+<td style="text-align:left;">
+92
+</td>
+<td style="text-align:left;">
+92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of traits analysed using GWA tests
+</td>
+<td style="text-align:left;">
+974
+</td>
+<td style="text-align:left;">
+974
+</td>
+</tr>
 <tr>
 <td style="text-align:left;">
 Number of studies with at least one significant SNP
@@ -1466,6 +1546,19 @@ MAF of all variants included in the GWAS (mean and SE)
 </tr>
 </tbody>
 </table>
+</div>
+<div
+id="version-of-the-table-that-is-correct-with-the-current-post-publication-version-of-the-dataset"
+class="section level4">
+<h4>Version of the table that is correct with the current,
+post-publication version of the dataset</h4>
+<p>The figures in this table will be updated when new DGRP data is added
+to the database.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>all_sig_snps <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># do *not* restrict to only papers in the original database, i.e. not those added post-publication:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_full_tally_table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1474,7 +1567,8 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+</div>
 </div>
 </div>
 </div>
