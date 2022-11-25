@@ -412,10 +412,10 @@ make_full_tally_table <- function(all_sig_snps){
       group_by(SNP) %>% 
       summarise(n = n()) 
     
-    num_snps_sig_in_2_studies <- sum(pull(num_traits_affected, n) == 2)
-    num_snps_sig_in_3_studies <- sum(pull(num_traits_affected, n) > 2)
-    num_snps_sig_in_2_studies_indep <- sum(pull(num_traits_affected_indep, n) == 2)
-    num_snps_sig_in_3_studies_indep <- sum(pull(num_traits_affected_indep, n) > 2)
+    num_snps_sig_in_2_studies <- sum(pull(num_traits_affected, n) >= 2)
+    num_snps_sig_in_3_studies <- sum(pull(num_traits_affected, n) >= 3)
+    num_snps_sig_in_2_studies_indep <- sum(pull(num_traits_affected_indep, n) >= 2)
+    num_snps_sig_in_3_studies_indep <- sum(pull(num_traits_affected_indep, n) >= 3)
     
     num_snps_sig_in_2_studies <- paste(prettify(num_snps_sig_in_2_studies), " (", num_snps_sig_in_2_studies_indep, ")", sep = "")
     num_snps_sig_in_3_studies <- paste(prettify(num_snps_sig_in_3_studies), " (", num_snps_sig_in_3_studies_indep, ")", sep = "")
@@ -426,8 +426,8 @@ make_full_tally_table <- function(all_sig_snps){
       `Number of studies with at least one significant SNP` = all_sig_snps %>% distinct(Reference) %>% nrow(),
       `Number of phenotypic traits with at least one significant SNP` = all_sig_snps %>% distinct(trait) %>% nrow(),
       `Number of variants significantly associated with at least one phenotypic trait` = all_sig_snps %>% distinct(SNP) %>% nrow() %>% prettify(),
-      `Number of variants significantly associated with two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_2_studies,
-      `Number of variants significantly associated with more than two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_3_studies,
+      `Number of variants significantly associated with at least two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_2_studies,
+      `Number of variants significantly associated with at least three phenotypic traits (which were measured in different studies)` = num_snps_sig_in_3_studies,
       `Number of genes close to one of the significant variants` = all_sig_snps %>% filter(!is.na(FBID)) %>% distinct(FBID) %>% nrow() %>% prettify(),
       `MAF of the significant variants (mean and SE)` = all_sig_snps %>% distinct(SNP, MAF) %>% pull(MAF) %>% mean_and_SE(),
       `MAF of all variants included in the GWAS (mean and SE)` = maf_all_snps_tests) %>% 
@@ -436,6 +436,7 @@ make_full_tally_table <- function(all_sig_snps){
   
   left_join(
     all_sig_snps %>% 
+      filter(log10_P >= 5) %>% 
       make_tally_table() %>% 
       rename(`Using p < 10-5` = n),
     
@@ -458,7 +459,7 @@ all_sig_snps %>%
 
 The figures in this table will be updated when new DGRP data is added to the database.
 
-```{r}
+```{r results='show'}
 all_sig_snps %>% 
   # do *not* restrict to only papers in the original database, i.e. not those added post-publication:
   make_full_tally_table() %>% 
