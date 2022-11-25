@@ -353,82 +353,115 @@ if(length(traits_to_run_for_gwas) > 0){
 
 ### Various summary statistics about the significant variants
 
+#### Version of the table that is correct with the originally-published dataset:
+
 The table shows various counts about the significant variants, as well as the mean and standard error MAF (minor allele frequency) for all the significant variants as well as the total set of variants that was used in the GWAS (i.e. all those with minor allele frequency >5% and missingness < 10%). Given that the choice of significance threshold is arbitrary, we use two different definitions of statistical significance: $P < 10^{-5}$ (which is used in many studies of the DGRP) and $P < 10^{-8}$ (which is commonly used in human GWAS).
 
 ```{r results='show'}
 all_sig_snps <- read_tsv("gwas_data/derived/all_traits_significant_SNPs.tsv") %>% 
-  left_join(read_csv("data/derived/meta_data_for_all_traits.csv"), by = c("trait" = "Trait"))
+  left_join(meta_data, by = c("trait" = "Trait"))
 
-# A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines
-get_independent_traits <- function(){
-  set.seed(1) # Set the seed for reproducibility
-  read_csv("data/derived/meta_data_for_all_traits.csv") %>%
-    # restrict to only papers in the original database, i.e. not those added post-publication:
-    filter(Reference %in% read_csv("data/input/references_in_original_database.csv")$Reference) %>% 
-    filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
-    group_by(Reference) %>%
-    sample_n(1) %>% # Randomly sample one phenotype per study
-    pull(Trait) %>% sort() 
+make_full_tally_table <- function(all_sig_snps){
+  
+  # Count number of GWAS that were run
+  gwas_results_files <- list.files("gwas_data/derived/gwas_results/")
+  gwas_results_files <- gwas_results_files[!str_detect(gwas_results_files, "_significant_SNPs")]
+  gwas_results_files <- gwas_results_files[!str_detect(gwas_results_files, "log[.]txt")]
+  num_gwas_run <- length(gwas_results_files)
+  
+  # Count number of unique studies that provided data for GWAS
+  num_unique_studies_used_for_gwas <- meta_data %>% 
+    filter(Trait %in% str_remove_all(gwas_results_files, "[.]tsv[.]gz")) %>% 
+    distinct(Reference) %>% nrow()
+  
+  # A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines
+  get_independent_traits <- function(){
+    set.seed(1) # Set the seed for reproducibility
+    read_csv("data/derived/meta_data_for_all_traits.csv") %>%
+      filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
+      group_by(Reference) %>%
+      sample_n(1) %>% # Randomly sample one phenotype per study
+      pull(Trait) %>% sort() 
+  }
+  
+  mean_and_SE <- function(x){
+    mean_x <- format(round(mean(x), 2), nsmall = 2)
+    se_x <- format(round(sd(x) / sqrt(length(x)), 3), nsmall = 3)
+    if(se_x == "0.000") se_x <- "<0.001"
+    paste(mean_x, " (", se_x, ")", sep = "")
+  }
+  
+  
+  maf_all_snps_tests <- tbl(db, "variants") %>% 
+    filter(MAF > 0.05) %>% 
+    pull(MAF) %>% mean_and_SE()
+  
+  
+  make_tally_table <- function(all_sig_snps){
+    
+    prettify <- function(x) format(x, big.mark=",")
+    
+    num_traits_affected <- all_sig_snps %>% 
+      distinct(SNP, trait) %>% 
+      group_by(SNP) %>% 
+      summarise(n = n()) 
+    
+    num_traits_affected_indep <- all_sig_snps %>% 
+      filter(trait %in% get_independent_traits()) %>% 
+      distinct(SNP, trait) %>% 
+      group_by(SNP) %>% 
+      summarise(n = n()) 
+    
+    num_snps_sig_in_2_studies <- sum(pull(num_traits_affected, n) == 2)
+    num_snps_sig_in_3_studies <- sum(pull(num_traits_affected, n) > 2)
+    num_snps_sig_in_2_studies_indep <- sum(pull(num_traits_affected_indep, n) == 2)
+    num_snps_sig_in_3_studies_indep <- sum(pull(num_traits_affected_indep, n) > 2)
+    
+    num_snps_sig_in_2_studies <- paste(prettify(num_snps_sig_in_2_studies), " (", num_snps_sig_in_2_studies_indep, ")", sep = "")
+    num_snps_sig_in_3_studies <- paste(prettify(num_snps_sig_in_3_studies), " (", num_snps_sig_in_3_studies_indep, ")", sep = "")
+    
+    tibble(
+      `Number of studies that provided data for GWA tests` = num_unique_studies_used_for_gwas,
+      `Number of traits analysed using GWA tests` = num_gwas_run,
+      `Number of studies with at least one significant SNP` = all_sig_snps %>% distinct(Reference) %>% nrow(),
+      `Number of phenotypic traits with at least one significant SNP` = all_sig_snps %>% distinct(trait) %>% nrow(),
+      `Number of variants significantly associated with at least one phenotypic trait` = all_sig_snps %>% distinct(SNP) %>% nrow() %>% prettify(),
+      `Number of variants significantly associated with two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_2_studies,
+      `Number of variants significantly associated with more than two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_3_studies,
+      `Number of genes close to one of the significant variants` = all_sig_snps %>% filter(!is.na(FBID)) %>% distinct(FBID) %>% nrow() %>% prettify(),
+      `MAF of the significant variants (mean and SE)` = all_sig_snps %>% distinct(SNP, MAF) %>% pull(MAF) %>% mean_and_SE(),
+      `MAF of all variants included in the GWAS (mean and SE)` = maf_all_snps_tests) %>% 
+      gather(Quantity, n)
+  }
+  
+  left_join(
+    all_sig_snps %>% 
+      make_tally_table() %>% 
+      rename(`Using p < 10-5` = n),
+    
+    all_sig_snps %>% 
+      filter(log10_P >= 8) %>% 
+      make_tally_table() %>% 
+      rename(`Using p < 10-8` = n), 
+    by = "Quantity") 
 }
 
-mean_and_SE <- function(x){
-  mean_x <- format(round(mean(x), 2), nsmall = 2)
-  se_x <- format(round(sd(x) / sqrt(length(x)), 3), nsmall = 3)
-  if(se_x == "0.000") se_x <- "<0.001"
-  paste(mean_x, " (", se_x, ")", sep = "")
-}
+all_sig_snps %>% 
+  # restrict to only papers in the original database, i.e. not those added post-publication:
+  filter(Reference %in% read_csv("data/input/references_in_original_database.csv")$Reference) %>% 
+  make_full_tally_table() %>% 
+  kable() %>% 
+  kable_styling(full_width = FALSE)
+```
 
+#### Version of the table that is correct with the current, post-publication version of the dataset
 
-maf_all_snps_tests <- tbl(db, "variants") %>% 
-  filter(MAF > 0.05) %>% 
-  pull(MAF) %>% mean_and_SE()
+The figures in this table will be updated when new DGRP data is added to the database.
 
-
-make_tally_table <- function(all_sig_snps){
-  
-  prettify <- function(x) format(x, big.mark=",")
-  
-  num_traits_affected <- all_sig_snps %>% 
-    distinct(SNP, trait) %>% 
-    group_by(SNP) %>% 
-    summarise(n = n()) 
-  
-  num_traits_affected_indep <- all_sig_snps %>% 
-    filter(trait %in% get_independent_traits()) %>% 
-    distinct(SNP, trait) %>% 
-    group_by(SNP) %>% 
-    summarise(n = n()) 
-  
-  num_snps_sig_in_2_studies <- sum(pull(num_traits_affected, n) == 2)
-  num_snps_sig_in_3_studies <- sum(pull(num_traits_affected, n) > 2)
-  num_snps_sig_in_2_studies_indep <- sum(pull(num_traits_affected_indep, n) == 2)
-  num_snps_sig_in_3_studies_indep <- sum(pull(num_traits_affected_indep, n) > 2)
-  
-  num_snps_sig_in_2_studies <- paste(prettify(num_snps_sig_in_2_studies), " (", num_snps_sig_in_2_studies_indep, ")", sep = "")
-  num_snps_sig_in_3_studies <- paste(prettify(num_snps_sig_in_3_studies), " (", num_snps_sig_in_3_studies_indep, ")", sep = "")
-  
-  tibble(
-  `Number of studies with at least one significant SNP` = all_sig_snps %>% distinct(Reference) %>% nrow(),
-  `Number of phenotypic traits with at least one significant SNP` = all_sig_snps %>% distinct(trait) %>% nrow(),
-  `Number of variants significantly associated with at least one phenotypic trait` = all_sig_snps %>% distinct(SNP) %>% nrow() %>% prettify(),
-  `Number of variants significantly associated with two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_2_studies,
-  `Number of variants significantly associated with more than two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_3_studies,
-  `Number of genes close to one of the significant variants` = all_sig_snps %>% filter(!is.na(FBID)) %>% distinct(FBID) %>% nrow() %>% prettify(),
-  `MAF of the significant variants (mean and SE)` = all_sig_snps %>% distinct(SNP, MAF) %>% pull(MAF) %>% mean_and_SE(),
-  `MAF of all variants included in the GWAS (mean and SE)` = maf_all_snps_tests) %>% 
-  gather(Quantity, n)
-}
-
-left_join(
-  all_sig_snps %>% 
-    make_tally_table() %>% 
-    rename(`Using p < 10-5` = n),
-  
-  all_sig_snps %>% 
-    filter(log10_P >= 8) %>% 
-    make_tally_table() %>% 
-    rename(`Using p < 10-8` = n), 
-  by = "Quantity") %>% 
+```{r}
+all_sig_snps %>% 
+  # do *not* restrict to only papers in the original database, i.e. not those added post-publication:
+  make_full_tally_table() %>% 
   kable() %>% 
   kable_styling(full_width = FALSE)
 ```
