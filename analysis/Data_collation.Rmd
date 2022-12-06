@@ -23,7 +23,8 @@ Most of the papers that report DGRP data provide estimates of the mean phenotype
 
 ```{r}
 all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
-  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait")
+  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait") %>% 
+  mutate(Sex = replace(Sex, Trait == "change.methamphetamine.preferenceA.f", "Female")) # fix this error in the input data
 ```
 
 
