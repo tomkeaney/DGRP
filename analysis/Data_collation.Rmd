@@ -33,7 +33,8 @@ Some studies only provide the raw data they collected when measuring DGRP phenot
 
 ```{r}
 line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_from_raw_data.csv") %>% 
-  left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait")
+  left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait") %>% 
+  filter(!is.na(trait_value))
 ```
 
 We also provide and save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
