@@ -25,7 +25,7 @@ $~$
 
 # Load and filter the data
 
-For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ and the microbiome traits measured in Everett _et al_ (2020). **We choose not to focus on the data from these studies because line means for these traits may also be associated with high levels of uncertainty, as they have only been measured in three and two flies per line respectively.** They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore also choose to trim our analysis to only include traits that have been measured across 80 or more lines.
+For the analysis presented in our manuscript, we remove the metabolite traits measured in Jin _et al_ (2020) and Zhou _et al_ and the microbiome traits measured in Everett _et al_ (2020). **These intermediate (in the gap between genotype and phenotype) traits are either associated with high levels of uncertainty, as they have only been measured in three and two flies per line or are simply difficult to interpret in the context of our analysis.** They also make up ~ half of our dataset, which massively reduces our power to detect genetic correlations between traits. Calculating correlation coefficients with small samples is imprecise, therefore we also choose to trim our analysis to only include traits that have been measured across 80 or more lines.
 
 The collection and cleaning of these data can be viewed [here](Data_collation.html).
 

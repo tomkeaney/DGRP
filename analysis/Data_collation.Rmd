@@ -26,7 +26,6 @@ all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>%
   left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait")
 ```
 
-
 ### Loading the line mean data calculated by us from the raw data
 
 Some studies only provide the raw data they collected when measuring DGRP phenotypes (e.g. measurements of individual flies, with replicates within each DGRP line). We need line mean data to calculate genetic correlations between traits and run typical GWA analyses. To get line means, we estimated them from the raw data as described in the script `analysis/get_line_means_from_raw_data.Rmd`, which can be viewed [here](get_line_means_from_raw_data.html).
@@ -39,10 +38,12 @@ line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_
 We also provide and save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
 
 ```{r}
-tibble(Reference = unique(meta_data$Reference)) %>% 
+rbind(
+  tibble(Reference = unique(line.mean.phenos.from.raw.data$Reference)),
+  tibble(Reference = unique(all.line.mean.phenos$Reference))) %>% 
+  arrange(Reference) %>% 
   write_csv("data/input/references_in_original_database.csv")
 ```
-
 
 ### Loading any data that were added after the initial creation of the database
 
@@ -67,12 +68,11 @@ all.dgrp.phenos_combined <-
 num_unique_lines <- length(unique(all.dgrp.phenos_combined$line))
 ```
 
-
 ## Cleaning the data
 
 ### Removing unusual lines
 
-We have phenotype line means for {r num_unique_lines} lines, which is more than we expected. There appear to be some lines that have been used in very few studies, suggesting some of these lines reflect labeling errors.
+We have phenotype line means for {r num_unique_lines} lines, which is more than we expected. There appear to be some lines that have been used in very few studies, suggesting some of these lines reflect labelling errors.
 
 After checking the [Bloomington Drosophila Stock Centre](https://bdsc.indiana.edu/Home/Search) and [Flybase](http://flybase.org/reports/FBlc0000504.html) we found the following anomalies:
 
@@ -86,7 +86,7 @@ After checking the [Bloomington Drosophila Stock Centre](https://bdsc.indiana.ed
 
 -   Watanabe and Riddle (2021): line 854 - not on Flybase
 
--   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for these mysterious lines. There are no obvious typos and the paper states they GWA for 178 lines, which matches the number reported in File S2, which is where we sourced the data.
+-   Battlay et al (2016): lines 226, 847 and 917 - there is no obvious reason for these mysterious lines. There are no obvious typos and the paper states they conduct GWA with 178 lines, which matches the number reported in File S2, which is where we sourced the data.
 
 -   Katzenberger et al (2015): line 521 - no obvious typo (data is ordered by increasing trait value). One-off issue. Not on Flybase.
 
@@ -121,15 +121,11 @@ all.dgrp.phenos_combined <-
   filter(!(line %in% aberrant_lines))
 ```
 
-This still leaves 219 lines, which was unexpected because most studies state that the DGRP consists of 205 lines. However, the DGRP record on Flybase (<http://flybase.org/reports/FBlc0000504.html>) indicates that a total of 219 lines have been included in the DGRP at some point since its creation. We infer that some lines were withdrawn from the Bloomington stock center, explaining their absence from most DGRP studies.
+This still leaves 219 lines, which was unexpected because most studies state that the DGRP consists of 205 lines. However, the DGRP record on Flybase (<http://flybase.org/reports/FBlc0000504.html>) indicates that a total of 219 lines have been included in the DGRP at some point since its creation. We infer that some lines were withdrawn from the Bloomington stock centre, explaining their absence from most DGRP studies.
 
 The lines that have been withdrawn but are included in our dataset are: 80, 272, 343, 378, 387, 393, 398, 476, 514, 554, 556, 591, 750, 771. We chose **not to remove** these lines from our dataset, as many of the studies we include in our dataset make use of these lines.
 
-
-
 ### Removing data duplicates
-
-
 
 Some studies report data that has been previously used (in a way that we missed in our initial data collection), leading to perfect or near perfect correlations between traits. We here remove one such duplicate trait. 
 
@@ -138,11 +134,7 @@ all.dgrp.phenos_combined_subset <-
   all.dgrp.phenos_combined %>% filter(Trait != "rapid.cold.hardening.25C")
 ```
 
-
-
 ### Removing traits that were measured in heterozyogtes
-
-
 
 Some traits have been measured in heterozygotes. This generally occurs when the goal of a study is to observe whether genetic variation affects the response to a genetic disease encoded by a particular variant or the expression of a transgenic construct. These studies are not ideal for our database, as the phenotypes they observe may be affected be dominance and epistatic interactions that are absent in the nearly completely homozygous DGRP lines. We remove these studies from our dataset.
 
@@ -171,7 +163,6 @@ all.dgrp.phenos_combined_subset <- all.dgrp.phenos_combined_subset %>%
          Trait != "Sema5c.olfactory.response.benzaldehyde.f")
 ```
 
-
 ### Removing lines that have multiple trait values
 
 For some traits, a small number of lines had >1 trait value. We fixed these datasets in the original spreadsheet before it entered R, but document our fixes here for transparency.
@@ -194,8 +185,6 @@ problems <- all.dgrp.phenos_combined_subset %>%
   arrange(-n) %>% 
   filter(n > 1)
 ```
-
-
 
 ### Save the cleaned dataset, with traits measured in the original units
 
