@@ -23,7 +23,8 @@ Most of the papers that report DGRP data provide estimates of the mean phenotype
 
 ```{r}
 all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
-  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait")
+  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait") %>% 
+  mutate(Sex = replace(Sex, Trait == "change.methamphetamine.preferenceA.f", "Female")) # fix this error in the input data
 ```
 
 ### Loading the line mean data calculated by us from the raw data
@@ -32,16 +33,16 @@ Some studies only provide the raw data they collected when measuring DGRP phenot
 
 ```{r}
 line.mean.phenos.from.raw.data <- read_csv("data/derived/dgrp_phenos_calculated_from_raw_data.csv") %>% 
-  left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait")
+  left_join(read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv"), by = "Trait") %>% 
+  filter(!is.na(trait_value))
 ```
 
 We also provide and save a list of references that appear in the original database, which is used to ensure that the analyses in the paper can be faithfully reproduced if new datasets are added later.
 
 ```{r}
-rbind(
-  tibble(Reference = unique(line.mean.phenos.from.raw.data$Reference)),
-  tibble(Reference = unique(all.line.mean.phenos$Reference))) %>% 
-  arrange(Reference) %>% 
+
+tibble(Reference = sort(unique(c(read_csv("data/input/all.line.mean.phenos_metadata.csv")$Reference,
+                            read_csv("data/derived/dgrp_phenos_calculated_from_raw_data_meta_data.csv")$Reference)))) %>% 
   write_csv("data/input/references_in_original_database.csv")
 ```
 
@@ -223,7 +224,7 @@ table <- all.dgrp.phenos_combined_subset %>%
   
 complete_metadata <- left_join(lines_measured, table) %>% 
   select(-line) %>% 
-  arrange(`Trait guild`, Trait)
+  arrange(`Trait guild`, Trait, Reference)
 
 all.dgrp.phenos_combined_subset %>% 
   select(line, Trait, trait_value, Reference) %>% 
