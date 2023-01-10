@@ -3339,9 +3339,16 @@ estimated_line_means <-
         aggression_m_line_means,
         Watanabe_traits)
 
-meta_data <- estimated_line_means %>% 
-  select(Trait, Sex, `Trait guild`, `Trait description`, Reference) %>% 
-  distinct()
+meta_data <- 
+  left_join(by = "Trait",
+            estimated_line_means %>% 
+              select(Trait, Sex, `Trait guild`, `Trait description`, Reference) %>% 
+              distinct(),
+            
+            read_csv("Life_stage_screen.csv")
+  ) %>% 
+  mutate(Life_stage = case_when(Life_stage == "Juvenile" ~ "Juvenile",
+                                is.na(Life_stage) ~ "Adult"))
 
 trait_data <- estimated_line_means %>% 
   select(-Sex, -`Trait guild`, -`Trait description`, -Reference) 

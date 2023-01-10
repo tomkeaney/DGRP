@@ -23,8 +23,7 @@ Most of the papers that report DGRP data provide estimates of the mean phenotype
 
 ```{r}
 all.line.mean.phenos <- read_csv("data/input/all.line.mean.phenos.csv") %>% 
-  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait") %>% 
-  mutate(Sex = replace(Sex, Trait == "change.methamphetamine.preferenceA.f", "Female")) # fix this error in the input data
+  left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv"), by = "Trait")
 ```
 
 ### Loading the line mean data calculated by us from the raw data
@@ -204,6 +203,8 @@ To help interpret the contents of this file, we also save a metadata file called
 
 - `Sex`: The sex of the flies being measured (Female, Male, or Pooled, where the latter means flies of both sexes were measured)
 
+- `Life_stage`: the life stage at which flies were phenotyped (Juvenile: all life stages that precede eclosion, and adulthood: post eclosion) 
+
 - `Trait guild`: A categorisation of the type of trait that was manually assigned by us (see the associated paper).
 
 - `Trait description`: A description of how the trait, including an explanation of the meaning of relatively high and low values.
@@ -223,7 +224,7 @@ table <- all.dgrp.phenos_combined_subset %>%
   select(-c(trait_value))
   
 complete_metadata <- left_join(lines_measured, table) %>% 
-  select(-line) %>% 
+  select(Trait, `# lines measured`, Sex, Life_stage, `Trait guild`, `Trait description`, Reference) %>% 
   arrange(`Trait guild`, Trait, Reference)
 
 all.dgrp.phenos_combined_subset %>% 
