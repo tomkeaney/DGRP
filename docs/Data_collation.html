@@ -515,7 +515,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-12-06
+<strong>Last updated:</strong> 2023-01-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -646,15 +646,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree54a62742c5fe40303feba0a025dcf5e863829d7atargetblank54a6274a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree1e28d4c3fd015e88596eac1c4a25f48743516766targetblank1e28d4ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/54a62742c5fe40303feba0a025dcf5e863829d7a" target="_blank">54a6274</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/1e28d4c3fd015e88596eac1c4a25f48743516766" target="_blank">1e28d4c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree54a62742c5fe40303feba0a025dcf5e863829d7atargetblank54a6274a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree1e28d4c3fd015e88596eac1c4a25f48743516766targetblank1e28d4ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -664,7 +664,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/54a62742c5fe40303feba0a025dcf5e863829d7a" target="_blank">54a6274</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/1e28d4c3fd015e88596eac1c4a25f48743516766" target="_blank">1e28d4c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -687,6 +687,7 @@ Ignored files:
     Ignored:    fits/
     Ignored:    gwas_data/.DS_Store
     Ignored:    gwas_data/derived/.DS_Store
+    Ignored:    gwas_data/derived/gwas_results/
 
 Untracked files:
     Untracked:  analysis/exporting GWAS stats for the app.R
@@ -714,9 +715,7 @@ Untracked files:
     Untracked:  gwas_data/derived/gcta_GRM.grm.bin
     Untracked:  gwas_data/derived/gcta_GRM.grm.id
     Untracked:  gwas_data/derived/gcta_GRM.log
-    Untracked:  gwas_data/derived/gwas_results/
     Untracked:  gwas_data/derived/luke_phenotype.txt
-    Untracked:  gwas_data/derived/manhattan_plots/
     Untracked:  gwas_data/derived/phenotype.txt
     Untracked:  gwas_data/derived/phenotype_pair.txt
     Untracked:  gwas_data/derived/plink.frq
@@ -724,10 +723,12 @@ Untracked files:
     Untracked:  gwas_data/derived/plink.prune.in
     Untracked:  gwas_data/derived/test_null.log
     Untracked:  gwas_data/input/
-    Untracked:  iris.csv
     Untracked:  test.pdf
     Untracked:  test2.pdf
     Untracked:  test3.pdf
+
+Unstaged changes:
+    Modified:   .gitignore
 
 </code></pre>
 <p>
@@ -773,6 +774,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/83efb5606880e750acf4e98e8e00595795e1a463/docs/Data_collation.html" target="_blank">83efb56</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2022-12-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1728,14 +1746,14 @@ Session information
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>R version 4.0.3 (2020-10-10)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Catalina 10.15.7
+Running under: macOS Big Sur 10.16
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
 LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 
 locale:
-[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -1743,34 +1761,33 @@ attached base packages:
 other attached packages:
  [1] DT_0.13         forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
  [5] purrr_0.3.4     readr_2.1.2     tidyr_1.1.4     tibble_3.1.6   
- [9] ggplot2_3.3.6   tidyverse_1.3.2 workflowr_1.7.0
+ [9] ggplot2_3.3.6   tidyverse_1.3.2
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.2          sass_0.4.4          bit64_0.9-7        
- [4] vroom_1.5.7         jsonlite_1.8.0      modelr_0.1.8       
- [7] bslib_0.4.1         assertthat_0.2.1    getPass_0.2-2      
-[10] googlesheets4_1.0.0 cellranger_1.1.0    yaml_2.3.5         
-[13] pillar_1.6.4.9003   backports_1.1.7     glue_1.4.2         
-[16] digest_0.6.29       promises_1.1.0      rvest_1.0.2        
-[19] colorspace_2.0-3    htmltools_0.5.2     httpuv_1.5.3.1     
-[22] pkgconfig_2.0.3     broom_0.7.11        haven_2.5.0        
-[25] scales_1.2.0        processx_3.5.2      whisker_0.4        
-[28] later_1.0.0         tzdb_0.1.2          git2r_0.27.1       
-[31] googledrive_2.0.0   generics_0.0.2      ellipsis_0.3.2     
-[34] cachem_1.0.4        withr_2.4.3         cli_3.1.0          
-[37] magrittr_2.0.1      crayon_1.4.2        readxl_1.3.1       
-[40] evaluate_0.15       ps_1.3.3            fs_1.4.1           
-[43] fansi_0.4.1         xml2_1.3.3          tools_4.0.3        
-[46] hms_1.1.1           gargle_1.2.0        lifecycle_1.0.1    
-[49] munsell_0.5.0       reprex_2.0.1        callr_3.7.0        
-[52] compiler_4.0.3      jquerylib_0.1.4     rlang_1.0.2        
-[55] grid_4.0.3          rstudioapi_0.13     htmlwidgets_1.5.4  
-[58] crosstalk_1.1.0.1   rmarkdown_2.11      gtable_0.3.0       
-[61] DBI_1.1.0           R6_2.4.1            lubridate_1.8.0    
-[64] knitr_1.39          fastmap_1.1.0       bit_1.1-15.2       
-[67] utf8_1.1.4          rprojroot_1.3-2     stringi_1.5.3      
-[70] parallel_4.0.3      Rcpp_1.0.4.6        vctrs_0.3.8        
-[73] dbplyr_2.1.1        tidyselect_1.1.0    xfun_0.31          </code></pre>
+ [1] Rcpp_1.0.4.6        lubridate_1.8.0     assertthat_0.2.1   
+ [4] rprojroot_1.3-2     digest_0.6.29       utf8_1.1.4         
+ [7] R6_2.4.1            cellranger_1.1.0    backports_1.1.7    
+[10] reprex_2.0.1        evaluate_0.15       httr_1.4.2         
+[13] pillar_1.6.4.9003   rlang_1.0.2         googlesheets4_1.0.0
+[16] readxl_1.3.1        rstudioapi_0.13     whisker_0.4        
+[19] jquerylib_0.1.4     rmarkdown_2.11      googledrive_2.0.0  
+[22] htmlwidgets_1.5.4   bit_1.1-15.2        munsell_0.5.0      
+[25] broom_0.7.11        compiler_4.0.3      httpuv_1.5.3.1     
+[28] modelr_0.1.8        xfun_0.31           pkgconfig_2.0.3    
+[31] htmltools_0.5.2     tidyselect_1.1.0    workflowr_1.7.0    
+[34] fansi_0.4.1         crayon_1.4.2        withr_2.4.3        
+[37] tzdb_0.1.2          dbplyr_2.1.1        later_1.0.0        
+[40] grid_4.0.3          jsonlite_1.8.0      gtable_0.3.0       
+[43] lifecycle_1.0.1     DBI_1.1.0           git2r_0.27.1       
+[46] magrittr_2.0.1      scales_1.2.0        vroom_1.5.7        
+[49] cli_3.1.0           stringi_1.5.3       cachem_1.0.4       
+[52] fs_1.4.1            promises_1.1.0      xml2_1.3.3         
+[55] bslib_0.4.1         ellipsis_0.3.2      generics_0.0.2     
+[58] vctrs_0.3.8         tools_4.0.3         bit64_0.9-7        
+[61] glue_1.4.2          crosstalk_1.1.0.1   hms_1.1.1          
+[64] parallel_4.0.3      fastmap_1.1.0       yaml_2.3.5         
+[67] colorspace_2.0-3    gargle_1.2.0        rvest_1.0.2        
+[70] knitr_1.39          haven_2.5.0         sass_0.4.4         </code></pre>
 </div>
 </div>
 </div>
