@@ -254,3 +254,24 @@ unlink(c("gwas_data/derived/lines_to_keep.txt"))
 unlink(c("gwas_data/derived/gwas_results/new.qassoc", "gwas_data/derived/gwas_results/new.log"))
 ```
 
+## Create a file of all the significant GWAS hits for all traits
+
+```{r compile_significant_snps}
+all_files <- list.files("gwas_data/derived/gwas_results", full.names = T)
+all_files <- all_files[grepl("tsv", all_files)]
+traits <- str_remove_all(str_remove_all(all_files, "gwas_data/derived/gwas_results/"), "[.]tsv[.]gz")
+
+
+gwas_hits <- lapply(1:length(all_files), function(i) {
+  print(i)
+  read_tsv(all_files[i]) %>%
+    filter(P < 10e-5) %>%
+    arrange(P) %>%
+    rename(Variant = SNP, Beta = BETA) %>%
+    mutate(Trait = traits[i], .before = 1)
+}) %>%
+  bind_rows()
+
+write_csv(gwas_hits, "gwas_data/derived/all_traits_significant_SNPs.tsv")
+```
+
