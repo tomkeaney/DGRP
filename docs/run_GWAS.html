@@ -628,15 +628,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed0f03cee67e0fce9031faa345af2f44f754c0482targetblankd0f03cea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree00e4f233d3d382220388538a879bf46a3df61c93targetblank00e4f23a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/d0f03cee67e0fce9031faa345af2f44f754c0482" target="_blank">d0f03ce</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/00e4f233d3d382220388538a879bf46a3df61c93" target="_blank">00e4f23</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtreed0f03cee67e0fce9031faa345af2f44f754c0482targetblankd0f03cea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree00e4f233d3d382220388538a879bf46a3df61c93targetblank00e4f23a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -646,7 +646,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/d0f03cee67e0fce9031faa345af2f44f754c0482" target="_blank">d0f03ce</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/00e4f233d3d382220388538a879bf46a3df61c93" target="_blank">00e4f23</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -667,6 +667,9 @@ Ignored files:
     Ignored:    data/derived/.DS_Store
     Ignored:    data/input/.DS_Store
     Ignored:    fits/
+    Ignored:    gwas_data/.DS_Store
+    Ignored:    gwas_data/derived/.DS_Store
+    Ignored:    gwas_data/derived/gwas_results/
 
 Untracked files:
     Untracked:  analysis/exporting GWAS stats for the app.R
@@ -674,13 +677,41 @@ Untracked files:
     Untracked:  analysis/luke_weighted_beta_ideas.R
     Untracked:  data/derived/correlation_SEs.rds
     Untracked:  data/imputed_data.RData
-    Untracked:  gwas_data/
+    Untracked:  gwas_data/README.md
+    Untracked:  gwas_data/derived/bivariate_greml_results.tsv
+    Untracked:  gwas_data/derived/delete_me.hsq
+    Untracked:  gwas_data/derived/delete_me.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.fam
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.fam
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.log
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.rds
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bed
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bim
+    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.fam
+    Untracked:  gwas_data/derived/gcta_GRM.grm.N.bin
+    Untracked:  gwas_data/derived/gcta_GRM.grm.bin
+    Untracked:  gwas_data/derived/gcta_GRM.grm.id
+    Untracked:  gwas_data/derived/gcta_GRM.log
+    Untracked:  gwas_data/derived/luke_phenotype.txt
+    Untracked:  gwas_data/derived/phenotype.txt
+    Untracked:  gwas_data/derived/phenotype_pair.txt
+    Untracked:  gwas_data/derived/plink.frq
+    Untracked:  gwas_data/derived/plink.log
+    Untracked:  gwas_data/derived/plink.prune.in
+    Untracked:  gwas_data/derived/test_null.log
+    Untracked:  gwas_data/input/
     Untracked:  test.pdf
     Untracked:  test2.pdf
     Untracked:  test3.pdf
 
 Unstaged changes:
     Modified:   .gitignore
+    Modified:   gwas_data/derived/all_traits_significant_SNPs.tsv
 
 </code></pre>
 <p>
@@ -726,6 +757,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tomkeaney/DGRP/blob/00e4f233d3d382220388538a879bf46a3df61c93/analysis/run_GWAS.Rmd" target="_blank">00e4f23</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2023-01-16
+</td>
+<td>
+wflow_publish("analysis/run_GWAS.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tomkeaney/DGRP/370d5e1091f9b8096beba3183d0281e537b24f08/docs/run_GWAS.html" target="_blank">370d5e1</a>
+</td>
+<td>
+lukeholman
+</td>
+<td>
+2023-01-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1234,22 +1299,42 @@ with a <em>higher</em> value of the trait in question.</p>
 <div id="create-a-file-of-all-the-significant-gwas-hits-for-all-traits"
 class="section level2">
 <h2>Create a file of all the significant GWAS hits for all traits</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>all_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results&quot;</span>, <span class="at">full.names =</span> T)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>all_files <span class="ot">&lt;-</span> all_files[<span class="fu">grepl</span>(<span class="st">&quot;tsv&quot;</span>, all_files)]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(all_files, <span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>), <span class="st">&quot;[.]tsv[.]gz&quot;</span>)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>all_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;gwas_data/derived/gwas_results&quot;</span>, <span class="at">full.names =</span> T, <span class="at">pattern =</span> <span class="st">&quot;_significant_SNPs&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">str_remove_all</span>(all_files, <span class="st">&quot;gwas_data/derived/gwas_results/&quot;</span>), <span class="st">&quot;_significant_SNPs[.]tsv[.]gz&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>gwas_hits <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(all_files), <span class="cf">function</span>(i) {</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(i)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_tsv</span>(all_files[i]) <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(P <span class="sc">&lt;</span> <span class="fl">10e-5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(P) <span class="sc">%&gt;%</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">Variant =</span> SNP, <span class="at">Beta =</span> BETA) <span class="sc">%&gt;%</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Trait =</span> traits[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(gwas_hits, <span class="st">&quot;gwas_data/derived/all_traits_significant_SNPs.tsv&quot;</span>)</span></code></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>gwas_hits <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(all_files), <span class="cf">function</span>(i) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(i)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_tsv</span>(all_files[i]) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(P <span class="sc">&lt;</span> <span class="fl">10e-5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(P) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">Variant =</span> SNP, <span class="at">Beta =</span> BETA) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Trait =</span> traits[i], <span class="at">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3&quot;</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>annotations <span class="ot">&lt;-</span> <span class="fu">tbl</span>(db, <span class="st">&quot;variants&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(SNP <span class="sc">%in%</span> <span class="sc">!!</span> <span class="fu">unique</span>(gwas_hits<span class="sc">$</span>Variant)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>chr, <span class="sc">-</span>position) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Variant =</span> SNP) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>(<span class="at">n=</span><span class="cn">Inf</span>) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>gene_names <span class="ot">&lt;-</span> <span class="fu">tbl</span>(db, <span class="st">&quot;genes&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(FBID <span class="sc">%in%</span> <span class="sc">!!</span> <span class="fu">unique</span>(annotations<span class="sc">$</span>FBID)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(FBID, gene_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>(<span class="at">n=</span><span class="cn">Inf</span>) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(gwas_hits, annotations, <span class="at">by =</span> <span class="st">&quot;Variant&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gene_names, <span class="at">by =</span> <span class="st">&quot;FBID&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Trait_ID =</span> Trait, Variant, </span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>         FBID, gene_name, <span class="at">site_class =</span> site.class, </span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>         <span class="at">distance_to_gene =</span> distance.to.gene, </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>         MAF, minor_allele, major_allele, </span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">BETA =</span> Beta, SE, P) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_tsv</span>(<span class="st">&quot;gwas_data/derived/all_traits_significant_SNPs.tsv&quot;</span>)</span></code></pre></div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
