@@ -13,8 +13,8 @@
 
 <title>About</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.5.0/jquery-3.5.0.min.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -55,6 +55,7 @@ div.section {
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -187,6 +188,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -415,7 +419,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -459,7 +463,7 @@ div.tocify {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -497,7 +501,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-11-24
+<strong>Last updated:</strong> 2022-09-29
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -628,15 +632,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree474abf10a75f4e97306de208a1a916123acdbe00targetblank474abf1a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree663c268fb47011ccfc702ff6bdf456a01df0e7edtargetblank663c268a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/tomkeaney/DGRP/tree/474abf10a75f4e97306de208a1a916123acdbe00" target="_blank">474abf1</a>
+<a href="https://github.com/tomkeaney/DGRP/tree/663c268fb47011ccfc702ff6bdf456a01df0e7ed" target="_blank">663c268</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree474abf10a75f4e97306de208a1a916123acdbe00targetblank474abf1a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomtomkeaneyDGRPtree663c268fb47011ccfc702ff6bdf456a01df0e7edtargetblank663c268a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -646,7 +650,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/tomkeaney/DGRP/tree/474abf10a75f4e97306de208a1a916123acdbe00" target="_blank">474abf1</a>.
+<a href="https://github.com/tomkeaney/DGRP/tree/663c268fb47011ccfc702ff6bdf456a01df0e7ed" target="_blank">663c268</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -662,58 +666,84 @@ were generated:
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    code/.DS_Store
     Ignored:    data/.DS_Store
     Ignored:    data/derived/.DS_Store
     Ignored:    data/input/.DS_Store
-    Ignored:    fits/
-    Ignored:    gwas_data/.DS_Store
-    Ignored:    gwas_data/derived/.DS_Store
+    Ignored:    data/input/Raw_data_files/.DS_Store
+    Ignored:    data/input/Raw_data_files/Zwoinska_2020/.DS_Store
 
 Untracked files:
-    Untracked:  analysis/exporting GWAS stats for the app.R
-    Untracked:  analysis/luke_cluster_ideas.R
-    Untracked:  analysis/luke_weighted_beta_ideas.R
-    Untracked:  data/derived/correlation_SEs.rds
-    Untracked:  data/imputed_data.RData
-    Untracked:  gwas_data/README.md
-    Untracked:  gwas_data/derived/bivariate_greml_results.tsv
-    Untracked:  gwas_data/derived/delete_me.hsq
-    Untracked:  gwas_data/derived/delete_me.log
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bed
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.bim
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.fam
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines.log
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bed
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.bim
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.fam
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.log
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_LDpruned.rds
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bed
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.bim
-    Untracked:  gwas_data/derived/dgrp2_QC_all_lines_imputed_correct.fam
-    Untracked:  gwas_data/derived/gcta_GRM.grm.N.bin
-    Untracked:  gwas_data/derived/gcta_GRM.grm.bin
-    Untracked:  gwas_data/derived/gcta_GRM.grm.id
-    Untracked:  gwas_data/derived/gcta_GRM.log
-    Untracked:  gwas_data/derived/gwas_results/
-    Untracked:  gwas_data/derived/luke_phenotype.txt
-    Untracked:  gwas_data/derived/manhattan_plots/
-    Untracked:  gwas_data/derived/phenotype.txt
-    Untracked:  gwas_data/derived/phenotype_pair.txt
-    Untracked:  gwas_data/derived/plink.frq
-    Untracked:  gwas_data/derived/plink.log
-    Untracked:  gwas_data/derived/plink.prune.in
-    Untracked:  gwas_data/derived/test_null.log
-    Untracked:  gwas_data/input/
-    Untracked:  iris.csv
-    Untracked:  test.pdf
-    Untracked:  test2.pdf
-    Untracked:  test3.pdf
+    Untracked:  Guild_variance_estimates.pdf
+    Untracked:  Trait_variance_analysis.Rmd
+    Untracked:  analysis/Google_sheets_private.Rmd
+    Untracked:  analysis/Trait_correlations.Rmd
+    Untracked:  broad_sense_heritability.csv
+    Untracked:  code/LICENSE
+    Untracked:  code/gcta64
+    Untracked:  code/plink
+    Untracked:  code/prettify
+    Untracked:  code/run_mashr.R
+    Untracked:  code/toy.map
+    Untracked:  code/toy.ped
+    Untracked:  data/DGRP_gwas_bfiles/
+    Untracked:  data/Literature_table.csv
+    Untracked:  data/Reported_heritability.xlsx
+    Untracked:  data/derived/all.dgrp.phenos_combined.csv
+    Untracked:  data/derived/all.dgrp.phenos_unscaled.csv
+    Untracked:  data/derived/rg_female.csv
+    Untracked:  data/derived/rg_male.csv
+    Untracked:  data/derived/selected.dgrp.phenos_unscaled.csv
+    Untracked:  data/gwas_data/
+    Untracked:  fits/
 
 Unstaged changes:
-    Modified:   analysis/Trait_correlations.Rmd
-    Modified:   analysis/cross_phenotype_meta_analysis.Rmd
+    Deleted:    analysis/Analysis.Rmd
+    Modified:   data/derived/SNP_heritability_cleaned.csv
+    Modified:   data/derived/all.dgrp.phenos_scaled.csv
+    Modified:   data/derived/rg.csv
+    Modified:   data/derived/selected.dgrp.phenos_scaled.csv
+    Deleted:    data/input/Appel_2016_memory_learning.csv
+    Deleted:    data/input/Chapman_2020.csv
+    Deleted:    data/input/Chowdhury_2021_aggression.csv
+    Deleted:    data/input/Dean_2018.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.TAG_glycerol.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.dw.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.feeding.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glucose.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.glycogen.ab.csv
+    Deleted:    data/input/Dobson_2015/gwasB.filtered.protein.ab.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_deltamethrin.csv
+    Deleted:    data/input/Duneau_2018/Duneau_2018_parathion.csv
+    Deleted:    data/input/Everett_microbiome_2020.csv
+    Deleted:    data/input/Everman_2019_starvation_res.csv
+    Deleted:    data/input/Freda_2017_ThermalHardiness.csv
+    Deleted:    data/input/Freda_2019/Cold18.csv
+    Deleted:    data/input/Freda_2019/Cold25.csv
+    Deleted:    data/input/Freda_2019/Heat18.csv
+    Deleted:    data/input/Freda_2019/Heat25.csv
+    Modified:   data/input/Future_line_means/template.csv
+    Deleted:    data/input/Gaertner_2015_male_mating.csv
+    Deleted:    data/input/Grubbs_2013_leg_props.csv
+    Deleted:    data/input/He_et_al_2014.csv
+    Deleted:    data/input/Jumbo_Lucioni_2012.csv
+    Deleted:    data/input/Najarro_et_al_2015_caffeine_resistance.csv
+    Deleted:    data/input/Palmer_2018_kallithea.csv
+    Deleted:    data/input/Pitchers_2019_wing_multivariate.csv
+    Deleted:    data/input/Rohde_2019.csv
+    Deleted:    data/input/Saltz_2017_larvae_learning_data.csv
+    Deleted:    data/input/Saltz_2017_pupation_substrate_data.csv
+    Deleted:    data/input/Srivastav_Kelleher_2017_data.csv
+    Deleted:    data/input/Teets_Hahn_2018_data.csv
+    Deleted:    data/input/Watanabe_Riddle_2021.csv
+    Deleted:    data/input/Yanagawa_total_groom_time.csv
+    Deleted:    data/input/Zhou_metabolome_2020.xlsx
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_females_2020.csv
+    Deleted:    data/input/Zwoinska_2020/Zwoinska_males_2020.csv
+    Deleted:    data/input/munoz_munoz_2016.csv
+    Deleted:    data/input/najarro_2017.csv
 
 </code></pre>
 <p>
@@ -758,108 +788,6 @@ Message
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tomkeaney/DGRP/blob/474abf10a75f4e97306de208a1a916123acdbe00/analysis/index.Rmd" target="_blank">474abf1</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2022-11-24
-</td>
-<td>
-wflow_publish("analysis/index.Rmd")
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tomkeaney/DGRP/b96cdfd37c2bee424391f309863ff8fd94d9fefe/docs/index.html" target="_blank">b96cdfd</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2022-11-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tomkeaney/DGRP/blob/3d09ff8d5bac071ec83afa61ca7c146f6623b6c5/analysis/index.Rmd" target="_blank">3d09ff8</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2022-11-24
-</td>
-<td>
-wflow_publish("analysis/index.Rmd")
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tomkeaney/DGRP/75c37c38abaf9c5283b73a2e8df6c9b00b2bfbc9/docs/index.html" target="_blank">75c37c3</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2022-11-01
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/tomkeaney/DGRP/blob/cf43124f81b8b4b10fff7355feba1f18400badbd/analysis/index.Rmd" target="_blank">cf43124</a>
-</td>
-<td>
-lukeholman
-</td>
-<td>
-2022-11-01
-</td>
-<td>
-wflow_publish("analysis/index.Rmd")
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/tomkeaney/DGRP/a99e2fabc87fbaf20b4a177024412b64ee85f7a9/docs/index.html" target="_blank">a99e2fa</a>
-</td>
-<td>
-ausevo
-</td>
-<td>
-2022-09-29
-</td>
-<td>
-Build site.
-</td>
-</tr>
 <tr>
 <td>
 Rmd
@@ -1051,12 +979,6 @@ class="math inline">\(r_g\)</span>.</p></li>
 <li><p><a href="SNP_heritabilities.html">Calculating
 ‘SNP-heritability’</a>, which details how we estimated heritability for
 each trait.</p></li>
-<li><p><a href="run_GWAS.html">Running genome-wide association
-tests</a>, which describes how GWA tests were run and shows some summary
-statistics.</p></li>
-<li><p><a href="cross_phenotype_meta_analysis.html">Cross phenotype meta
-analysis</a>, which details our CPMA analysis seraching for pleiotopic
-variants.</p></li>
 </ol>
 <p>We also <a href="How_to.html">provide a guide</a> to uploading your
 own data, so that this resource can remain current.</p>
@@ -1069,16 +991,16 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
-<pre><code>R version 4.0.3 (2020-10-10)
+<pre><code>R version 4.2.1 (2022-06-23)
 Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Catalina 10.15.7
+Running under: macOS Big Sur ... 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
-[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -1087,15 +1009,17 @@ other attached packages:
 [1] workflowr_1.7.0
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6    rstudioapi_0.13 knitr_1.39      whisker_0.4    
- [5] magrittr_2.0.1  getPass_0.2-2   R6_2.4.1        rlang_1.0.2    
- [9] fastmap_1.1.0   stringr_1.4.0   httr_1.4.2      tools_4.0.3    
-[13] xfun_0.31       cli_3.1.0       jquerylib_0.1.1 git2r_0.27.1   
-[17] htmltools_0.5.2 yaml_2.3.5      digest_0.6.29   rprojroot_1.3-2
-[21] processx_3.5.2  callr_3.7.0     later_1.0.0     promises_1.1.0 
-[25] fs_1.4.1        ps_1.3.3        glue_1.4.2      evaluate_0.15  
-[29] rmarkdown_2.11  stringi_1.5.3   compiler_4.0.3  backports_1.1.7
-[33] httpuv_1.5.3.1 </code></pre>
+ [1] Rcpp_1.0.8.3     bslib_0.3.1      compiler_4.2.1   pillar_1.7.0    
+ [5] later_1.3.0      git2r_0.30.1     jquerylib_0.1.4  tools_4.2.1     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.8.0   evaluate_0.15   
+[13] tibble_3.1.7     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.3     
+[17] cli_3.3.0        rstudioapi_0.13  yaml_2.3.5       xfun_0.31       
+[21] fastmap_1.1.0    httr_1.4.3       stringr_1.4.0    knitr_1.39      
+[25] sass_0.4.1       fs_1.5.2         vctrs_0.4.1      rprojroot_2.0.3 
+[29] glue_1.6.2       R6_2.5.1         processx_3.6.1   fansi_1.0.3     
+[33] rmarkdown_2.14   callr_3.7.0      magrittr_2.0.3   whisker_0.4     
+[37] ps_1.7.1         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.5.1    </code></pre>
 </div>
 
 

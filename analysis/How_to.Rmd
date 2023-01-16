@@ -23,7 +23,7 @@ library(kableExtra)
 The code below will create the csv sheet that you can submit your data in. It will be saved in the `data/input/Future_line_means` folder as `template.csv`
 
 ```{r}
-tibble("line" = "In each row list the DGRP line number e.g. 26", "Trait" = "trait name", "Sex" = "e.g. Female", "trait_value" = "In each row list the trait value for the specified DGRP line", "Trait guild" = "e.g. Life history",  "Trait description" = "Short explanation of your trait", "Reference" = "e.g. Mackay et al (2012) Nature") %>% 
+tibble("line" = "In each row list the DGRP line number e.g. 26", "Trait" = "trait name", "Sex" = "e.g. Female", "Life_stage" = "e.g. Adult", "trait_value" = "In each row list the trait value for the specified DGRP line", "Trait guild" = "e.g. Life history",  "Trait description" = "Short explanation of your trait", "Reference" = "e.g. Mackay et al (2012) Nature") %>% 
   write_csv("data/input/Future_line_means/template.csv")
 ```
 
@@ -34,6 +34,8 @@ tibble("line" = "In each row list the DGRP line number e.g. 26", "Trait" = "trai
 `Trait`: provide a succinct name for your trait. Separate each word with a `.` If you measured the trait in a specific sex, please also include `.f` or `.m` as the last two characters of the column name. If you measured the trait across both sexes (say if you measured something to do with larvae), then no suffix is required. For example, if you measured lifespan in females, you might name your trait `lifespan.f`, however if you did not discriminate between the sexes you could name your trait `lifespan`.
 
 `Sex`: which sex did you measure the trait in - `Female`, `Male` or `Both`. Both refers to traits that have been measured in both sexes indiscriminately, and the mean calculated from the pooled sex data.
+
+`Life_stage`: specify whether the phenotype was measured pre (`Juvenile`) or post (`Adult`) eclosion. 
 
 `trait_value`: Fill this column with the line mean values that correspond to the lines listed. 
 
@@ -59,16 +61,16 @@ tibble("line" = "In each row list the DGRP line number e.g. 26", "Trait" = "trai
 
 `Trait description`: provide a brief explanation of your trait so that a general audience can understand what you have measured. Include units and provide an indication of what an increase in the value of the trait means e.g. for mortality, higher values indicate lower survival.
 
-**Should I also include more columns like DOI/URL or various meta-data things?**
-
 # Example data
 
 ```{r}
 read_csv("data/input/all.line.mean.phenos.csv") %>% 
   left_join(read_csv("data/input/all.line.mean.phenos_metadata.csv")) %>% 
   filter(Trait == "lifetime.fecundity.25C.f") %>% 
+  select(line, Trait, Sex, Life_stage, trait_value, `Trait guild`, Reference, `Trait description`) %>% 
   kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(width = "100%", height = "800px")
 ```
 
 

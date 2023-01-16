@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 This website is a companion page to our main page [Becca's shiny app here](...). Here you can find all of the code used to produce the analysis shown on the main page, with step by step annotation.
 
+**Must check Harrison et al 2020 data. Supplied by MK but I'm not sure where from. They have data on github but it is poorly annotated, so very hard to model.** 
+
 We document three different steps in our analysis:
 
 1. [Data collation](Data_collation.html), which shows how we collected the data and the data cleaning process.

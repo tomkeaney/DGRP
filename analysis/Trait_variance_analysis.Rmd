@@ -1,0 +1,479 @@
+---
+title: "Genetic variance and evolvability analysis"
+site: workflowr::wflow_site
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, warning = FALSE
+)
+```
+
+# Load packages
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(rcartocolor)
+library(brms)
+library(tidybayes)
+library(pander)
+```
+
+# Load data from file
+
+```{r}
+meta_data <- read_csv("data/derived/meta_data_for_all_traits.csv") %>% 
+  group_by(Reference) %>% 
+  mutate(Study_ID = as.factor(cur_group_id())) %>% 
+  ungroup()
+
+dgrp.phenos_unscaled <- left_join(
+  read_csv("data/derived/all.dgrp.phenos_unscaled.csv") %>% 
+  mutate(line = as.factor(line)),
+  
+  meta_data
+) 
+
+#view(meta_data %>% 
+ # filter(str_detect(`Trait description`, "larv")))
+
+#view(meta_data %>% filter(Sex == "Pooled"))
+```
+
+$~$
+
+# Selecting data appropriate for analysis 
+
+$~$
+
+Following [Houle 1992](https://academic.oup.com/genetics/article/130/1/195/6007162) we only include traits for which variance is reported on an untransformed scale.
+
+We also only include traits that have been measured across >= 40 DGRP lines, which matches the minimum number of lines used in the DGRP literature to calculate broad sense heritability. Note that this is half the minimum threshold we use to calculate trait correlations. We are more lenient here because variance estimation is more robust to smaller samples than correlational analysis is (**ref**)
+
+```{r}
+# Remove traits that are difficult to interpret or that have transformed means
+
+selected.dgrp.phenos_unscaled <-
+  dgrp.phenos_unscaled %>% 
+  filter(Reference != "Jin et al (2020) PLOS Genetics" & # Normalised
+           Reference != "Zhou et al (2020) Genome Research" & # Normalised
+           Reference != "Everett et al (2020) Genome Research" & # values reported on log scale
+           Reference != "Wong and Holman (in prep)" & # values scaled
+           Reference != "Howick and Lazzaro (2017) Molecular Ecology" & # values reported on logit and ln scales
+           Reference != "Harrison et al (2020) BMC Genomics" & # values scaled? Hard data to make sense of
+           Reference != "Takahara and Takahashi (2015) PLOS One" & # PC scores reported (are these transformed? mean ~ 0 for both)
+           Reference != "Early et al (2017) PLOS One" & # scaled means
+           Trait != "social.effect.aggression.m" & # trait has scaled mean
+           Trait != "wing.imaginal.disk.size.relative.f" & # scaled by body size
+           Trait != "wing.imaginal.disk.size.relative.m" & # scaled by body size
+           `# lines measured` >= 39) # Filter by number of lines measured
+
+# how many traits do we have?
+num_unique_traits <- length(unique(selected.dgrp.phenos_unscaled$Trait))
+# how many studies are they measured across?
+num_unique_studies <- length(unique(selected.dgrp.phenos_unscaled$Reference))
+```
+
+After this selection process, {r num_unique_traits} remain, that were measured across {r num_unique_studies} studies.
+
+# Model to find $CV_A$ for each trait
+
+We assume that the line mean value for a given trait represents the genotypic value. This is because the phenotypic value converges towards the genotypic value with replicated measurements (Falconer and Mackay, 1996). This is the rationale motivating replicated measurements within DGRP line.
+
+We can estimate $V_A$ from the line mean data by fitting an intercept only model for each unscaled trait. This model assigns equal weight to each line, that is, we assume that sampling effort was divided evenly between lines. This may lead to slight differences in our estimates with those found in the literature. From this we get a distribution of \mu, the trait mean and \sigma, the standard deviation. We can then calculate the variance in the trait across lines (the genetic variance) using the formula: $Var = \sigma^2$ (SD is simply the square root of the variance). 
+
+We can then calculate $CV_A$ using the formula:
+
+$CV_A = 100\sqrt{V_A}/ \overline{X}$ where $\overline{X}$ is the trait mean.
+
+```{r}
+
+
+d <- selected.dgrp.phenos_unscaled %>% filter(Trait == "fecundity.f")
+
+VA_model <-
+  brm(data = d,
+      family = gaussian(),
+      trait_value ~ 1,
+      chains = 4, cores = 4, 
+      seed = 1, iter = 6000, warmup = 2000)
+
+
+# make a function to update the model and the posterior sample output with the desired trait
+
+CVA_calculator <- function(selected_trait){
+  
+  data <- selected.dgrp.phenos_unscaled %>% filter(Trait == selected_trait)
+  
+  model <- update(VA_model, newdata = data)
+  
+  posterior <- 
+    as_draws_df(model) %>%
+    select(b_Intercept, sigma) %>% 
+    mutate(VA = sigma^2,
+           CVA = 100 * sqrt(VA) / abs(b_Intercept)) %>% 
+    mutate(Trait = selected_trait)
+  
+  posterior
+}
+
+trait_list <- unique(selected.dgrp.phenos_unscaled$Trait)
+
+# Run the models
+
+Run_function <- FALSE # Change this to TRUE to run the models
+
+if(Run_function){
+  
+CVA_data <- map_dfr(trait_list, CVA_calculator)
+  
+  CVA_data %>% 
+    write_csv("data/derived/CVA_data.csv")
+} else {
+  CVA_data <- read_csv("data/derived/CVA_data.csv")
+}
+
+```
+
+Following Houle (1992) we then take the log of $CV_A$. This normalises the data, places greater weight on the centre of the $CV_A$ distribution and aids visual presentation.
+
+```{r}
+# Wrangle data
+CVA_data_logged <-
+  CVA_data %>% 
+  mutate(log_CVA = log(CVA)) %>% 
+  group_by(Trait) %>% 
+  summarise_draws() %>% 
+  ungroup() %>% 
+  select(Trait, variable, mean, sd) 
+
+CVA_data_clean <- left_join(
+  CVA_data_logged %>%
+    pivot_wider(names_from = "variable", values_from = c(mean, sd)),
+  
+  selected.dgrp.phenos_unscaled %>% 
+    distinct(Trait, .keep_all = TRUE) %>% 
+    select(-c(line, trait_value, `Trait description`))) %>% 
+  mutate(Trait = case_when(Sex == "Female" ~ gsub('.{2}$', '', Trait), # remove the sex indicating suffix's
+                           Sex == "Male" ~ gsub('.{2}$', '', Trait),
+                           Sex == "Pooled" ~ Trait)) %>% 
+  mutate(log_CVA = log10(mean_CVA)) %>% 
+  rename(Trait_guild = `Trait guild`)
+```
+
+# Look for anomalies in the data
+
+```{r}
+
+## delete after
+  
+  
+p1 <- 
+  CVA_data_clean %>% 
+  ggplot(aes(x = log(mean_b_Intercept), y = log_CVA)) +
+  geom_point(aes(fill = Study_ID), size = 3, shape = 21) +
+  geom_smooth(method = "lm") +
+  guides(colour = "none") +
+  labs(x = "log10(mean)",
+       y = "log10(CVA)") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
+
+
+p2 <- 
+  CVA_data_clean %>% 
+  ggplot(aes(x = `# lines measured`, y =  log(mean_VA))) +
+  geom_point(aes(fill = Study_ID), size = 3, shape = 21) +
+  geom_smooth(method = "lm") +
+  guides(colour = "none") +
+  labs(x = "# lines measured",
+       y = "log(VA)") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
+  
+
+p1 / p2
+```
+
+Figure XX. Diagnostic plots. **a** shows a negative relationship between a traits mean and CVA, as found in Houle (1992). **b** shows that genetic variance decreases as the number of genotypes considered increases. However, trait guilds appear to be measured across a range of genotypes, with no clear biases towards measuring more genotypes in one guild than any other. 
+
+$~$
+
+# Fit the meta-model
+
+$~$
+
+We use $log(CV_A)$ as the response variable in the model and include the standard deviation in these estimates in the model using the `se()` function to account for measurement error.
+
+We include the following predictors in our models:
+
+`Sex`: a **fixed effect** with three levels - Female, Male and Pooled. Pooled refers to traits that were measured on individuals that could not be sexed (almost exclusively traits measured in larvae), or for traits where the research question did not require the separation of the sexes while phenotyping.
+
+`Life_stage`: a fixed effect with two levels - Juvenile, which encompasses all life stages that precede eclosion, and adulthood; all traits measured post eclosion. 
+
+`Trait guild`: a **random effect** with 15 levels. We include `Trait guild` to test whether traits of certain classes exhibit different degrees of genetic variability.
+
+`Study ID`: a **random effect** with {r num_unique_studies} levels. This variable accounts for non-independence of $CV_A$ values measured for traits phenotyped in the same study. Traits may have been measured using the same flies, or on flies that had been reared under the same conditions. This is not a fool-proof measure, as some studies re-analyse data collected in past studies that are also included in the data, or are completed concurrently on flies reared under common conditions.
+
+```{r}
+
+CVA_model <- 
+  brm(log_CVA | se(sd_log_CVA, sigma = TRUE) ~ 1 + Sex + Life_stage + (1|Trait_guild) + (1|Study_ID),
+      family = student(), # for thicker tails than standard Gaussian
+      data = CVA_data_clean,
+      prior = c(prior(student_t(3, 1, 0.5), class = Intercept),
+                prior(exponential(1), class = sd),
+                prior(normal(0, 1), class = b)),
+      warmup = 4000, iter = 8000,
+      seed = 1, cores = 4, chains = 4,
+      control = list(adapt_delta = 0.97, max_treedepth = 15),
+      file = "meta_model_fits/CVA_model")
+
+summary(CVA_model)
+```
+
+## Posterior predictive check 
+
+```{r}
+pp_check(CVA_model)
+```
+
+## Get predictions from the model
+
+```{r}
+
+# get predictions from the model
+
+# the b_intercept represents the log(CVA) estimate for traits measured in adult females
+CVA_posterior <-
+  as_draws_df(CVA_model) %>% 
+  select(b_Intercept, contains("r_Trait_guild")) %>% 
+  transmute(Activity = b_Intercept + `r_Trait_guild[Activity,Intercept]`,
+            Behavioural = b_Intercept + `r_Trait_guild[Behavioural,Intercept]`,
+            Morphological = b_Intercept + `r_Trait_guild[Morphological,Intercept]`,
+            `Temperature related` = b_Intercept + `r_Trait_guild[Temperature.related,Intercept]`,
+            Sensory = b_Intercept + `r_Trait_guild[Sensory,Intercept]`,
+            `Pathogen response` = b_Intercept + `r_Trait_guild[Pathogen.response,Intercept]`,
+            `Stress response` = b_Intercept + `r_Trait_guild[Stress.response,Intercept]`,
+            `Insecticide response` = b_Intercept + `r_Trait_guild[Insecticide.response,Intercept]`,
+            `Drug response` = b_Intercept + `r_Trait_guild[Drug.response,Intercept]`,
+            CHC = b_Intercept + `r_Trait_guild[CHC,Intercept]`,
+            Physiological = b_Intercept + `r_Trait_guild[Physiological,Intercept]`,
+            `Life history` = b_Intercept + `r_Trait_guild[Life.history,Intercept]`,
+            Genomic = b_Intercept + `r_Trait_guild[Genomic,Intercept]`,
+            Metabolome = b_Intercept + `r_Trait_guild[Metabolome,Intercept]`,
+            Microbiome = b_Intercept + `r_Trait_guild[Microbiome,Intercept]`)
+
+
+CVA_posterior_long <-
+  CVA_posterior %>% 
+  pivot_longer(names_to = "Trait_guild", values_to = "log_CVA", cols = everything())
+
+# Find the differeces with the life history guild
+
+Life_history_diff <-
+  CVA_posterior %>% 
+  mutate(Sensory = Sensory - `Life history`,
+         Behavioural = Behavioural - `Life history`,
+         Morphological = Morphological - `Life history`,
+         `Temperature related` = `Temperature related` - `Life history`,
+         Activity = Activity - `Life history`,
+         `Pathogen response` = `Pathogen response` - `Life history`,
+         `Stress response` = `Stress response` - `Life history`,
+         `Insecticide response` = `Insecticide response` - `Life history`,
+         `Drug response` = `Drug response` - `Life history`,
+         CHC = CHC - `Life history`,
+         Physiological = Physiological - `Life history`,
+         Metabolome = Metabolome - `Life history`,
+         Microbiome = Microbiome - `Life history`,
+         Genomic = Genomic - `Life history`) %>% 
+  select(-`Life history`) %>% 
+  pivot_longer(names_to = "Trait_guild", values_to = "Life_history_diff", cols = everything())
+
+# Get predictions for the sexes
+
+CVA_posterior_sexes <-
+  as_draws_df(CVA_model) %>% 
+  select(1:3) %>%
+  transmute(Female = b_Intercept,
+            Male = b_Intercept + b_SexMale,
+            Pooled = b_Intercept + b_SexPooled)
+
+CVA_posterior_sexes_long <-
+  CVA_posterior_sexes %>% 
+  pivot_longer(names_to = "Sex", values_to = "log_CVA", cols = everything())
+
+
+# Life stage
+
+CVA_posterior_ls <-
+  as_draws_df(CVA_model) %>% 
+  select(b_Intercept, b_Life_stageJuvenile) %>%
+  transmute(Adult = b_Intercept,
+            Juvenile = b_Intercept + b_Life_stageJuvenile)
+
+CVA_posterior_ls_long <-
+  CVA_posterior_ls %>% 
+  pivot_longer(names_to = "Life stage", values_to = "log_CVA", cols = everything())
+
+```
+
+# Plot
+
+```{r}
+
+p_CVA_1 <-
+  CVA_posterior_long %>%
+  #filter(Trait_guild != "CHC" & 
+  #         Trait_guild != "Genomic" &
+  #Trait_guild != "Insecticide response" &
+  #Trait_guild != "Metabolome" &
+  #Trait_guild != "Physiological" &
+  #        Trait_guild != "Microbiome") %>% 
+  group_by(Trait_guild) %>% 
+  mutate(median_CVA = median(`log_CVA`)) %>%
+  
+  ggplot(aes(log_CVA, fct_reorder(Trait_guild, median_CVA))) +
+  #geom_vline(xintercept = fixef(CVA_model)[1, 1], color = "grey33", linewidth = 1) +
+  #geom_vline(xintercept = fixef(CVA_model)[1, 3:4], color = "grey33", linetype = 2)+
+  stat_interval(.width = c(0.02, 0.66, 0.95), 
+                height = 3, show.legend = F) +
+  rcartocolor::scale_color_carto_d(palette = "Peach") +
+  ylab("Trait guild") +
+  xlab(expression("log(CV"[A]*")"))+
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank(),
+        text = element_text(size = 14))
+
+p_CVA_2 <-
+  Life_history_diff %>% 
+  #filter(Trait_guild != "CHC" & 
+  #        Trait_guild != "Genomic" &
+  #Trait_guild != "Insecticide response" &
+  #Trait_guild != "Metabolome" & 
+  #Trait_guild != "Physiological" &
+  #       Trait_guild != "Microbiome") %>% 
+  group_by(Trait_guild) %>% 
+  mutate(median_diff = median(Life_history_diff)) %>%
+  ggplot(aes(x = Life_history_diff, y = fct_reorder(Trait_guild, median_diff))) +
+  geom_vline(xintercept = 0, linetype = 2, linewidth = 1) +
+  stat_interval(.width = c(0.03, 0.66, 0.95), 
+                height = 3, show.legend = F, alpha = 0.95) +
+  rcartocolor::scale_color_carto_d(palette = "Peach") +
+  #coord_cartesian(xlim = c(0, 0.5)) +
+  ylab("Trait guild") +
+  xlab(expression("Difference in log(CV"[A]*") with the life history guild"))+
+  #xlab("Difference in log(CVA) with the life history guild") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank(),
+        text = element_text(size = 14))
+
+p_sex <-
+  CVA_posterior_sexes_long %>% 
+  ggplot(aes(x = log_CVA, y = Sex)) +
+  stat_halfeye(.width = c(0.66, 0.95), alpha = 1, 
+               fill = carto_pal(7, "Peach")[3],
+               point_interval = "mean_qi", point_fill = "white",
+               shape = 21, point_size = 4, stroke = 1.5,
+               slab_colour = "black") + # width indicates the uncertainty intervals: here we have 66% and 95% intervals + # width indicates the uncertainty intervals: here we have 66% and 95% intervals+
+  ylab("Sex") +
+  xlab(expression("log(CV"[A]*")")) +
+  coord_cartesian(ylim = c(1.44,3.15)) +
+  theme_bw() + 
+  theme(panel.background = element_rect(fill='transparent'),
+        plot.background = element_rect(fill='transparent', color=NA),
+        legend.position = "none", 
+        text = element_text(size=14))
+
+
+p_ls <-
+  CVA_posterior_ls_long %>% 
+  ggplot(aes(x = log_CVA, y = `Life stage`)) +
+  stat_halfeye(.width = c(0.66, 0.95), alpha = 1, 
+               fill = carto_pal(7, "Peach")[3],
+               point_interval = "mean_qi", point_fill = "white",
+               shape = 21, point_size = 4, stroke = 1.5,
+               slab_colour = "black") + # width indicates the uncertainty intervals: here we have 66% and 95% intervals + # width indicates the uncertainty intervals: here we have 66% and 95% intervals+
+  ylab("Life history stage") +
+  xlab(expression("log(CV"[A]*")")) +
+    coord_cartesian(ylim = c(1.5,2.1)) +
+    scale_x_continuous(breaks = c(0.6, 0.9, 1.2, 1.5, 1.8), limits = c(0.5, 2)) +
+  theme_bw() + 
+  theme(panel.background = element_rect(fill='transparent'),
+        plot.background = element_rect(fill='transparent', color=NA),
+        legend.position = "none", 
+        text = element_text(size=14))
+
+(p_CVA_2 + (p_sex / p_ls)) +
+  plot_annotation(tag_levels = 'a')
+```
+**Figure...** Estimates of $CV_A$, the coefficient of additive genetic variation. **a** shows the difference in $CV_A$ between traits belonging to the life history guild and those from all other trait guilds included in the dataset. Bars show the mean with 66 and 95% intervals, while the dashed line indicates a difference of zero. **b** shows $CV_A$ estimates for each sex after controlling for life history stage. The pooled category indicates traits that were measured across a pool of both sexes. **c** shows $CV_A$ estimates for traits measured in juveniles and adults. In **b** and **c** points indicates mean estimates and bars show 66 and 95% intervals.
+
+
+```{r, include=FALSE}
+
+CVA_posterior_long %>% 
+  group_by(Trait_guild) %>% 
+  mean_qi() %>% 
+  
+  arrange(log_CVA) %>% 
+  select(1:4) %>% 
+  rename(`Trait guild` = Trait_guild, 
+         `Log(CVA)` = log_CVA,
+         `2.5% Interval` = .lower,
+         `97.5% Interval` = .upper) %>% 
+  mutate_at(2:4, ~ round(.x, 3)) %>% 
+  pander()
+
+
+Life_history_diff %>% 
+  group_by(Trait_guild) %>% 
+  mean_qi() %>% 
+  
+  arrange(Life_history_diff) %>% 
+  select(1:4) %>% 
+  rename(`Trait guild` = Trait_guild, 
+         Difference = Life_history_diff,
+         `2.5% Interval` = .lower,
+         `97.5% Interval` = .upper) %>% 
+  mutate_at(2:4, ~ round(.x, 3)) %>%
+  pander()
+
+
+CVA_posterior_sexes %>% 
+  mutate(`Pooled - Female` = Pooled - Female,
+         `Pooled - Male` = Pooled - Male,
+         `Male - Female` = Male - Female) %>% 
+  select(4:6) %>% 
+  pivot_longer(names_to = "Contrast", values_to = "log_CVA_diff", cols = everything()) %>% 
+  group_by(Contrast) %>% 
+  mean_qi() %>% 
+  arrange(log_CVA_diff) %>%
+  select(1:4) %>% 
+  rename(Difference = log_CVA_diff,
+         `2.5% Interval` = .lower,
+         `97.5% Interval` = .upper) %>% 
+  mutate_at(2:4, ~ round(.x, 3)) %>%
+  pander()
+
+CVA_posterior_ls %>% 
+  mutate(`Adult - Juvenile` = Adult - Juvenile) %>% 
+  pivot_longer(names_to = "Life history stage", values_to = "log_CVA", cols = everything()) %>% 
+  group_by(`Life history stage`) %>% 
+  mean_qi() %>% 
+  select(1:4) %>%
+  arrange(-log_CVA) %>% 
+  rename(`log(CVA)` = log_CVA,
+         `2.5% Interval` = .lower,
+         `97.5% Interval` = .upper) %>% 
+  mutate_at(2:4, ~ round(.x, 3)) %>%
+  pander()
+    
+```

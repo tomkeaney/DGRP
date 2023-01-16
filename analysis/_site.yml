@@ -11,8 +11,8 @@ navbar:
     href: Data_collation.html
   - text: Calculating genetic trait correlations
     href: Trait_correlations.html
-  - text: Calculating 'SNP-heritability'
-    href: SNP_heritabilities.html
+  - text: Trait variance analysis
+    href: Trait_variance_analysis.html
   - text: License
     href: license.html
   right:

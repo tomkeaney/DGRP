@@ -7,7 +7,7 @@ editor_options:
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(
-  message = FALSE, warning = FALSE, results='hide'
+  message = FALSE, results='hide'
 )
 ```
 
@@ -16,16 +16,7 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(bigsnpr) # to install:   devtools::install_github("privefl/bigsnpr")
 library(glue)
-library(dbplyr)
-library(DBI)
-library(RSQLite)
-library(kableExtra)
-
-# Database of variant and gene annotations
-db <- DBI::dbConnect(RSQLite::SQLite(),
-                     "~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3")
-
-plink <- file.path(getwd(), "code/plink") # I used plink v1.9 for MacOS, available here: https://www.cog-genomics.org/plink/
+plink <- file.path(getwd(), "code/plink") # I use plink v1.9
 options(readr.show_col_types = FALSE)
 
 
@@ -35,51 +26,6 @@ options(readr.show_col_types = FALSE)
 run_command <- function(shell_command, wd = getwd(), path = ""){
   cat(system(glue("cd ", wd, path, "\n", shell_command), intern = TRUE), sep = '\n')
 }
-
-save_manhattan_plot <- function(gwas_results, save_path){
-  
-  manhattan_data <- gwas_results %>%
-    mutate(position = str_split(SNP, "_"),
-           chr = map_chr(position, ~ .x[1]),
-           position = as.numeric(map_chr(position, ~ .x[2])),
-           pval = -1 * log10(P)) %>% 
-    select(chr, position, pval)
-  
-  max_pos <- manhattan_data %>%
-    group_by(chr) %>%
-    summarise(
-      max_pos = max(position), 
-      middle_pos = (max_pos - min(position)) / 2,
-      .groups = "drop") %>%
-    as.data.frame()
-  max_pos$max_pos <- c(0, cumsum(max_pos$max_pos[1:5]))
-  max_pos$label_pos <- max_pos$max_pos + max_pos$middle_pos
-  
-  manhattan_data <- manhattan_data %>%
-    left_join(max_pos, by = "chr") %>%
-    mutate(position = position + max_pos)
-  y_max <- max(manhattan_data$pval) * 1.08
-  
-  plot <- manhattan_data %>%
-    ggplot(aes(position, pval, group = chr, fill = chr, stroke = 0.05)) +
-    # geom_hline(yintercept = 5, linetype = 2, colour = "grey20") +
-    geom_point(size = 0.9, colour="grey20", pch = 21) +
-    scale_fill_brewer(palette = "Paired", name = "Chromosome") +
-    scale_x_continuous(breaks = max_pos$label_pos, labels = max_pos$chr) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, y_max)) +
-    ylab(expression(paste("-", log[10], " p value"))) + 
-    xlab("Chromosome and position") +
-    theme_bw() +
-    theme(legend.position = "none",
-          panel.grid.major.x = element_blank(), 
-          panel.grid.minor.x = element_blank(),
-          panel.border = element_blank(),
-          axis.ticks.x = element_blank()) 
-  
-  ggsave(filename = save_path, plot = plot, height = 6, width = 6)
-  rm(plot)
-}
-
 ```
 
 
@@ -179,7 +125,7 @@ line_mean_phenotypes <- line_mean_phenotypes %>%
 
 ## Create a reduced list of LD-pruned SNPs with PLINK
 
-To keep the computation time and memory usage manageable, we do not save the effect sizes for every variant (SNPs and indels) that passed the MAF and missingness quality control step above (i.e. 1,646,652 variants), but rather we save the effect sizes for a subset of variants that were approximately in linkage disequilibrium. We identified this LD-pruned set of variants using the PLINK arguments `--indep-pairwise 100 10 0.2`, i.e. pruning within 100kB sliding windows, sliding 10 variants along with each step, and allowing a maximum pairwise $r^2$ threshold of 0.2 between loci. With these parameters, 1,420,071 variants were removed, leaving 226,581 for downstream analysis. Subsequent inspection of the Manhattan plots suggests that this method removes most (but not all) variants that are in complete or high LD.
+To keep the computation time and memory usage manageable, we do not save the effect sizes for every variant (SNPs and indels) that passed the MAF and missingness quality control step above (i.e. 1,646,652 variants), but rather we save the effect sizes for a subset of variants that were approximately in linkage disequilibrium. We identified this LD-pruned set of variants using the PLINK arguments `--indep-pairwise 100 10 0.2`, i.e. pruning within 100kB sliding windows, sliding 10 variants along with each step, and allowing a maximum pairwise $r^2$ threshold of 0.2 between loci. With these parameters, 1,420,071 variants were removed, leaving 226,581 for downstream analysis. Subsequent inspection of the Manhattan plots suggests that this method removes most (but not all) nearby variants that are in complete or high LD.
 
 ```{r}
 # indep-pairwise arguments are: 
@@ -264,10 +210,6 @@ gwas_one_trait <- function(focal_phenotype){
                              header = TRUE) %>% 
     select(SNP, BETA, SE, P)
   
-  # Save a Manhattan plot for this trait, using the all variants (not just the LD subset):
-  save_manhattan_plot(gwas_results,
-                      glue("gwas_data/derived/manhattan_plots/{focal_phenotype}.jpeg"))
-  
   # If the trait has a "/" in the name it cannot work as a file name. Change the "/" to "_"
   # focal_phenotype <- str_replace_all(focal_phenotype, "[/]", "_")
 
@@ -310,160 +252,5 @@ unlink(list.files("gwas_data/derived",
                   pattern = "focal_lines", full.names = T))
 unlink(c("gwas_data/derived/lines_to_keep.txt"))
 unlink(c("gwas_data/derived/gwas_results/new.qassoc", "gwas_data/derived/gwas_results/new.log"))
-```
-
-## Details about the significant variants
-
-### Create a table of information about all the significant variants
-
-The code below creates a large file (>12MB) containing all the significant variants (defined as $P < 10^{-5}$) for all the traits, alongside some annotations for each variant (e.g. the gene associated with the variant, the site class of the variant, and its alleles and minor allele frequencies) plus the summary statistics from the GWAS (`BETA` is the effect size of the association, where _negative_ effect sizes mean that the minor allele is associated with lower trait values, while _positive_ effect sizes means that the minor allele is associated with higher trait values, SE is the standard error, and P is the p-value). This information is saved in the file `gwas_data/derived/all_traits_significant_SNPs.tsv`, which is accessible on the Github repository.
-
-```{r}
-if(length(traits_to_run_for_gwas) > 0){
-  
-  top_hits_files <- list.files("gwas_data/derived/gwas_results", full.names = TRUE, pattern = "significant_SNPs")
-  
-  add_annotation <- function(filepath){
-    focal <- read_tsv(filepath) %>% 
-      arrange(P)
-    snp_order <- focal$SNP
-    trait <- str_remove_all(filepath, "gwas_data[/]derived[/]gwas_results[/]")
-    trait <- str_remove_all(trait, "_significant_SNPs[.]tsv[.]gz")
-    print(trait)
-    tbl(db, "variants") %>% 
-      filter(SNP %in% !!focal$SNP) %>% 
-      select(-chr, -position) %>% 
-      collect() %>% 
-      left_join(focal, by = "SNP") %>% 
-      mutate(log10_P = -1 * log10(P),
-             SNP = factor(SNP, snp_order)) %>% 
-      arrange(SNP) %>% 
-      rename_all(~ str_replace_all(.x, "[.]", "_")) %>% 
-      mutate(trait = trait, .before = 1)
-    
-  }
-  
-  map_df(top_hits_files, add_annotation)  %>% 
-    left_join(tbl(db, "genes") %>% select(FBID, gene_name) %>% collect(), by = "FBID") %>% 
-    select(trait, SNP, FBID, gene_name, everything()) %>% 
-    mutate(gene_name = replace(gene_name, is.na(FBID), NA)) %>% 
-    write_tsv("gwas_data/derived/all_traits_significant_SNPs.tsv")
-}
-```
-
-### Various summary statistics about the significant variants
-
-#### Version of the table that is correct with the originally-published dataset:
-
-The table shows various counts about the significant variants, as well as the mean and standard error MAF (minor allele frequency) for all the significant variants as well as the total set of variants that was used in the GWAS (i.e. all those with minor allele frequency >5% and missingness < 10%). Given that the choice of significance threshold is arbitrary, we use two different definitions of statistical significance: $P < 10^{-5}$ (which is used in many studies of the DGRP) and $P < 10^{-8}$ (which is commonly used in human GWAS).
-
-```{r results='show'}
-all_sig_snps <- read_tsv("gwas_data/derived/all_traits_significant_SNPs.tsv") %>% 
-  left_join(meta_data, by = c("trait" = "Trait"))
-
-make_full_tally_table <- function(all_sig_snps){
-  
-  # Count number of GWAS that were run
-  gwas_results_files <- list.files("gwas_data/derived/gwas_results/")
-  gwas_results_files <- gwas_results_files[!str_detect(gwas_results_files, "_significant_SNPs")]
-  gwas_results_files <- gwas_results_files[!str_detect(gwas_results_files, "log[.]txt")]
-  num_gwas_run <- length(gwas_results_files)
-  
-  # Count number of unique studies that provided data for GWAS
-  num_unique_studies_used_for_gwas <- meta_data %>% 
-    filter(Trait %in% str_remove_all(gwas_results_files, "[.]tsv[.]gz")) %>% 
-    distinct(Reference) %>% nrow()
-  
-  # A function to randomly select one trait per study, from among the traits measured in at least 80 DGRP lines
-  get_independent_traits <- function(){
-    set.seed(1) # Set the seed for reproducibility
-    read_csv("data/derived/meta_data_for_all_traits.csv") %>%
-      filter(`# lines measured` >= 80) %>% # Only analyse traits that measured at least 80 lines
-      group_by(Reference) %>%
-      sample_n(1) %>% # Randomly sample one phenotype per study
-      pull(Trait) %>% sort() 
-  }
-  
-  mean_and_SE <- function(x){
-    mean_x <- format(round(mean(x), 2), nsmall = 2)
-    se_x <- format(round(sd(x) / sqrt(length(x)), 3), nsmall = 3)
-    if(se_x == "0.000") se_x <- "<0.001"
-    paste(mean_x, " (", se_x, ")", sep = "")
-  }
-  
-  
-  maf_all_snps_tests <- tbl(db, "variants") %>% 
-    filter(MAF > 0.05) %>% 
-    pull(MAF) %>% mean_and_SE()
-  
-  
-  make_tally_table <- function(all_sig_snps){
-    
-    prettify <- function(x) format(x, big.mark=",")
-    
-    num_traits_affected <- all_sig_snps %>% 
-      distinct(SNP, trait) %>% 
-      group_by(SNP) %>% 
-      summarise(n = n()) 
-    
-    num_traits_affected_indep <- all_sig_snps %>% 
-      filter(trait %in% get_independent_traits()) %>% 
-      distinct(SNP, trait) %>% 
-      group_by(SNP) %>% 
-      summarise(n = n()) 
-    
-    num_snps_sig_in_2_studies <- sum(pull(num_traits_affected, n) >= 2)
-    num_snps_sig_in_3_studies <- sum(pull(num_traits_affected, n) >= 3)
-    num_snps_sig_in_2_studies_indep <- sum(pull(num_traits_affected_indep, n) >= 2)
-    num_snps_sig_in_3_studies_indep <- sum(pull(num_traits_affected_indep, n) >= 3)
-    
-    num_snps_sig_in_2_studies <- paste(prettify(num_snps_sig_in_2_studies), " (", num_snps_sig_in_2_studies_indep, ")", sep = "")
-    num_snps_sig_in_3_studies <- paste(prettify(num_snps_sig_in_3_studies), " (", num_snps_sig_in_3_studies_indep, ")", sep = "")
-    
-    tibble(
-      `Number of studies that provided data for GWA tests` = num_unique_studies_used_for_gwas,
-      `Number of traits analysed using GWA tests` = num_gwas_run,
-      `Number of studies with at least one significant SNP` = all_sig_snps %>% distinct(Reference) %>% nrow(),
-      `Number of phenotypic traits with at least one significant SNP` = all_sig_snps %>% distinct(trait) %>% nrow(),
-      `Number of variants significantly associated with at least one phenotypic trait` = all_sig_snps %>% distinct(SNP) %>% nrow() %>% prettify(),
-      `Number of variants significantly associated with at least two phenotypic traits (which were measured in different studies)` = num_snps_sig_in_2_studies,
-      `Number of variants significantly associated with at least three phenotypic traits (which were measured in different studies)` = num_snps_sig_in_3_studies,
-      `Number of genes close to one of the significant variants` = all_sig_snps %>% filter(!is.na(FBID)) %>% distinct(FBID) %>% nrow() %>% prettify(),
-      `MAF of the significant variants (mean and SE)` = all_sig_snps %>% distinct(SNP, MAF) %>% pull(MAF) %>% mean_and_SE(),
-      `MAF of all variants included in the GWAS (mean and SE)` = maf_all_snps_tests) %>% 
-      gather(Quantity, n)
-  }
-  
-  left_join(
-    all_sig_snps %>% 
-      filter(log10_P >= 5) %>% 
-      make_tally_table() %>% 
-      rename(`Using p < 10-5` = n),
-    
-    all_sig_snps %>% 
-      filter(log10_P >= 8) %>% 
-      make_tally_table() %>% 
-      rename(`Using p < 10-8` = n), 
-    by = "Quantity") 
-}
-
-all_sig_snps %>% 
-  # restrict to only papers in the original database, i.e. not those added post-publication:
-  filter(Reference %in% read_csv("data/input/references_in_original_database.csv")$Reference) %>% 
-  make_full_tally_table() %>% 
-  kable() %>% 
-  kable_styling(full_width = FALSE)
-```
-
-#### Version of the table that is correct with the current, post-publication version of the dataset
-
-The figures in this table will be updated when new DGRP data is added to the database.
-
-```{r results='show'}
-all_sig_snps %>% 
-  # do *not* restrict to only papers in the original database, i.e. not those added post-publication:
-  make_full_tally_table() %>% 
-  kable() %>% 
-  kable_styling(full_width = FALSE)
 ```
 
