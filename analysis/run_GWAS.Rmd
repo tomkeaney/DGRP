@@ -465,5 +465,48 @@ all_sig_snps %>%
   make_full_tally_table() %>% 
   kable() %>% 
   kable_styling(full_width = FALSE)
+
 ```
+
+<!-- ## Create a file of all the significant GWAS hits for all traits -->
+
+<!-- ```{r compile_significant_snps} -->
+<!-- all_files <- list.files("gwas_data/derived/gwas_results", full.names = T, pattern = "_significant_SNPs") -->
+<!-- traits <- str_remove_all(str_remove_all(all_files, "gwas_data/derived/gwas_results/"), "_significant_SNPs[.]tsv[.]gz") -->
+
+
+<!-- gwas_hits <- lapply(1:length(all_files), function(i) { -->
+<!--   print(i) -->
+<!--   read_tsv(all_files[i]) %>% -->
+<!--     filter(P < 10e-5) %>% -->
+<!--     arrange(P) %>% -->
+<!--     rename(Variant = SNP, Beta = BETA) %>% -->
+<!--     mutate(Trait = traits[i], .before = 1) -->
+<!-- }) %>% -->
+<!--   bind_rows() -->
+
+<!-- db <- DBI::dbConnect(RSQLite::SQLite(), -->
+<!--                      "~/Rprojects/fitnessGWAS/data/derived/annotations.sqlite3") -->
+
+<!-- annotations <- tbl(db, "variants") %>%  -->
+<!--   filter(SNP %in% !! unique(gwas_hits$Variant)) %>%  -->
+<!--   select(-chr, -position) %>%  -->
+<!--   rename(Variant = SNP) %>%  -->
+<!--   collect(n=Inf) %>% distinct() -->
+
+<!-- gene_names <- tbl(db, "genes") %>%  -->
+<!--   filter(FBID %in% !! unique(annotations$FBID)) %>%  -->
+<!--   select(FBID, gene_name) %>%  -->
+<!--   collect(n=Inf) %>% distinct() -->
+
+<!-- left_join(gwas_hits, annotations, by = "Variant") %>%  -->
+<!--   left_join(gene_names, by = "FBID") %>%  -->
+<!--   select(Trait_ID = Trait, Variant,  -->
+<!--          FBID, gene_name, site_class = site.class,  -->
+<!--          distance_to_gene = distance.to.gene,  -->
+<!--          MAF, minor_allele, major_allele,  -->
+<!--          BETA = Beta, SE, P) %>%  -->
+<!--   write_tsv("gwas_data/derived/all_traits_significant_SNPs.tsv") -->
+
+<!-- ``` -->
 
